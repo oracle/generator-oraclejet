@@ -1,0 +1,38 @@
+{
+  "name": "generator-oraclejet",
+  "version": "2.0.0",
+  "description": "initial",
+  "keywords": 
+  [
+    "yeoman-generator"
+  ],
+  
+  "files": 
+  [
+    "generators/app",
+    "generators/hybrid",
+    "generators/restore",
+    "generators/restore-hybrid",
+    "generators/restore-web",
+    "generators/web"
+  ],
+
+  "dependencies": 
+  {
+    "yeoman-generator": "0.18.0"    
+  },
+
+  "engines": 
+  {
+    "node": ">=0.10.0"
+  },
+
+  "devDependencies": 
+  {
+    "adm-zip": "0.4.7",
+    "fs-extra": "0.24.0",
+    "xmldom": "0.1.19"
+  },
+
+  "preferGlobal": true
+}
