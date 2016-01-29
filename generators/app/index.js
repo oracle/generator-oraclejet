@@ -3,10 +3,7 @@
  * The Universal Permissive License (UPL), Version 1.0
  */
 'use strict';
-var fs = require('fs-extra');
 var generators = require('yeoman-generator');
-var constants = require("../../util/constants");
-var util = require("../../util");
 var common = require("../../common");
 var templateHandler = require("../../common/template");
 
@@ -34,6 +31,7 @@ var OracleJetWebCreateGenerator = generators.Base.extend({
   constructor: function () 
   {
     generators.Base.apply(this, arguments);
+
     this.argument('appDir', { type: String, 
       required: false, optional:true, defaults:".", desc: "Application directory to contain the scaffold content" });
   },
@@ -51,10 +49,10 @@ var OracleJetWebCreateGenerator = generators.Base.extend({
         //generator
 
         //change the directory for oraclejet:restore and the invocation of cordova add
-       process.chdir(self.destinationPath(self.appDir));
+        process.chdir(self.destinationPath(self.appDir));
         done();
-      }).
-      catch(function(err)
+      })
+      .catch(function(err)
       {
         self.env.error(err);
       });
@@ -70,14 +68,15 @@ module.exports = OracleJetWebCreateGenerator;
 
 function _writeTemplate(generator) 
 {
-  var self = generator;
+
   return new Promise(function (resolve, reject) 
   { 
-    var appDirectory = self.destinationPath(self.appDir);
-    templateHandler.handleTemplate(self, appDirectory)
+    var appDirectory = generator.destinationPath(generator.appDir);
+    
+    templateHandler.handleTemplate(generator, appDirectory)
       .then(function() 
       {
-        resolve(self);
+        resolve(generator);
       })
       .catch(function(err)
       {

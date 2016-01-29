@@ -12,7 +12,7 @@ module.exports = {
 
   handleTemplate: function _handleTemplate(generator, templateDestDirectory) 
   {
-    //templateDestDirectory will be www or appDirectory for hybrid and web respectively
+    //templateDestDirectory will be src or appDirectory for hybrid and web respectively
     var BLANK_TEMPLATE = blankTemplate.BLANK_TEMPLATE;
     var URL_TEMPLATE = urlTemplate.URL_TEMPLATE;
     var template = generator.options.template || BLANK_TEMPLATE;

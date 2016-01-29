@@ -21,7 +21,7 @@ module.exports = {
           var commonDest = generator.destinationPath(generator.appDir + "/");
 
           fs.copySync(common, commonDest);
-          resolve();
+          resolve(generator);
         })
         .catch(function(err)
         {

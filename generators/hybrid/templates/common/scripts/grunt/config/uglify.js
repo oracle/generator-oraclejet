@@ -4,18 +4,24 @@
  */
 //grunt uglify task
 
+var constants = require("../../common/constants");
+var cordovaDirectory = constants.CORDOVA_DIRECTORY;
+var appSrcDirectory = constants.APP_SRC_DIRECTORY;
+
 module.exports = {
   
   //to minify app js files
   release: 
   {
     files: 
-    [{
-      expand: true,
-      cwd:'www/js',
-      src:['**/*.js', '!libs/**', '!main.js'],
-      dest:'www/release/js'
-    }]    
+    [
+      {
+        expand: true,
+        cwd: appSrcDirectory + '/js',
+        src:['**/*.js', '!libs/**', '!main.js'],
+        dest: cordovaDirectory + '/www/js'
+      }
+    ]    
   }
   
 };

@@ -9,17 +9,18 @@
  */
 
 var path = require("path");
+var constants = require('./constants');
+var cordovaDirectory = constants.CORDOVA_DIRECTORY;
 
 module.exports = {
 
   "android" : 
   {
-    ROOT: "platforms/android/assets/www/",
+    ROOT: cordovaDirectory + "/platforms/android/assets/www/",
 
     getCopyPaths: function(begPath, endPath, appName) 
     {
       return [
-        path.resolve(begPath + "platforms/android/build/intermediates/assets/debug/www/" + endPath),
         path.resolve(begPath + this.ROOT + endPath)
       ];
     }
@@ -27,12 +28,11 @@ module.exports = {
 
   "ios" : 
   {
-    ROOT: "platforms/ios/www/",
+    ROOT: cordovaDirectory + "/platforms/ios/www/",
 
     getCopyPaths: function(begPath, endPath, appName) 
     {
       return [
-        path.resolve(begPath + "platforms/ios/build/emulator/" + appName + ".app/www/" + endPath),
         path.resolve(begPath + this.ROOT + endPath)
       ];
     }
@@ -40,7 +40,7 @@ module.exports = {
 
   "windows": 
   {
-    ROOT: "platforms/windows/www/",
+    ROOT: cordovaDirectory + "/platforms/windows/www/",
 
     getCopyPaths: function(begPath, endPath, appName) 
     {

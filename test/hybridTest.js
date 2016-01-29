@@ -6,6 +6,7 @@ var env = process.env,
 	assert = require('assert'),
 	fs = require('fs-extra'),
 	path = require('path'),
+  hybridDirectory = "hybrid",
 	exec = require('child_process').exec,
 	util = require('./util'),
 
@@ -17,9 +18,12 @@ var env = process.env,
 describe("Hybrid Test", function()
 {
 	var filelist;
+  var hybridFileList;
 	var testDir = path.resolve('built/test/generator/hybridTest');
+  var hybridTestDir = path.resolve('built/test/generator/hybridTest/' + hybridDirectory);
 	var platform = util.getPlatform(env.OS);
 	fs.ensureDirSync(testDir);
+  fs.ensureDirSync(hybridTestDir);
 
 	it("Generate android/ios app in 300 seconds", function(done) 
 	{		
@@ -28,6 +32,7 @@ describe("Hybrid Test", function()
 		{
 			
 			filelist = fs.readdirSync(testDir);
+      hybridFileList = fs.readdirSync(hybridTestDir);
 			assert.equal(util.isSuccess(stdout),true, error);  
 			done();
 		});
@@ -102,8 +107,8 @@ describe("Hybrid Test", function()
   	{  
   		it("config.xml exists", function()
   		{
-  			var inlist = filelist.indexOf("config.xml") > -1;
-  			assert.equal(inlist, true, path.resolve(testDir,'config.xml') + " missing");
+  			var inlist = hybridFileList.indexOf("config.xml") > -1;
+  			assert.equal(inlist, true, path.resolve(testDir, 'config.xml') + " missing");
   		});
 
   		it("package.json exists", function()
@@ -128,13 +133,13 @@ describe("Hybrid Test", function()
   		{
   			it(".apk exists", function()
   			{	
-  				var apkList = fs.readdirSync(path.resolve(testDir,'platforms/android/build/outputs/apk'));
+  				var apkList = fs.readdirSync(path.resolve(testDir, hybridDirectory, 'platforms/android/build/outputs/apk'));
   				var inlist = false;
   				apkList.forEach(function(value)
   				{
   					inlist = inlist || /.apk/.test(value);
   				});
-	  			assert.equal(inlist, true, path.resolve(testDir,'platforms/android/build/outputs/apk','android.apk') + " missing");
+	  			assert.equal(inlist, true, path.resolve(testDir, hybridDirectory, 'platforms/android/build/outputs/apk','android.apk') + " missing");
   			});
   		} 		
 
@@ -145,7 +150,7 @@ describe("Hybrid Test", function()
   	{ 
   		it("JET Version Match", function(){
   			var packageJSON = fs.readJSONSync(path.resolve(testDir,'oraclejetconfig.json'));
-  			var jetVersion = util.getJetVersion(testDir, 'www/js/libs/oj');
+  			var jetVersion = util.getJetVersion(testDir, 'src/js/libs/oj');
   			assert.equal( jetVersion[0], packageJSON.version, "File version does not match in oraclejetconfig.json");
   		});  		
   	});
@@ -165,7 +170,7 @@ describe("Hybrid Test", function()
 
   		it("Clean cordova platform", function(done){
   			this.timeout(40000);
-			exec("cordova platform remove " + platform, {cwd: testDir}, function(error, stdout)
+			exec("cordova platform remove " + platform, {cwd: hybridTestDir}, function(error, stdout)
 			{
 				done(); 
 				var success = error ? false : true;
@@ -175,7 +180,7 @@ describe("Hybrid Test", function()
 
   		it("Clean cordova platform try #2", function(done){
   			this.timeout(40000);
-			exec("cordova platform remove " + platform, {cwd: testDir}, function(error, stdout)
+			exec("cordova platform remove " + platform, {cwd: hybridTestDir}, function(error, stdout)
 			{
 				done(); 
 				var success = error ? false : true;
@@ -185,7 +190,7 @@ describe("Hybrid Test", function()
 
   		it("Clean cordova ", function(done){
   			this.timeout(40000);
-			exec("cordova clean", {cwd: testDir}, function(error, stdout)
+			exec("cordova clean", {cwd: hybridTestDir}, function(error, stdout)
 			{
 				done(); 
 				var success = error ? false : true;
@@ -195,12 +200,12 @@ describe("Hybrid Test", function()
 
   		it("Clean cordova try #2", function(done){
   			this.timeout(40000);
-			exec("cordova clean", {cwd: testDir}, function(error, stdout)
+			exec("cordova clean", {cwd: hybridTestDir}, function(error, stdout)
 			{
 				done(); 
 				var success = error ? false : true;
 				//assert.equal(success,true, error); 
-			});
-  		});	
+	  		});  			
+  		});  		
   	});
 });

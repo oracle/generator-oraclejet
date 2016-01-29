@@ -6,6 +6,10 @@
 
 var fileChangeHandler = require('../fileChangeHandler');
 
+var constants = require("../../common/constants");
+var cordovaDirectory = constants.CORDOVA_DIRECTORY;
+var appSrcDirectory = constants.APP_SRC_DIRECTORY;
+
 module.exports = function(grunt) {
 
   //to handle the changed files (i.e. copy over to platforms directory and etc)
@@ -28,11 +32,11 @@ module.exports = function(grunt) {
     {
       files: 
       [
-      'www/css/!(libs)/**/*.css',
-      'www/js/!(libs)/**/*.js',
-      'www/js/{,*/}*.js',
-      'www/css/{,*/}*.css',
-      'www/**/*.html'
+        appSrcDirectory + '/css/!(libs)/**/*.css',
+        appSrcDirectory + '/js/!(libs)/**/*.js',
+        appSrcDirectory + '/js/{,*/}*.js',
+        appSrcDirectory + '/css/{,*/}*.css',
+        appSrcDirectory + '/**/*.html'
       ],
 
       options: 
@@ -45,7 +49,7 @@ module.exports = function(grunt) {
     {
       files: 
       [
-        'merges/**'
+        cordovaDirectory + '/merges/**'
       ]
     }
   };

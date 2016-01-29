@@ -9,6 +9,7 @@ module.exports = {
   SUPPORTED_PLATFORMS: ["android", "ios"],
 
   CORDOVA_CONFIG_XML: "config.xml",
+  CORDOVA_DIRECTORY: "hybrid",
 
   APP_TYPE: 
   {

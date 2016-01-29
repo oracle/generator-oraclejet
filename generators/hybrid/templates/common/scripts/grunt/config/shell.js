@@ -4,26 +4,42 @@
  */
 //grunt shell task
 
+var constants = require("../../common/constants");
+var cordovaDirectory = constants.CORDOVA_DIRECTORY;
+
 module.exports = {
 
   cordovaPrepare:
   {
-    command: 'cordova prepare <%= platform %>'
+    command: 'cordova prepare <%= platform %>',
+    options: {
+      execOptions: 
+      {
+        cwd: cordovaDirectory
+      }
+    }
   },
 
   cordovaCompile:
   {
-    command: 'cordova compile <%= platform %> <%= buildType %> <%= buildConfig %>'
+    command: 'cordova compile <%= platform %> <%= buildType %> <%= buildConfig %>',
+    options: {
+      execOptions: 
+      {
+        cwd: cordovaDirectory
+      }
+    }
   },
-
-  cordovaBuild: 
-  {
-    command: 'cordova build <%= platform %> <%= buildType %> <%= buildConfig %>'
-  },
-
+  
   cordovaRun:
   {
-    command: 'cordova run <%= platform %> <%= destination %> <%= buildType %> <%= buildConfig %>'
+    command: 'cordova run <%= platform %> <%= destination %> <%= buildType %> <%= buildConfig %>',
+    options: {
+      execOptions: 
+      {
+        cwd: cordovaDirectory
+      }
+    }
   }
 
 };

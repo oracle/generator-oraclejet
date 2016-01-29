@@ -19,20 +19,8 @@ var fs = require('fs-extra');
 var endOfLine = require('os').EOL;
 var DOMParser = require('xmldom').DOMParser;
 
-var CORDOVA_HOOKS =
-[
-  {
-    type: "after_prepare", src: "scripts/hooks/jetAfterPrepare.js"
-  },
-  {
-    type: "before_compile", src: "scripts/hooks/jetBeforeCompile.js"
-  },
-  {
-    type: "before_run", src: "scripts/hooks/jetBeforeRun.js"
-  }  
-];
-
 var ORACLEJET_DOMAIN = "org.oraclejet.";
+var APP_SRC_DIRECTORY = "src";
 
 /*
  * Generator for the create step
@@ -132,10 +120,10 @@ var OracleJetHybridCreateGenerator = generators.Base.extend({
   {
     var done = this.async();
     
-    cordovaHelper.create(this)  
-      .then(_removeExtraCordovaFiles.bind(this))            
-      .then(_writeTemplate.bind(this))
+    _writeTemplate(this)
       .then(common.writeCommonGruntScripts)
+      .then(cordovaHelper.create)
+      .then(_removeExtraCordovaFiles.bind(this))            
       .then(this._updateConfigXml.bind(this)) 
       .then(this._getPlatformsToProcess.bind(this))  
       .then(this._addPlatforms.bind(this))                 
@@ -186,12 +174,10 @@ var OracleJetHybridCreateGenerator = generators.Base.extend({
 
   _updateConfigXml: function ()
   {
-    process.chdir(this.destinationPath(this.appDir));
-    var configXml = this.destinationPath(constants.CORDOVA_CONFIG_XML);
+    var configXml = this.destinationPath(constants.CORDOVA_DIRECTORY + "/" + constants.CORDOVA_CONFIG_XML);
     var configRead = fs.readFileSync(configXml, "utf-8");
     var document = new DOMParser().parseFromString(configRead, 'text/xml');
     _addCordovaConfigDescriptionAndAuthor(document);  
-    _addCordovaConfigHooks(document); 
     fs.writeFileSync(configXml, document);     
   },
 
@@ -200,6 +186,8 @@ var OracleJetHybridCreateGenerator = generators.Base.extend({
     var platformPromises = [];
     var platforms = this._platformsToProcess;
     var context = {generator: this};
+
+    process.chdir(this.destinationPath(constants.CORDOVA_DIRECTORY));
 
     platforms.forEach(function(value) 
     {
@@ -212,7 +200,11 @@ var OracleJetHybridCreateGenerator = generators.Base.extend({
     return new Promise(function(resolve, reject)
     {
       Promise.all(platformPromises)
-        .then(resolve)
+        .then(function() 
+        {
+          process.chdir(path.resolve(".."));
+          resolve();
+        })
         .catch(function(err)
         {
           reject(err);
@@ -257,20 +249,6 @@ function _processPlatformOptions(generator, platforms)
   });
 }
 
-function _createHookElement(document, value)
-{
-  var hook = document.createElement("hook");
-  hook.setAttribute("type", value.type);
-  hook.setAttribute("src", value.src);
-
-  return hook;
-}
-
-function _createNewLineElement(document)
-{
-  return document.createTextNode(endOfLine);
-}
-
 function _getDefaultAppId(appDir)
 {
   appDir = _getAppBaseName(appDir); 
@@ -290,15 +268,15 @@ function _getAppBaseName(appDir)
 
 function _writeTemplate(generator)
 {
-  var self = generator;
+  
   return new Promise(function (resolve, reject) 
   {
-    var appDir = self.appDir;
+    var appDir = generator.appDir;
 
-    templateHandler.handleTemplate(self, self.destinationPath(appDir + "/www/"))
+    templateHandler.handleTemplate(generator, generator.destinationPath(appDir + "/" + APP_SRC_DIRECTORY + "/"))
       .then(function() 
       {
-        resolve(self);
+        resolve(generator);
       })
       .catch(function(err)
       {
@@ -310,14 +288,15 @@ function _writeTemplate(generator)
 
 function _removeExtraCordovaFiles(generator)
 { 
-  var appDir = generator.appDir;
+  var cordovaDir = this.destinationPath(constants.CORDOVA_DIRECTORY);
+
   return new Promise(function (resolve, reject)
   {    
     try
     {
-      fs.removeSync(path.resolve(appDir,'hooks'));
-      fs.removeSync(path.resolve(appDir,'www/*'));
-      resolve(generator)
+      fs.removeSync(path.resolve(cordovaDir, 'hooks'));
+      fs.removeSync(path.resolve(cordovaDir, 'www/*'));
+      resolve(generator);
     }
     catch(err)
     {
@@ -349,16 +328,6 @@ function _updateCordovaConfigDescription(widget, packageJSON)
   var descriptionElement = _getFirstElementByTagName(widget, "description");
   descriptionElement.childNodes[0].data = "\n        " + description +"\n    ";
 }
-
-function _addCordovaConfigHooks(document)
-{
-  var widget = _getFirstElementByTagName(document,"widget");
-  CORDOVA_HOOKS.forEach(function(value) 
-    {
-      widget.appendChild(_createHookElement(document, value));
-      widget.appendChild(_createNewLineElement(document));
-    });
-} 
 
 function _getFirstElementByTagName(node, tag)
 {

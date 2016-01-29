@@ -8,6 +8,10 @@
 //original location in github to specific path with the file name being modified to include the 
 //version of the 3rd party.
 
+var constants = require("../../common/constants");
+var cordovaDirectory = constants.CORDOVA_DIRECTORY;
+var appSrcDirectory = constants.APP_SRC_DIRECTORY;
+
 module.exports = {
 
   options: 
@@ -20,7 +24,7 @@ module.exports = {
     options:
     {
       srcPrefix: 'bower_components/oraclejet/css/libs/',
-      destPrefix: 'merges/android/css/libs'
+      destPrefix: cordovaDirectory + '/merges/android/css/libs'
     },
     
     files: 
@@ -34,7 +38,7 @@ module.exports = {
     options:
     {
       srcPrefix: 'bower_components/oraclejet/css/libs/',
-      destPrefix: 'merges/ios/css/libs'
+      destPrefix: cordovaDirectory + '/merges/ios/css/libs'
     },
     
     files: 
@@ -48,7 +52,7 @@ module.exports = {
     options:
     {
       srcPrefix: 'bower_components/oraclejet/css/libs/',
-      destPrefix: 'merges/windows/css/libs'
+      destPrefix: cordovaDirectory + '/merges/windows/css/libs'
     },
     
     files: 
@@ -62,7 +66,7 @@ module.exports = {
     options:
     {
       srcPrefix: 'bower_components/oraclejet/css/libs/',
-      destPrefix: 'www/css/libs'
+      destPrefix: appSrcDirectory + '/css/libs'
     },
 
     src: 'oj/<%= oraclejetconfig.version %>/!(alta-android|alta-ios|alta-windows|alta)/**'
@@ -73,7 +77,7 @@ module.exports = {
     options:
     {
       srcPrefix: 'bower_components',
-      destPrefix: 'www/js'
+      destPrefix: appSrcDirectory + '/js'
     },
 
     files:
@@ -88,7 +92,7 @@ module.exports = {
     options:
     {
       srcPrefix: 'bower_components',
-      destPrefix: 'www/js/libs'
+      destPrefix: appSrcDirectory + '/js/libs'
     },
 
     files:

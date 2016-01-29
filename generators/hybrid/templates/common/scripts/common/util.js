@@ -30,14 +30,13 @@ module.exports = {
     return platform === "android" ? ANDROID_LOCAL_IP_ADDRESS : LOCAL_IP_ADDRESS;
   },
 
-  getAppName: function() 
+  getAppName: function(configxml) 
   {
     //gets the appName for copyPath
-    var configxml = path.resolve("config.xml");
     var document = new DOMParser().parseFromString(fs.readFileSync(configxml, "utf-8"), 'text/xml');
     var name = document.getElementsByTagName("name")[0];
 
-    return name.value;
+    return name && name.firstChild ? name.firstChild.nodeValue : "";
   },
 
   getCordovaBuildType: function(target)

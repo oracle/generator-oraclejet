@@ -5,12 +5,8 @@
 'use strict';
 
 var generators = require('yeoman-generator');
-var fs = require('fs-extra');
-var path = require('path');
 
 var commonRestore = require("../../common/restore");
-
-var constants = require('../../util/constants');
 
 /*
  * Generator for the restore step

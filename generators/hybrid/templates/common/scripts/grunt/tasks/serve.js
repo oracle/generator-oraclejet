@@ -6,6 +6,8 @@
 var ports = require('../common/ports');
 var constants = require("../../common/constants");
 var util = require("../../common/util");
+var injector = require('../../common/injector');
+var cordovaConfig = require('../../common/cordovaConfig');
 var StringDecoder = require('string_decoder').StringDecoder;
 
 module.exports = function(grunt) {
@@ -25,6 +27,8 @@ module.exports = function(grunt) {
     var disableLiveReload = _updateGruntConfig(grunt, platform, web, target);
     
     _updateProcessEnv(grunt, platform, target, disableLiveReload);
+
+    cordovaConfig.updateConfig();
     _runTasks(grunt, disableLiveReload, web, target);
 
   });
@@ -54,10 +58,12 @@ module.exports = function(grunt) {
       args = [];
     }
 
+    process.chdir(constants.CORDOVA_DIRECTORY);
     _cordovaServe(grunt, cmd, args.slice())
       .then(function() 
       {
         _cordovaRun(grunt, cmd, args.slice(), destination, buildConfig);
+        process.chdir("..");
         _watch(grunt);
       })
       .catch(function(err)
@@ -177,6 +183,10 @@ function _updateProcessEnv(grunt, platform, target, disableLiveReload)
 
 function _runTasks(grunt, disableLiveReload, web, target)
 {
+  if(!web)
+  {
+    injector.injectCordovaFeatures(false);
+  }
   var tasks = _getTasks(grunt, disableLiveReload, web, target);
   grunt.task.run(tasks);
 }
@@ -184,12 +194,10 @@ function _runTasks(grunt, disableLiveReload, web, target)
 function _getTasks(grunt, disableLiveReload, web, target)
 {
   var tasks;
-  
+
   if(web) 
   {
-    //need to specify the index.html to modify for the injector (either www/release or www)
-    grunt.config.set("indexInjectPath", target === 'dev' ? '' : 'release/');
-
+    
     tasks = [
       'open',
       'connect:' + target + 'Server' + (disableLiveReload? ":keepalive" : "")

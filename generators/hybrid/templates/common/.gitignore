@@ -1,0 +1,15 @@
+node_modules
+bower_components
+
+hybrid/platforms
+
+src/js/libs
+src/css/libs/oj
+
+!hybrid/plugins
+hybrid/plugins/*
+!hybrid/plugins/fetch.json
+
+hybrid/merges/android/css/libs/oj
+hybrid/merges/ios/css/libs/oj
+hybrid/merges/windows/css/libs/oj

@@ -18,12 +18,17 @@ var util = require('./util');
 
 module.exports = {
 
-  injectCordovaFeatures: function()
+  injectCordovaFeatures: function(updatePlatformFile)
   {
-    var injectSourceContent = _getInjectSourceContent();
+    //note that this function will be invoked only for non-web case
+    //and it's purpose is to inject content from the copied over src/index.html
+    var injectSourceContent = _getInjectSourceContent(updatePlatformFile);
     var indexHTML = injectSourceContent.indexHTML;
     var document = injectSourceContent.document;
     
+    //per discussion the below cordova injection will be removed in the 
+    //future when the cordova.js is added to the quick start templates + 
+    //addeventlistener (mock) added in
     _injectCordovaScript(injectSourceContent);
     _injectLiveReloadScript(injectSourceContent);
     _injectPlatformStyleClasses(injectSourceContent);
@@ -32,11 +37,21 @@ module.exports = {
   }
 };
 
-function _getInjectSourceContent()
+function _getInjectSourceContent(updatePlatformFile)
 {
-  var platform = process.env[constants.PLATFORM_ENV_KEY];
-  var root = platformPaths[platform].ROOT;
-  var indexHTML = path.resolve(root, "index.html");
+  var indexHTML;
+
+  if(updatePlatformFile)
+  {
+    var platform = process.env[constants.PLATFORM_ENV_KEY];
+    var root = platformPaths[platform].ROOT;
+    indexHTML = path.resolve(root, "index.html");
+  }
+  else
+  {
+    indexHTML = path.resolve(constants.CORDOVA_DIRECTORY + "/www/index.html");
+  }
+  
   var document = new DOMParser().parseFromString(fs.readFileSync(indexHTML, "utf-8"), 'text/html');
 
   return {indexHTML: indexHTML, document: document};

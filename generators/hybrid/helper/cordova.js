@@ -4,15 +4,18 @@
  */
 'use strict';
 
+var constants = require('../../../util/constants');
+
 module.exports = {
 
   create: function _create(generator)
   {
+    process.chdir(generator.destinationPath(generator.appDir));
+
     return new Promise(function (resolve, reject) 
     {
-      var appDir = generator.appDir;
-      var args = ["create", appDir];
-      var appDirectory = generator.destinationPath(appDir);
+      var cordovaDir = constants.CORDOVA_DIRECTORY;
+      var args = ["create", cordovaDir];
       
       if(generator.options.domain && generator.options.title) 
       {

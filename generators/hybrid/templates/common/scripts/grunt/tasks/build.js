@@ -5,6 +5,7 @@
 //grunt task for build
 
 var constants = require("../../common/constants");
+var cordovaConfig = require('../../common/cordovaConfig');
 var util = require("../../common/util");
 
 module.exports = function(grunt) {
@@ -17,13 +18,22 @@ module.exports = function(grunt) {
     {
       throw new Error("Platform option is required");
     }
+
+    if(_checkDirectoryStructure(grunt))
+    {
+      return grunt.log.error(["Invalid directory structure containing ROOT/www, please migrate to new structure"]);
+    }
     
     target = target || "dev";
     _processBuildConfigs(grunt, platform, target);
 
+    var tasks = ['clean:www', 'copy:www' + (target === "dev" ? "Dev" : "Release"),
+                  'copy:merges'];
+    cordovaConfig.updateConfig();
+
     if(target === "dev") 
     {
-      grunt.task.run(
+      tasks = tasks.concat(
       [
         'shell:cordovaPrepare',
         'shell:cordovaCompile'
@@ -31,12 +41,10 @@ module.exports = function(grunt) {
     }
     else if(target === "release")
     {
-      grunt.task.run(
+      tasks = tasks.concat(
       [
-        'clean:release',
         'injector:mainReleasePaths',
         'uglify:release',
-        'copy:release', 
         'requirejs',
         'clean:mainTemp',
         'shell:cordovaPrepare',
@@ -45,9 +53,10 @@ module.exports = function(grunt) {
     }
     else
     {
-      grunt.log.error(["Invalid argument, try build:dev or build:release"]);
+      return grunt.log.error(["Invalid argument, try build:dev or build:release"]);
     }
-  
+
+    grunt.task.run(tasks);
   });
 
 };
@@ -62,8 +71,12 @@ function _processBuildConfigs(grunt, platform, target)
   grunt.config.set('buildType', util.getCordovaBuildType(target));
   grunt.config.set('buildConfig', util.getCordovaBuildConfig(grunt));
 
-  //update for cordova hooks
   process.env[constants.PLATFORM_ENV_KEY] = platform;
   process.env[constants.TARGET_ENV_KEY] = target;
   process.env[constants.LIVERELOAD_ENABLED_ENV_KEY] = false;
+}
+
+function _checkDirectoryStructure(grunt) 
+{
+  return grunt.file.exists("www");
 }

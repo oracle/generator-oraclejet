@@ -4,6 +4,9 @@
  */
 //grunt requirejs task
 
+var constants = require("../../common/constants");
+var cordovaDirectory = constants.CORDOVA_DIRECTORY;
+
 module.exports = {
   
   //to compress the main.js
@@ -11,11 +14,11 @@ module.exports = {
   {
     options: 
     {
-      baseUrl: "www/release/js",
+      baseUrl: cordovaDirectory + "/www/js",
       name: "main-temp",
-      mainConfigFile: "www/release/js/main-temp.js",
+      mainConfigFile: cordovaDirectory + "/www/js/main-temp.js",
       optimize: "none",
-      out: "www/release/js/main.js"
+      out: cordovaDirectory + "/www/js/main.js"
     }
   }
   

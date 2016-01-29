@@ -5,6 +5,10 @@
 //grunt injector task
 var path = require("path");
 
+var constants = require("../../common/constants");
+var cordovaDirectory = constants.CORDOVA_DIRECTORY;
+var appSrcDirectory = constants.APP_SRC_DIRECTORY;
+
 module.exports = function(grunt) {
 
   return {
@@ -15,15 +19,15 @@ module.exports = function(grunt) {
       {
         starttag: '//injector:mainReleasePaths',
         endtag: '//endinjector',
-        template: "www/js/main.js",
-        destFile: "www/js/main-temp.js",
+        template: appSrcDirectory + "/js/main.js",
+        destFile: cordovaDirectory + "/www/js/main-temp.js",
         transform: function(filePath) 
         {
           //need to inject the complete file content. 
           //since we do not want to touch js/main.js and requirejs plugin requires a file 
           //off of the baseUrl create a main-temp.js file which will be cleaned up after 
           //the requirejs task
-          var mainReleasePaths = path.resolve("www/js/main-release-paths.json");
+          var mainReleasePaths = path.resolve(appSrcDirectory + "/js/main-release-paths.json");
           
           return grunt.file.read(mainReleasePaths);
         }
@@ -31,7 +35,7 @@ module.exports = function(grunt) {
 
       files: 
       {
-        "www/js/main.js": ['www/js/main.js']
+        "src/js/main.js": [appSrcDirectory + '/js/main.js']
       }
     }
     

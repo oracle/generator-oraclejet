@@ -23,7 +23,7 @@ var OracleJetRestoreGenerator = generators.Base.extend({
   initializing: function() 
   {
     //if the project contains cordova's config.xml, consider it to be a hybrid; otherwise web
-    this._hybrid = fs.existsSync(path.resolve(constants.CORDOVA_CONFIG_XML));
+    this._hybrid = fs.existsSync(path.resolve(constants.CORDOVA_DIRECTORY, constants.CORDOVA_CONFIG_XML));
   },
 
   end: function() 

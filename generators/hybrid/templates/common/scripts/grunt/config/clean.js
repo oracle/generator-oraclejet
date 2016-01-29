@@ -4,6 +4,9 @@
  */
 //grunt clean task
 
+var constants = require("../../common/constants");
+var cordovaDirectory = constants.CORDOVA_DIRECTORY;
+
 module.exports = {
 
   options: 
@@ -11,7 +14,7 @@ module.exports = {
     force: true
   },
   
-  release: ['www/release/*'],
-  mainTemp: ['www/js/main-temp.js','www/release/js/main-temp.js']
+  www: [cordovaDirectory + '/www/*'],
+  mainTemp: [cordovaDirectory + '/www/js/main-temp.js']
   
 };

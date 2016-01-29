@@ -4,6 +4,9 @@
  */
 //grunt connect task
 
+var constants = require("../../common/constants");
+var cordovaDirectory = constants.CORDOVA_DIRECTORY;
+
 module.exports = {
   
   //to start the server for hosting
@@ -14,7 +17,7 @@ module.exports = {
       hostname:'localhost',
       port: '<%= oraclejet.ports.server %>',
       livereload: '<%= oraclejet.ports.livereload %>',
-      base: ["merges/<%= platform %>", "www"]
+      base: [cordovaDirectory + "/merges/<%= platform %>", cordovaDirectory + "/www"]
     }
   },
 
@@ -23,7 +26,7 @@ module.exports = {
     options: 
     {
       port: '<%= oraclejet.ports.server %>',
-      base: ["merges/<%= platform %>", "www/release"]
+      base: [cordovaDirectory + "/merges/<%= platform %>", cordovaDirectory + "/www"]
     }
   }
   

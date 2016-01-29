@@ -13,7 +13,10 @@ var path = require("path");
 
 var platformPaths = require("../common/platformPaths");
 var util = require('../common/util');
+var constants = require('../common/constants');
 var injector = require('../common/injector');
+
+var CORDOVA_WWW_DIRECTORY = "hybrid/www";
 
 module.exports = {
 
@@ -23,10 +26,10 @@ module.exports = {
     {
       if(target === "livereload") 
       {
-        //simple copying file over
+        //from src directory to www + platform directories
         _copyFileOver(filePath);
 
-        _checkIndexHTML(filePath);
+        _indexHTMLPlatformInjection(filePath);
       }
       else if(target === "platformFiles") 
       {
@@ -42,14 +45,27 @@ function _copyFileOver(filePath)
 {
 
   //copies file over for the watch events
-  var index = filePath.indexOf("www");
+  var index = filePath.indexOf(constants.APP_SRC_DIRECTORY);
   var begPath = filePath.substring(0, index);
-  var endPath = filePath.substring(index+4);
+  var endPath = filePath.substring(index+3);
+
+  _copyFileToWWW(filePath, begPath, endPath);
+  _copyFileToPlatforms(filePath, begPath, endPath);
+}
+
+function _copyFileToWWW(filePath, begPath, endPath) 
+{
+  fs.copySync(filePath, begPath + CORDOVA_WWW_DIRECTORY + endPath);
+}
+
+function _copyFileToPlatforms(filePath, begPath, endPath)
+{
   var newBuildPath;
   var newPath;
 
-  var parsed = JSON.parse(fs.readFileSync(path.resolve("platforms/platforms.json"), 'utf8'));
-  var appName = util.getAppName();
+  var parsed = JSON.parse(fs.readFileSync(path.resolve(constants.CORDOVA_DIRECTORY + "/platforms/platforms.json"), 'utf8'));
+  var configXML = path.resolve(constants.CORDOVA_DIRECTORY + "/config.xml");
+  var appName = util.getAppName(configXML);
 
   Object.keys(parsed).forEach(function(platform) 
   {
@@ -67,22 +83,23 @@ function _copyFileOver(filePath)
   });
 }
 
-function _checkIndexHTML(filePath)
+function _indexHTMLPlatformInjection(filePath)
 {
   //if index.html need an additional step of performing inject
   var splitted = filePath.split(path.sep);
   var length = splitted.length;
 
-  if(length > 1 && splitted[length-1] === "index.html" && splitted[length-2] === "www")
+  if(length > 1 && splitted[length-1] === "index.html" && splitted[length-2] === constants.APP_SRC_DIRECTORY)
   {
-    injector.injectCordovaFeatures();
+    injector.injectCordovaFeatures(true);
   }
 }
 
 function _copyMergesFileChange(action, filePath, target)
 {
   var splitted = filePath.split(path.sep);
-  var paths = platformPaths[splitted[1]].getCopyPaths("", splitted.slice(2).join("/"), util.getAppName());
+  var configXML = path.resolve(constants.CORDOVA_DIRECTORY + "/config.xml");
+  var paths = platformPaths[splitted[1]].getCopyPaths("", splitted.slice(2).join("/"), util.getAppName(configXML));
 
   paths.forEach(function(currPath) 
   {

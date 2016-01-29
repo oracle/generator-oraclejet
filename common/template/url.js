@@ -10,9 +10,9 @@ var fetchZip = require("../../util/fetchZip");
 module.exports = {
 
   URL_TEMPLATE: {
-    "navBar": "http://den00pwq.us.oracle.com:8080/hudson/job/OJET_Build/lastSuccessfulBuild/artifact/apps/components/public_html/public_samples/nojet/OracleJET_QuickStartHybridNavBar.zip",
-    "navDrawer": "http://den00pwq.us.oracle.com:8080/hudson/job/OJET_Build/lastSuccessfulBuild/artifact/apps/components/public_html/public_samples/nojet/OracleJET_QuickStartHybridNavDrawer.zip",
-    "quickStart": "http://den00pwq.us.oracle.com:8080/hudson/job/OJET_Build/lastSuccessfulBuild/artifact/apps/components/public_html/public_samples/nojet/OracleJET_QuickStartBasic.zip"
+    "navBar": "http://den00pwq.us.oracle.com:8080/hudson/job/OJET_V2.0.X/lastSuccessfulBuild/artifact/apps/components/public_html/public_samples/nojet/OracleJET_QuickStartHybridNavBar.zip",
+    "navDrawer": "http://den00pwq.us.oracle.com:8080/hudson/job/OJET_V2.0.X/lastSuccessfulBuild/artifact/apps/components/public_html/public_samples/nojet/OracleJET_QuickStartHybridNavDrawer.zip",
+    "quickStart": "http://den00pwq.us.oracle.com:8080/hudson/job/OJET_V2.0.X/lastSuccessfulBuild/artifact/apps/components/public_html/public_samples/nojet/OracleJET_QuickStartBasic.zip"
   },
   
   handle: function _handle(generator, template, destination) 
