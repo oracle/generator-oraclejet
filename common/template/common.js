@@ -2,18 +2,16 @@
  * Copyright (c) 2014, 2016, Oracle and/or its affiliates.
  * The Universal Permissive License (UPL), Version 1.0
  */
-'use strict';
+"use strict";
 
-var fs = require('fs-extra');
+var fs = require("fs-extra");
 
-module.exports = {
-  
+module.exports =
+{
   handle: function _handle(baseTemplateHandler) 
   {
-    
     return new Promise(function(resolve, reject)
     {
-      
       baseTemplateHandler
         .then(function(generator)
         {
@@ -27,8 +25,6 @@ module.exports = {
         {
           reject(err);
         });
-      
     });
   }
-
 };

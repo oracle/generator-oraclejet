@@ -4,57 +4,30 @@
  */
 'use strict';
 
-var http = require('http');
-var https = require('https');
 var admzip = require('adm-zip');
+var request = require('request');
 
-module.exports = function (url) 
+module.exports = function(url) 
 {
-  //fetches the zip file
+  // fetches the zip file
 
-  return new Promise(function (resolve, reject) 
+  return new Promise(function(resolve, reject) 
   {
-    var httpHandle = /^https.*/.test(url) ? https : http;
+    request.get({url: url, encoding: null}, function(err, resp, body)
+      {
+        var zip = null;
 
-    httpHandle.get(url, function (response) 
-    {
-      var data = [];
-      var dataLen = 0;
-
-      response
-        .on('data', function (chunk) 
+        try 
         {
-
-          data.push(chunk);
-          dataLen += chunk.length;
-
-        })
-        .on('end', function () 
+          zip = new admzip(body);
+        }
+        catch (e)
         {
-
-          var buf = new Buffer(dataLen);
-          var zip;
-
-          for (var i=0, len = data.length, pos = 0; i < len; i++) 
-          { 
-            data[i].copy(buf, pos); 
-            pos += data[i].length; 
-          } 
-
-          try 
-          {
-            zip = new admzip(buf);
-          }
-          catch(err)
-          {
-            return reject(err);
-          }
-
-          return resolve(zip);
-
-        });
-
-    });
-
+          reject(e);
+          return;
+        }
+        
+        resolve(zip);
+      });      
   });
 };

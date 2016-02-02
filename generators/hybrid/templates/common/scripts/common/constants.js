@@ -2,9 +2,10 @@
  * Copyright (c) 2014, 2016, Oracle and/or its affiliates.
  * The Universal Permissive License (UPL), Version 1.0
  */
-'use strict';
+"use strict";
 
-module.exports = {
+module.exports =
+{
   LOAD_URL_TIMEOUT_VALUE: "240000",
   LOAD_URL_TIMEOUT_PREFERENCE: "loadUrlTimeoutValue",
 

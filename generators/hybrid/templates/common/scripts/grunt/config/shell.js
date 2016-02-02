@@ -2,17 +2,19 @@
  * Copyright (c) 2014, 2016, Oracle and/or its affiliates.
  * The Universal Permissive License (UPL), Version 1.0
  */
-//grunt shell task
+// grunt shell task
 
 var constants = require("../../common/constants");
+
 var cordovaDirectory = constants.CORDOVA_DIRECTORY;
 
-module.exports = {
-
+module.exports =
+{
   cordovaPrepare:
   {
-    command: 'cordova prepare <%= platform %>',
-    options: {
+    command: "cordova prepare <%= platform %>",
+    options:
+    {
       execOptions: 
       {
         cwd: cordovaDirectory
@@ -22,8 +24,9 @@ module.exports = {
 
   cordovaCompile:
   {
-    command: 'cordova compile <%= platform %> <%= buildType %> <%= buildConfig %>',
-    options: {
+    command: "cordova compile <%= platform %> <%= buildType %> <%= buildConfig %>",
+    options:
+    {
       execOptions: 
       {
         cwd: cordovaDirectory
@@ -33,13 +36,13 @@ module.exports = {
   
   cordovaRun:
   {
-    command: 'cordova run <%= platform %> <%= destination %> <%= buildType %> <%= buildConfig %>',
-    options: {
+    command: "cordova run <%= platform %> <%= destination %> <%= buildType %> <%= buildConfig %>",
+    options:
+    {
       execOptions: 
       {
         cwd: cordovaDirectory
       }
     }
   }
-
 };

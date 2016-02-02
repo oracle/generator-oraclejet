@@ -2,10 +2,10 @@
  * Copyright (c) 2014, 2016, Oracle and/or its affiliates.
  * The Universal Permissive License (UPL), Version 1.0
  */
-'use strict';
+"use strict";
 
-var generators = require('yeoman-generator');
-
+var generators = require("yeoman-generator");
+var commonMessages = require("../../common/messages");
 var commonRestore = require("../../common/restore");
 
 /*
@@ -15,8 +15,8 @@ var commonRestore = require("../../common/restore");
  * 2) write oraclejetconfig.json file
  * 3) invoke grunt bowercopy
  */
-var OracleJetHybridRestoreGenerator = generators.Base.extend({
-
+var OracleJetHybridRestoreGenerator = generators.Base.extend(
+{
   constructor: function () 
   {
     generators.Base.apply(this, arguments);
@@ -29,7 +29,6 @@ var OracleJetHybridRestoreGenerator = generators.Base.extend({
     
     commonRestore.npmBowerInstall({generator: this})
       .then(commonRestore.writeOracleJetConfigFile)
-      .then(commonRestore.removeTempZipLib)
       .then(commonRestore.invokeBowerCopyScript)
       .then(function() 
       {
@@ -37,12 +36,16 @@ var OracleJetHybridRestoreGenerator = generators.Base.extend({
       })
       .catch(function(err)
       {
-        if(err)
+        if (err)
         {
-          this.env.error(err);
+          this.env.error(commonMessages.prefixError(err));
         }
       }.bind(this));
+  },
 
+  end: function()
+  {
+    this.log(commonMessages.restoreComplete(this.options.invokedByRestore));
   }
 
 });

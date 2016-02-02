@@ -2,18 +2,19 @@
  * Copyright (c) 2014, 2016, Oracle and/or its affiliates.
  * The Universal Permissive License (UPL), Version 1.0
  */
-//grunt connect task
+// grunt connect task
 
-module.exports = {
-  
-  //to start the server for hosting
+module.exports =
+{
+  // to start the server for hosting
   devServer: 
   {
     options: 
     { 
-      hostname:'localhost',
-      port: '<%= oraclejet.ports.server %>',
-      livereload: '<%= oraclejet.ports.livereload %>'
+      hostname: "localhost",
+      port: "<%= oraclejet.ports.server %>",
+      livereload: "<%= oraclejet.ports.livereload %>",
+      open: true
     }
   },
 
@@ -21,9 +22,9 @@ module.exports = {
   {
     options: 
     {
-      port: '<%= oraclejet.ports.server %>',
-      base: ["release"]
+      port: "<%= oraclejet.ports.server %>",
+      base: ["release"],
+      open: true
     }
   }
-  
 };

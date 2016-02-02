@@ -2,14 +2,14 @@
  * Copyright (c) 2014, 2016, Oracle and/or its affiliates.
  * The Universal Permissive License (UPL), Version 1.0
  */
-//grunt requirejs task
+// grunt requirejs task
 
 var constants = require("../../common/constants");
+
 var cordovaDirectory = constants.CORDOVA_DIRECTORY;
 
-module.exports = {
-  
-  //to compress the main.js
+module.exports =
+{
   main: 
   {
     options: 
@@ -21,5 +21,4 @@ module.exports = {
       out: cordovaDirectory + "/www/js/main.js"
     }
   }
-  
 };
