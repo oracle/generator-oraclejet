@@ -14,6 +14,11 @@ module.exports = {
   	return (std.indexOf("without errors") > -1 ? true : false);
   },
 
+  isWindows:function _isWindows(OS)
+  {
+    return /^Windows/.test(OS);
+  },
+
   getJetVersion: function _getJetVersion(filePath, file)
   {
     return fs.readdirSync(path.join(filePath,file));
