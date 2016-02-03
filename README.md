@@ -28,7 +28,7 @@ yo oraclejet:hybrid myApp --appId=com.oracle.samples --appName=MyApp --template=
 ```
 
 ### [Contributing](https://github.com/oracle/generator-oraclejet/tree/master/CONTRIBUTING.md)
-Oracle JET is an open source project. See 
+Oracle JET is an open source project. Pull Requests are currently not being accepted. See 
 [CONTRIBUTING](https://github.com/oracle/generator-oraclejet/tree/master/CONTRIBUTING.md)
 for details.
 

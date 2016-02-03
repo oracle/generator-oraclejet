@@ -9,17 +9,18 @@
   
   "files": 
   [
-    "generators/app",
-    "generators/hybrid",
-    "generators/restore",
-    "generators/restore-hybrid",
-    "generators/restore-web",
-    "generators/web"
+    "generators",
+    "common",
+    "util"
   ],
 
   "dependencies": 
   {
-    "yeoman-generator": "0.18.0"    
+    "yeoman-generator": "0.18.0",   
+    "adm-zip": "0.4.7",
+    "fs-extra": "0.24.0",
+    "xmldom": "0.1.19",
+    "request": "2.69.0"
   },
 
   "engines": 
@@ -29,12 +30,8 @@
 
   "devDependencies": 
   {
-    "adm-zip": "0.4.7",
-    "fs-extra": "0.24.0",
     "yeoman-assert": "2.1.1",
-    "yeoman-test": "1.0.0",
-    "xmldom": "0.1.19",
-    "request": "2.69.0"
+    "yeoman-test": "1.0.0"
   },
 
   "preferGlobal": true
