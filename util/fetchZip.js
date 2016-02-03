@@ -15,6 +15,10 @@ module.exports = function(url)
   {
     request.get({url: url, encoding: null}, function(err, resp, body)
       {
+        if (err) {
+            reject(err);
+        }
+          
         var zip = null;
 
         try 

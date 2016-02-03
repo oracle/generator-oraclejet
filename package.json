@@ -1,12 +1,13 @@
 {
   "name": "generator-oraclejet",
-  "version": "0.0.2",
+  "version": "0.0.4",
+  "license":"UPL-1.0",
   "description": "initial",
   "keywords": 
   [
     "yeoman-generator"
-  ],
-  
+  ], 
+  "main": "common/index.js",
   "files": 
   [
     "generators",
