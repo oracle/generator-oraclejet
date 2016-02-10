@@ -19,7 +19,7 @@ var OracleJetWebCreateGenerator = generators.Base.extend(
   initializing: function()
   {
     var done = this.async();
-    common.validateAppDirNotExistsOrIsEmpty(this.appDir)
+    common.validateAppDirNotExistsOrIsEmpty(this)
       .then(function()
       {
         done();
@@ -58,7 +58,7 @@ var OracleJetWebCreateGenerator = generators.Base.extend(
         // generator
 
         // change the directory for oraclejet:restore and the invocation of cordova add
-        process.chdir(self.destinationPath(self.appDir));
+        self.destinationRoot(self.destinationPath(self.appDir));
         done();
       })
       .catch(function(err)

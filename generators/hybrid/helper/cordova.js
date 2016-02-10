@@ -10,8 +10,8 @@ module.exports =
 {
   create: function _create(generator)
   {
-    process.chdir(generator.destinationPath(generator.appDir));
-
+    generator.destinationRoot(generator.destinationPath(generator.appDir));
+    
     return new Promise(function(resolve, reject) 
     {
       var cordovaDir = constants.CORDOVA_DIRECTORY;

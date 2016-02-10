@@ -60,7 +60,7 @@ module.exports =
     });
   },
 
-  validateAppDirNotExistsOrIsEmpty: function _validateAppDirNotExistsOrIsEmpty(appDir)
+  validateAppDirNotExistsOrIsEmpty: function _validateAppDirNotExistsOrIsEmpty(generator)
   { 
     return new Promise(function(resolve,reject)
     { 
@@ -106,13 +106,14 @@ function _fileNotHidden(filename)
   return !/^\..*/.test(filename);
 }
 
-function _handleAbsolutePath(appDir)
+function _handleAbsolutePath(generator)
 {
+  var appDir = generator.appDir;
   if (path.isAbsolute(appDir))
   { 
     var parentDir = path.resolve(appDir, ".."); 
     fs.ensureDirSync(parentDir);
-    process.chdir(parentDir);
+    generator.destinationRoot(parentDir);
     appDir = path.basename(appDir);  
   }
 

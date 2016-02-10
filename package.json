@@ -1,6 +1,6 @@
 {
   "name": "generator-oraclejet",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "license":"UPL-1.0",
   "description": "initial",
   "keywords": 
@@ -17,10 +17,10 @@
 
   "dependencies": 
   {
-    "yeoman-generator": "0.18.0",   
+    "yeoman-generator": "0.22.5",   
     "adm-zip": "0.4.7",
-    "fs-extra": "0.24.0",
-    "xmldom": "0.1.19",
+    "fs-extra": "0.26.5",
+    "xmldom": "0.1.22",
     "request": "2.69.0"
   },
 

@@ -57,7 +57,11 @@ module.exports =
     try
     {
       document = fs.readFileSync(configXml, "utf-8");
-      document = _processConfigSrcAttribute(document);
+      if (_isLiveReloadEnabled())
+      {
+        document = _processConfigSrcAttribute(document);
+        document = _addNavigationPermission(document);        
+      }
       document = _addLoadUrlTimeoutPreference(document);
       fs.writeFileSync(configXml, document);
     }
@@ -135,7 +139,6 @@ function _getNewHtmlContent(content, platform)
 
 function _getConfigXmlPath(platform)
 {
-  //var platform = process.env[constants.PLATFORM_ENV_KEY];
   var configXmlPath;
 
   if (platform === "android")
@@ -170,26 +173,17 @@ function _processConfigSrcAttribute(document)
 
   // need to update the config src for livereloading
   var platform = process.env["PLATFORM"];
-  var liveReloadEnabled = process.env["LIVERELOAD_ENABLED"];
   var serverPort = process.env["SERVER_PORT"];
   
-  if (liveReloadEnabled !== "false") 
-  {
-    var localIpAddress = (platform === "android") ? ANDROID_LOCAL_IP_ADDRESS : LOCAL_IP_ADDRESS;
-    // due to how emulator/devices work; localhost does not point to your
-    // laptop and etc but its internal one, need to use ip address
-    var newSrcValue = "http://" + localIpAddress + ":" + serverPort + "/" + platform + "/www/index.html";
-        
-    var contentTag = _getXmlTag(document, "content");
-    var newContentTag = _setXmlAttrValue(contentTag, "src", newSrcValue);
+  // due to how emulator/devices work; localhost does not point to your
+  // laptop and etc but its internal one, need to use ip address
+  var newSrcValue = "http://" + _getLocalIpAddress() + ":" + serverPort + "/" + platform + "/www/index.html";
+  var contentTag = _getXmlTag(document, "content");
+  var newContentTag = _setXmlAttrValue(contentTag, "src", newSrcValue);
 
-    newDocument = document.replace(contentTag, newContentTag);
-  }
-  
+  newDocument = document.replace(contentTag, newContentTag);
   return newDocument;
-
 }
-
 
 function _addLoadUrlTimeoutPreference(document) 
 {
@@ -210,12 +204,39 @@ function _addLoadUrlTimeoutPreference(document)
     contentTag = _getXmlTag(document, "content");
     if (contentTag)
     {
-      newPreferenceTag = contentTag + '\n    <preference name="' + LOAD_URL_TIMEOUT_VALUE + '" value="240000"/>';
+      newPreferenceTag = contentTag + '\n    <preference name="' + LOAD_URL_TIMEOUT_VALUE + '" value="240000" />';
       newDocument = document.replace(contentTag, newPreferenceTag);
     }
   }
 
   return newDocument;    
+}
+
+function _addNavigationPermission(document)
+{
+  // need to update the config src for livereloading
+  var newDocument = document;
+  var contentTag = _getXmlTag(document, "content");
+  
+  if (contentTag)
+  {
+    var newAllowTag = contentTag + '\n    <allow-navigation href="http://' + _getLocalIpAddress() + '/*" />';
+    newDocument = document.replace(contentTag, newAllowTag);
+  }
+
+  return newDocument;
+}
+
+function _isLiveReloadEnabled()
+{
+  var liveReloadEnabled = process.env["LIVERELOAD_ENABLED"];
+  return (liveReloadEnabled !== "false"); 
+}
+
+function _getLocalIpAddress()
+{
+  var platform = process.env["PLATFORM"];
+  return (platform === "android") ? ANDROID_LOCAL_IP_ADDRESS : LOCAL_IP_ADDRESS;
 }
 
 function _getXmlTag(content, tagName)

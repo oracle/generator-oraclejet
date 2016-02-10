@@ -58,7 +58,7 @@ var OracleJetHybridCreateGenerator = generators.Base.extend({
   initializing: function() 
   { 
     var done = this.async();
-    common.validateAppDirNotExistsOrIsEmpty(this.appDir)
+    common.validateAppDirNotExistsOrIsEmpty(this)
       .then(function()
       {
         done();
@@ -198,7 +198,7 @@ var OracleJetHybridCreateGenerator = generators.Base.extend({
     var platforms = this._platformsToProcess;
     var context = {generator: this};
 
-    process.chdir(this.destinationPath(constants.CORDOVA_DIRECTORY));
+    this.destinationRoot(this.destinationPath(constants.CORDOVA_DIRECTORY));
 
     platforms.forEach(function(value) 
     {
@@ -213,7 +213,7 @@ var OracleJetHybridCreateGenerator = generators.Base.extend({
       Promise.all(platformPromises)
         .then(function() 
         {
-          process.chdir(path.resolve(".."));
+          context.generator.destinationRoot(path.resolve(".."));
           resolve();
         })
         .catch(function(err)

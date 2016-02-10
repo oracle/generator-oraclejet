@@ -48,7 +48,7 @@ function _getRestoreComplete(invokedByRestore)
   }
   else
   {
-    return _appendSuccessPrefix("Your app is ready! Try grunt build and serve...");
+    return _appendSuccessPrefix("Your app is ready! Change to your new app directory and try grunt build and serve...");
   }
 }  
 
