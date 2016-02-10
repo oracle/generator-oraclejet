@@ -64,13 +64,14 @@ module.exports =
   { 
     return new Promise(function(resolve,reject)
     { 
-      appDir = path.resolve(appDir);     
+      var appDir = _handleAbsolutePath(generator);  
+
       fs.stat(appDir, function(err,stats)
       {
         if (err)
         {
           // Proceed to scaffold if appDir directory doesn't exist
-          resolve(); 
+          resolve(appDir); 
         } 
         else
         {
@@ -80,7 +81,7 @@ module.exports =
             if (isEmpty)
             {
               // Proceed to scaffold if appDir directory is empty
-              resolve();
+              resolve(appDir);
             } 
             else
             {

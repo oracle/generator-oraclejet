@@ -59,32 +59,34 @@ var OracleJetHybridCreateGenerator = generators.Base.extend({
   { 
     var done = this.async();
     common.validateAppDirNotExistsOrIsEmpty(this)
-      .then(function()
+      .then(function(validAppDir)
       {
+        this.appDir = path.basename(validAppDir);
+
+        // platforms that will be added by cordova API.
+        // note if this.options.platforms is not provided        
+        // it will test out the platform candidates during the prompting
+        // lifecycle; otherwise it will parse the provided 
+        // platforms options and filter to those that are capable 
+        // on the user's machine
+        this._platformsToProcess; 
+    
+        if (!this.options.appName) 
+        {
+          this.options.appName = _getAppBaseName(this.appDir);
+        }
+
+        if (!this.options.appId)
+        {      
+          this.options.appId = _getDefaultAppId(this.appDir);
+        }
+
         done();
-      })
+      }.bind(this))
       .catch(function(err)
       {
         this.env.error(commonMessages.prefixError(err));
       }.bind(this));
-
-    // platforms that will be added by cordova API
-    // note if this.options.platforms is not provided
-    // it will test out the platform candidates during the prompting
-    // lifecycle; otherwise it will parse the provided 
-    // platforms options and filter to those that are capable 
-    // on the user's machine
-    this._platformsToProcess; 
-    
-    if (!this.options.appName) 
-    {
-      this.options.appName = _getAppBaseName(this.appDir);
-    }
-
-    if (!this.options.appId)
-    {      
-      this.options.appId = _getDefaultAppId(this.appDir);
-    }
   },
 
   prompting: function()
