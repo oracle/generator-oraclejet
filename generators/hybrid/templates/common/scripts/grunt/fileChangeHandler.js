@@ -28,7 +28,6 @@ module.exports =
       {
         // from src directory to www + platform directories
         _copyFileOver(filePath);
-        _indexHTMLPlatformInjection(filePath);
       }
       else if (target === "platformFiles") 
       {
@@ -46,9 +45,26 @@ function _copyFileOver(filePath)
   var index = filePath.indexOf(constants.APP_SRC_DIRECTORY);
   var begPath = filePath.substring(0, index);
   var endPath = filePath.substring(index+3);
-
+  
   _copyFileToWWW(filePath, begPath, endPath);
-  _copyFileToPlatforms(filePath, begPath, endPath);
+
+  // if index.html need an additional step of performing inject
+  var splitted = filePath.split(path.sep);
+  var length = splitted.length;
+
+  if (length > 1 &&
+        splitted[length-1] === "index.html" &&
+        splitted[length-2] === constants.APP_SRC_DIRECTORY)
+  {
+    // inject the cordova.js script and use the new file as the source for copy
+    injector.injectCordovaScript(false);
+    var newIndexSrc = begPath + CORDOVA_WWW_DIRECTORY + endPath;
+    _copyFileToPlatforms(newIndexSrc, begPath, endPath);
+    _indexHTMLPlatformInjection();
+  }
+  else {
+    _copyFileToPlatforms(filePath, begPath, endPath);
+  }
 }
 
 function _copyFileToWWW(filePath, begPath, endPath) 
@@ -58,12 +74,11 @@ function _copyFileToWWW(filePath, begPath, endPath)
 
 function _copyFileToPlatforms(filePath, begPath, endPath)
 {
-  var platformJsonPath = path.resolve(constants.CORDOVA_DIRECTORY + "/platforms/platforms.json");
-  var parsed = JSON.parse(fs.readFileSync(platformJsonPath), 'utf8');
+  var platforms = _getInstalledPlatforms();
   var configXML = path.resolve(constants.CORDOVA_DIRECTORY + "/config.xml");
   var appName = util.getAppName(configXML);
 
-  Object.keys(parsed).forEach(function(platform) 
+  platforms.forEach(function(platform) 
   {
     var paths = platformPaths[platform].getCopyPaths(begPath, endPath, appName);
 
@@ -79,20 +94,13 @@ function _copyFileToPlatforms(filePath, begPath, endPath)
   });
 }
 
-function _indexHTMLPlatformInjection(filePath)
+function _indexHTMLPlatformInjection()
 {
-  // if index.html need an additional step of performing inject
-  var splitted = filePath.split(path.sep);
-  var length = splitted.length;
-
-  if (length > 1 &&
-        splitted[length-1] === "index.html" &&
-        splitted[length-2] === constants.APP_SRC_DIRECTORY)
+  var platforms = _getInstalledPlatforms();
+  platforms.forEach(function(platform)
   {
-    injector.injectPlatformStyleClasses();
-    injector.injectCordovaScript(true);
-    injector.injectLiveReloadScript(true);   
-  }
+    injector.updateIndexHtml(platform);
+  });
 }
 
 function _copyMergesFileChange(action, filePath, target)
@@ -117,4 +125,18 @@ function _copyMergesFileChange(action, filePath, target)
       }
     });
   });
+}
+
+function _getInstalledPlatforms()
+{
+  var platforms = [];
+  var platformJsonPath = path.resolve(constants.CORDOVA_DIRECTORY + "/platforms/platforms.json");
+  var parsed = JSON.parse(fs.readFileSync(platformJsonPath), 'utf8');
+
+  Object.keys(parsed).forEach(function(platform) 
+  {
+    platforms.push(platform);
+  });
+  
+  return platforms;
 }

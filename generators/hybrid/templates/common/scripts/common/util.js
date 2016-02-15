@@ -46,8 +46,19 @@ module.exports =
 
   getCordovaBuildConfig: function(grunt)
   {
-    var bConfig = grunt.option("buildConfig");
+    var bConfig = grunt.option("buildConfig") || "";
 
-    return bConfig ? "--buildConfig=" + bConfig : "";
+    if(bConfig)
+    {
+      var bcPath = path.resolve(bConfig);
+
+      if(!fs.existsSync(bcPath))
+      {
+        throw new Error("Please ensure location of buildConfig is correct, current : " + bcPath);
+      }
+      bConfig = "--buildConfig=" + bcPath;
+    }
+
+    return bConfig;
   }
 };

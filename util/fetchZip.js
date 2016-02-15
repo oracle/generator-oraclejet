@@ -10,28 +10,41 @@ var request = require('request');
 module.exports = function(url) 
 {
   // fetches the zip file
-
   return new Promise(function(resolve, reject) 
   {
-    request.get({url: url, encoding: null}, function(err, resp, body)
-      {
+    var data = [];
+    var dataLen = 0;
+      
+    request.get({url: url, encoding: null}).on('error', function(err)
+    {
+        reject(err);
+    }).on('data', function(block)
+    {
+        data.push(block);
+        dataLen += block.length;
+    }).on('end', function(err, resp, body)
+    {
         if (err) {
             reject(err);
-        }
-          
-        var zip = null;
+        }          
+        var buf = new Buffer(dataLen);
+
+        for (var i=0, len = data.length, pos = 0; i < len; i++) 
+        { 
+            data[i].copy(buf, pos); 
+            pos += data[i].length; 
+        } 
 
         try 
         {
-          zip = new admzip(body);
+          var zip = new admzip(buf);
+          resolve(zip);
         }
         catch (e)
         {
           reject(e);
           return;
         }
-        
-        resolve(zip);
-      });      
+    });
   });
 };

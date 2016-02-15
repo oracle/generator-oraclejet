@@ -18,25 +18,9 @@ var hookInjector = require("../hooks/injector.js");
 
 module.exports =
 {
-  injectLiveReloadScript: function(updatePlatformFile)
+  injectCordovaScript: function(updatePlatformFile, platform)
   {
-    // note that this function will be invoked only for non-web case
-    // and it's purpose is to inject content from the copied over src/index.html
-    var injectSourceContent = _getInjectSourceContent(updatePlatformFile);
-    var indexHTML = injectSourceContent.indexHTML;
-    var document = injectSourceContent.document;
-    
-    // per discussion the below cordova injection will be removed in the 
-    // future when the cordova.js is added to the quick start templates + 
-    // addeventlistener (mock) added in
-    _injectLiveReloadScript(injectSourceContent);
-    
-    fs.writeFileSync(indexHTML, document);    
-  },
-  
-  injectCordovaScript: function(updatePlatformFile)
-  {
-    var injectSourceContent = _getInjectSourceContent(updatePlatformFile);
+    var injectSourceContent = _getInjectSourceContent(updatePlatformFile, platform);
     var indexHTML = injectSourceContent.indexHTML;
     var document = injectSourceContent.document;
 
@@ -49,21 +33,19 @@ module.exports =
     }
   },
   
-  injectPlatformStyleClasses: function()
+  updateIndexHtml: function(platform)
   {
-    var platform = process.env[constants.PLATFORM_ENV_KEY];
-    hookInjector.injectPlatformStyleClasses(platform, true);
+    hookInjector.updateIndexHtml(platform, true);
   }
   
 };
 
-function _getInjectSourceContent(updatePlatformFile)
+function _getInjectSourceContent(updatePlatformFile, platform)
 {
   var indexHTML;
 
   if (updatePlatformFile)
   {
-    var platform = process.env[constants.PLATFORM_ENV_KEY];
     var root = platformPaths[platform].ROOT;
     indexHTML = path.resolve(root, "index.html");
   }
@@ -75,36 +57,6 @@ function _getInjectSourceContent(updatePlatformFile)
   var document = new DOMParser().parseFromString(fs.readFileSync(indexHTML, "utf-8"), "text/html");
 
   return {indexHTML: indexHTML, document: document};
-}
-
-function _injectLiveReloadScript(injectSourceContent)
-{
-  var document = injectSourceContent.document;
-  var liveReloadElement;
-
-  if (_isLiveReloadEnabled())
-  {
-    liveReloadElement = _createLiveReloadElement(document);
-    if (liveReloadElement)
-    {
-      _inject(injectSourceContent, liveReloadElement);
-    }
-  }
-}
-
-function _isLiveReloadEnabled() 
-{
-  return process.env[constants.LIVERELOAD_ENABLED_ENV_KEY] !== "false";
-}
-
-function _createLiveReloadElement(document)
-{
-  var liveReloadPort = process.env[constants.LIVERELOAD_PORT_ENV_KEY];
-  var platform = process.env[constants.PLATFORM_ENV_KEY];
-  
-  var liveReloadSrc = "http://" + util.getLocalIp(platform) + ":" + liveReloadPort + "/livereload.js";
-
-  return _createScriptLibraryElement(document, liveReloadSrc);
 }
 
 function _createScriptLibraryElement(document, src)

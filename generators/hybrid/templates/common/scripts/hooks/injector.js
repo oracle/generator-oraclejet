@@ -17,7 +17,7 @@ var LOAD_URL_TIMEOUT_VALUE = "loadUrlTimeoutValue";
 
 module.exports =
 {
-  injectPlatformStyleClasses: function(platform, external)
+  updateIndexHtml: function(platform, external)
   {
     var indexHtmlPath = _getIndexHtmlPath(platform, external);
     var content;
@@ -30,18 +30,19 @@ module.exports =
     try
     {
       content = fs.readFileSync(indexHtmlPath, "utf-8");
-      content = _getNewHtmlContent(content, platform);
-      if (content)
+      content = _addPlatformStyleClasses(content, platform);
+      if (_isLiveReloadEnabled())
       {
-        fs.writeFileSync(indexHtmlPath, content);
+        content = _addLiveReloadElement(content, platform);
       }
+      fs.writeFileSync(indexHtmlPath, content);
     }
     catch (e)
     {
     }
   },
 
-  updateConfig: function(platform) 
+  updateConfigXml: function(platform) 
   {
     if (!process || !process.env || !process.env["PLATFORM"])
     {
@@ -98,13 +99,13 @@ function _getIndexHtmlPath(platform, external)
   return indexHtmlPath;  
 }
 
-function _getNewHtmlContent(content, platform)
+function _addPlatformStyleClasses(content, platform)
 {
   var bodyTag;
   var classAttrValue;
   var newBodyTag;
   var newClassAttrValue;
-  var newContent;
+  var newContent = content;
   
   var classStr = " oj-platform-cordova";
   if (platform === "android")
@@ -117,25 +118,34 @@ function _getNewHtmlContent(content, platform)
   }
                         
   bodyTag = _getXmlTag(content, "body"); 
-  if (!bodyTag)
+  if (bodyTag)
   {
-    return null;
-  }
-  
-  classAttrValue = _getXmlAttrValue(bodyTag, "class");
-  if (classAttrValue)
-  {
-    newClassAttrValue = classAttrValue + classStr;
-  }
-  else
-  {
-    newClassAttrValue = classStr;
-  }
-  newBodyTag = _setXmlAttrValue(bodyTag, "class", newClassAttrValue);
-  newContent = content.replace(bodyTag, newBodyTag);
-  
+    classAttrValue = _getXmlAttrValue(bodyTag, "class");
+    if (classAttrValue)
+    {
+      newClassAttrValue = classAttrValue + classStr;
+    }
+    else
+    {
+      newClassAttrValue = classStr;
+    }
+    newBodyTag = _setXmlAttrValue(bodyTag, "class", newClassAttrValue);
+    newContent = content.replace(bodyTag, newBodyTag);
+  }  
   return newContent;
 }
+
+function _addLiveReloadElement(content, platform)
+{
+  var newContent = content;
+  var liveReloadPort = process.env["LIVERELOAD_PORT"];  
+  var liveReloadSrc = "http://" + _getLocalIpAddress(platform) + ":" + liveReloadPort + "/livereload.js";
+  var scriptTag = '<script type="text/javascript" src="' + liveReloadSrc + '"></script>';
+
+  newContent = content.replace("</body>", "  " + scriptTag + "\n  </body>");
+  return newContent;
+}
+
 
 function _getConfigXmlPath(platform)
 {
@@ -177,7 +187,7 @@ function _processConfigSrcAttribute(document)
   
   // due to how emulator/devices work; localhost does not point to your
   // laptop and etc but its internal one, need to use ip address
-  var newSrcValue = "http://" + _getLocalIpAddress() + ":" + serverPort + "/" + platform + "/www/index.html";
+  var newSrcValue = "http://" + _getLocalIpAddress(platform) + ":" + serverPort + "/" + platform + "/www/index.html";
   var contentTag = _getXmlTag(document, "content");
   var newContentTag = _setXmlAttrValue(contentTag, "src", newSrcValue);
 
@@ -216,11 +226,12 @@ function _addNavigationPermission(document)
 {
   // need to update the config src for livereloading
   var newDocument = document;
+  var platform = process.env["PLATFORM"];
   var contentTag = _getXmlTag(document, "content");
   
   if (contentTag)
   {
-    var newAllowTag = contentTag + '\n    <allow-navigation href="http://' + _getLocalIpAddress() + '/*" />';
+    var newAllowTag = contentTag + '\n    <allow-navigation href="http://' + _getLocalIpAddress(platform) + '/*" />';
     newDocument = document.replace(contentTag, newAllowTag);
   }
 
@@ -233,9 +244,8 @@ function _isLiveReloadEnabled()
   return (liveReloadEnabled !== "false"); 
 }
 
-function _getLocalIpAddress()
+function _getLocalIpAddress(platform)
 {
-  var platform = process.env["PLATFORM"];
   return (platform === "android") ? ANDROID_LOCAL_IP_ADDRESS : LOCAL_IP_ADDRESS;
 }
 

@@ -177,10 +177,6 @@ function _updateProcessEnv(grunt, platform, target, disableLiveReload)
 
 function _runTasks(grunt, disableLiveReload, web, target)
 {
-  if (!web)
-  {
-    injector.injectLiveReloadScript(false);
-  }
   var tasks = _getTasks(grunt, disableLiveReload, web, target);
   grunt.task.run(tasks);
 }

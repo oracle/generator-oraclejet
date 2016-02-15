@@ -16,8 +16,8 @@ module.exports = function(context)
   {
     platforms.forEach(function(value)
       {
-        injector.injectPlatformStyleClasses(value);
-        injector.updateConfig(value);
+        injector.updateIndexHtml(value);
+        injector.updateConfigXml(value);
       }
     );
   }    
