@@ -13,7 +13,7 @@ var _WEB = "web";
 var _BOTH = "both";
 
 var BLANK_TEMPLATE = blankTemplate.BLANK_TEMPLATE;
-var _TEMPLATE_URL_ROOT = "https://github.com/oracle/oraclejet/releases/download/0.0.2/";
+var _TEMPLATE_URL_ROOT = "https://github.com/oracle/oraclejet/releases/download/2.0.0/";
 
 var _TEMPLATES =
 {
