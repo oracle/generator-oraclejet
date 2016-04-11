@@ -80,8 +80,12 @@ function _copyFileToPlatforms(filePath, begPath, endPath)
 
   platforms.forEach(function(platform) 
   {
+    if (platformPaths[platform] === undefined)
+    {
+      return;   // skip unsupported platform
+    }
+    
     var paths = platformPaths[platform].getCopyPaths(begPath, endPath, appName);
-
     paths.forEach(function(currPath) 
     {
       var exists = fs.existsSync(currPath);

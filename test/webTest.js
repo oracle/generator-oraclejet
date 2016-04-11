@@ -8,91 +8,106 @@ var env = process.env,
         path = require('path'),
         exec = require('child_process').exec,
         util = require('./util'),
+        helpers = require('yeoman-test'),
+        yoAssert = require('yeoman-assert'),
         execOptions =
         {
-          cwd: path.resolve('built/test/generator/')
+          cwd: path.resolve('built/test/generator/test/')
         };
+
+var filelist;
+var testDir = path.resolve('built/test/generator/test', 'webTest');
+var utilDir = path.resolve('built/test/generator/util/web');
 
 describe("Web Test", function ()
 {
-  var filelist;
-  var testDir = path.resolve('built/test/generator', 'webTest');
-  fs.ensureDirSync(testDir);
+  before(function(){
+    fs.ensureDirSync(testDir);
+    fs.emptyDirSync(testDir);    
+  });  
 
-  it("Generate web in 300 seconds", function (done)
-  {
-    this.timeout(300000);
-    exec('yo oraclejet webTest', execOptions, function (error, stdout)
+  describe("Scaffold with norestore flag", function(){
+    
+    it("Generate web app", function (done)
     {
-      done();
-      filelist = fs.readdirSync(testDir);
-      assert.equal(util.isSuccess(stdout), true, error);
-    });
-  });
-
-  describe("Check essential files", function ()
-  {
-
-    it("package.json exists", function () {
-      var inlist = filelist.indexOf("package.json") > -1;
-      assert.equal(inlist, true, path.resolve(testDir, 'package.json') + " missing");
-    });
-
-    it("oraclejetconfig exists", function () {
-      var inlist = filelist.indexOf("oraclejetconfig.json") > -1;
-      assert.equal(inlist, true, path.resolve(testDir, 'oraclejetconfig.json') + " missing");
-    });
-
-    it(".gitignore exists", function () {
-      var inlist = filelist.indexOf(".gitignore") > -1;
-      assert.equal(inlist, true, path.resolve(testDir, '.gitignore') + " missing");
-    });
-
-  });
-
-
-  describe("validate templates", function ()
-  {
-
-    it("navBar is invalid template", function (done) {
-      this.timeout(15000);
-      exec('yo oraclejet testWebTemplate --template=navBar', execOptions, function (error, stdout)
+      this.timeout(120000);
+      exec('yo oraclejet webTest --norestore=true', execOptions, function (error, stdout)
       {
-        var errLogCorrect = /Invalid template name or URL for web: navBar/.test(error.message);
-        assert.equal(errLogCorrect, true, error);
+        done();
+        assert.equal(util.norestoreSuccess(stdout), true, error);
+        filelist = fs.readdirSync(testDir);
+      });
+    });
+  })
+
+  describe("Run Tests", function(){
+
+    it("Copy npm and bower modules", function(done){
+      this.timeout(200000);
+      //copy Npm and bower modules     
+      fs.copy(utilDir, testDir, function(err){
         done();
       });
     });
 
-    it("navDrawer is invalid template", function (done) {
-      this.timeout(15000);
-      exec('yo oraclejet testWebTemplate --template=navDrawer', execOptions, function (error, stdout)
-      {
-        var errLogCorrect = /Invalid template name or URL for web: navDrawer/.test(error.message);
-        assert.equal(errLogCorrect, true, error);
-        done();
+    describe("Check essential files", function (){
+
+      it("package.json exists", function () {
+        var inlist = filelist.indexOf("package.json") > -1;
+        assert.equal(inlist, true, path.resolve(testDir, 'package.json') + " missing");
       });
-    });
-    //TODO
-    it("quickStart is valid template", function () {
-      this.timeout(300000);
-      exec('yo oraclejet testWebQuickStart --template=quickStart --norestore=true', execOptions, function (error, stdout)
+
+      it("Gruntfile.js exists", function () {
+        var inlist = filelist.indexOf("Gruntfile.js") > -1;
+        assert.equal(inlist, true, path.resolve(testDir, 'Gruntfile.js') + " missing");
+      });
+
+      it(".gitignore exists", function ()
       {
-        assert.equal(util.isSuccess(stdout), true, error);
+        var inlist = filelist.indexOf(".gitignore") > -1;
+        assert.equal(inlist, true, path.resolve(testDir, '.gitignore') + " missing");
+      });
+
+    });
+
+    it("Run bowercopy task", function(done){
+      this.timeout(60000);
+      exec('grunt bowercopy', {cwd: testDir}, function(err, stdout){
         done();
+        assert.equal(util.isSuccess(stdout), true, err);      
       });
     });
 
-  });
-  /*
-  describe("Check JET version", function ()
-  {
-    it("JET Version Match", function ()
-    {
-      var packageJSON = fs.readJSONSync(path.resolve(testDir, 'oraclejetconfig.json'));
-      var jetVersion = util.getJetVersion(testDir, 'js/libs/oj');
-      assert.equal(jetVersion[0], packageJSON.version, "File version does not match in oraclejetconfig.json");
+    describe("validate templates", function (){   
+
+      it("navBar is invalid template", function (done) {
+        this.timeout(15000);
+        exec('yo oraclejet testWebTemplate --template=navBar', execOptions, function (error, stdout)
+        {
+          var errLogCorrect = /Invalid template name or URL for web: navBar/.test(error.message);
+          assert.equal(errLogCorrect, true, error);
+          done();
+        });
+      });
+
+      it("navDrawer is invalid template", function (done) {
+        this.timeout(15000);
+        exec('yo oraclejet testWebTemplate --template=navDrawer', execOptions, function (error, stdout)
+        {
+          var errLogCorrect = /Invalid template name or URL for web: navDrawer/.test(error.message);
+          assert.equal(errLogCorrect, true, error);
+          done();
+        });
+      });
+      //TODO
+      it("basic is valid template", function (done) {
+        this.timeout(300000);
+        exec('yo oraclejet testWebBasic --template=basic --norestore=true', execOptions, function (error, stdout)
+        {          
+          done();
+          assert.equal(util.norestoreSuccess(stdout), true, error);          
+        });
+      });
     });
   });
-  */
 });

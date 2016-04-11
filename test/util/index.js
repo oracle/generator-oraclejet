@@ -14,6 +14,11 @@ module.exports = {
   	return (std.indexOf("without errors") > -1 ? true : false);
   },
 
+  norestoreSuccess: function _yoSuccess(std)
+  {
+    return (std.indexOf("Oracle JET Error") > -1 ? false : true);
+  },   
+
   isWindows:function _isWindows(OS)
   {
     return /^Windows/.test(OS);
@@ -45,5 +50,10 @@ module.exports = {
       }
     }
     return false;
+  }, 
+
+  isCordovaSuccess: function _isCordovaSuccess(std)
+  {
+    return (std.indexOf("BUILD SUCCESSFUL") > -1 ? true : false);
   }
 };

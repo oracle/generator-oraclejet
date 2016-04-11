@@ -1,8 +1,8 @@
 {
   "name": "oraclejet-app",
-  "version": "1.0.0",
+  "version": "1.0.1-b1",
   "dependencies": 
   {
-    "oraclejet": "2.0.0"
+    "oraclejet": "2.0.1-b1"
   }
 }

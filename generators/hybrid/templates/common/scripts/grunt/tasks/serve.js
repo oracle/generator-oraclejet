@@ -6,7 +6,6 @@
 var ports = require("../common/ports");
 var constants = require("../../common/constants");
 var util = require("../../common/util");
-var injector = require("../../common/injector");
 var StringDecoder = require("string_decoder").StringDecoder;
 
 module.exports = function(grunt) {
@@ -200,10 +199,12 @@ function _getTasks(grunt, disableLiveReload, web, target)
 
     if (!disableLiveReload)
     {
+      tasks.push("shell:cordovaClean");
       tasks.push("customServe");
     }
     else
     {
+      tasks.push("shell:cordovaClean");
       tasks.push("shell:cordovaRun");
     }
   }

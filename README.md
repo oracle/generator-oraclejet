@@ -1,4 +1,4 @@
-# generator-oraclejet 1.0.0
+# generator-oraclejet 1.0.1
 
 ## About the generator
 This Yeoman generator for Oracle JET lets you quickly set up a project for use as a Web application or mobile-hybrid application for Android and iOS. 

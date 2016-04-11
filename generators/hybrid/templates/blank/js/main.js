@@ -18,9 +18,9 @@ requirejs.config(
     "promise": "libs/es6-promise/promise-1.0.0",
     "hammerjs": "libs/hammer/hammer-2.0.4",
     "ojdnd": "libs/dnd-polyfill/dnd-polyfill-1.0.0",
-    "ojs": "libs/oj/v2.0.0/debug",
-    "ojL10n": "libs/oj/v2.0.0/ojL10n",
-    "ojtranslations": "libs/oj/v2.0.0/resources",
+    "ojs": "libs/oj/v2.0.1/debug",
+    "ojL10n": "libs/oj/v2.0.1/ojL10n",
+    "ojtranslations": "libs/oj/v2.0.1/resources",
     "knockout-amd-helpers": "libs/knockout/knockout-amd-helpers",
     "text": "libs/require/text",
     "signals": "libs/js-signals/signals"

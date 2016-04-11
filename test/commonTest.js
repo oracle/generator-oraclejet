@@ -23,7 +23,7 @@ describe("Npm Packages", function()
 {
 	it("check yeoman plugin is installed", function(done) 
 	{
-		this.timeout(10000);
+		this.timeout(30000);
 	   	exec('npm list', execOptions, function(error, stdout)
 	   	{	   	
 	   		assert.equal(

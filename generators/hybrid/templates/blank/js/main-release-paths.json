@@ -5,9 +5,9 @@
   "promise": "libs/es6-promise/promise-1.0.0.min",
   "hammerjs": "libs/hammer/hammer-2.0.4.min",
   "ojdnd": "libs/dnd-polyfill/dnd-polyfill-1.0.0.min",
-  "ojs": "libs/oj/v2.0.0/min",
-  "ojL10n": "libs/oj/v2.0.0/ojL10n",
-  "ojtranslations": "libs/oj/v2.0.0/resources",
+  "ojs": "libs/oj/v2.0.1/min",
+  "ojL10n": "libs/oj/v2.0.1/ojL10n",
+  "ojtranslations": "libs/oj/v2.0.1/resources",
   "knockout-amd-helpers": "libs/knockout/knockout-amd-helpers.min",
   "text": "libs/require/text",
   "signals": "libs/js-signals/signals.min"

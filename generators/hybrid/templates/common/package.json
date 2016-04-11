@@ -1,11 +1,9 @@
 {
   "name": "oraclejet-app",
-  "version": "1.0.0",
+  "version": "1.0.1-b1",
   "description":"A sample Oracle JavaScript Extension Toolkit (JET) mobile app based on Cordova",
   "author":{
-    "name": "Oracle Jet Team",
-    "email": "oraclejet_interest_ww_grp@oracle.com",
-    "homepage": "http://jet.us.oracle.com"
+    "name": "Oracle Jet Team"
   },
   "devDependencies": 
   {

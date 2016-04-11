@@ -44,5 +44,17 @@ module.exports =
         cwd: cordovaDirectory
       }
     }
+  },
+
+  cordovaClean:
+  {
+    command: "cordova clean <%= platform %>",
+    options:
+    {
+      execOptions: 
+      {
+        cwd: cordovaDirectory
+      }
+    }
   }
 };

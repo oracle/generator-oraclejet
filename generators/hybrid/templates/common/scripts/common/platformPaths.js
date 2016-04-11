@@ -49,5 +49,17 @@ module.exports =
         path.resolve(begPath + this.ROOT + endPath)
       ];
     }
-  }
+  },
+  
+  "browser": 
+  {
+    ROOT: cordovaDirectory + "/platforms/browser/www/",
+
+    getCopyPaths: function(begPath, endPath, appName) 
+    {
+      return [
+        path.resolve(begPath + this.ROOT + endPath)
+      ];
+    }
+  }  
 };
