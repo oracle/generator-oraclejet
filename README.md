@@ -1,4 +1,4 @@
-# generator-oraclejet 1.0.1
+# generator-oraclejet 1.0.2
 
 ## About the generator
 This Yeoman generator for Oracle JET lets you quickly set up a project for use as a Web application or mobile-hybrid application for Android and iOS. 
@@ -6,13 +6,13 @@ This Yeoman generator for Oracle JET lets you quickly set up a project for use a
 This is an open source project maintained by Oracle Corp.
 
 ### Installation
-For step-by-step instructions on using Yeoman and this generator to build an Oracle JET application, including possible pre-requisites for installation, please see the [Oracle JET Developers Guide](http://docs.oracle.com/middleware/jet200/jet/)
+For step-by-step instructions on using Yeoman and this generator to build an Oracle JET application, including possible pre-requisites for installation, please see the [Oracle JET Developers Guide](http://docs.oracle.com/middleware/jet202/jet/)
 ```bash
 npm install -g generator-oraclejet
 ```
 
 ### Usage
-Once you have the generator installed, the following commands will scaffold up a JET based application. See the [Oracle JET Developers Guide](http://docs.oracle.com/middleware/jet200/jet/) for information about all of the available Command Line options as well as details on pre-requisites for installation and usage with Mobile-Hybrid applications.
+Once you have the generator installed, the following commands will scaffold up a JET based application. See the [Oracle JET Developers Guide](http://docs.oracle.com/middleware/jet202/jet/) for information about all of the available Command Line options as well as details on pre-requisites for installation and usage with Mobile-Hybrid applications.
 
 ```bash
 # Generate a web based application with default blank template
