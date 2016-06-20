@@ -1,7 +1,7 @@
 # generator-oraclejet 1.0.2
 
 ## About the generator
-This Yeoman generator for Oracle JET lets you quickly set up a project for use as a Web application or mobile-hybrid application for Android and iOS. 
+This Yeoman generator for Oracle JET lets you quickly set up a project for use as a web application or hybrid mobile application for Android and/or iOS. 
 
 This is an open source project maintained by Oracle Corp.
 
@@ -24,10 +24,10 @@ yo oraclejet <app name> --template=basic
 ```
 ```bash
 # Generate a mobile hybrid application for Android with default navDrawer template
-yo oraclejet:hybrid myApp --appId=com.oracle.samples --appName=MyApp --template=navDrawer --platforms=android
+yo oraclejet:hybrid myApp --appId=com.oracle.samples.MyApp --appName=MyApp --template=navDrawer --platforms=android
 ```
 
-### Release Notes
+### Known Issues
 * Invoking 'grunt serve:release' may attempt to deploy an unsigned APK file, which fails. This will occur if you have an unsigned APK file in your build outputs directory, because the underlying call to 'cordova run' attempts to install the first APK file located in that directory.  
 **Solution:** Remove the unsigned APK file before invoking 'grunt serve:release'.  
 * Invoking 'grunt build' may cause corruption of `<button>` tags whereby `<button></button>` is changed to `<button />` which in turn may lead to the page not displaying correctly.  
