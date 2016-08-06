@@ -15,7 +15,7 @@ var _WEB = "web";
 
 var BLANK_TEMPLATE = blankTemplate.BLANK_TEMPLATE;
 
-var _TEMPLATES_NPM_URL = "http://den00pwq.us.oracle.com:8080/hudson/job/OJET_V2.1.X/lastSuccessfulBuild/artifact/apps/components/public_html/public_samples/oraclejet-templates-2.1.0-b1.tgz";
+var _TEMPLATES_NPM_URL = "oraclejet-templates@2.1.0-b1";
 
 var _TEMPLATES = [BLANK_TEMPLATE, 'basic',  'navbar', 'navdrawer'];
 

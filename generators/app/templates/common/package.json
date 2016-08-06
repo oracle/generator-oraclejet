@@ -10,9 +10,9 @@
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-bowercopy": "1.2.4",
-    "grunt-oraclejet": "1.1.0-b1",
+    "grunt-oraclejet": "1.1.0-b3",
     "load-grunt-config": "0.19.2",
-    "oraclejet-tooling": "1.1.0-b1"
+    "oraclejet-tooling": "1.1.0-b3"
   },
   "engines": {
     "node": ">=0.10.0"
