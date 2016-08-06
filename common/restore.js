@@ -1,7 +1,7 @@
 /**
- * Copyright (c) 2014, 2016, Oracle and/or its affiliates.
- * The Universal Permissive License (UPL), Version 1.0
- */
+  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  The Universal Permissive License (UPL), Version 1.0
+*/
 "use strict";
 
 var fs = require("fs-extra");
@@ -19,33 +19,38 @@ module.exports =
   writeOracleJetConfigFile: function _writeOracleJetConfigFile(context)
   {
     var generator = context.generator;
+
     var destinationRoot = generator.destinationRoot();
     var configPath = path.resolve(destinationRoot, ORACLE_JET_CONFIG_FILE);
-
-    generator.log("Writing ", ORACLE_JET_CONFIG_FILE);
+    
+    return new Promise(function(resolve, reject)
+    {
+      generator.log("Writing ", ORACLE_JET_CONFIG_FILE);
 
     // need to place the oracletjetconfig.json at origDestRoot
 
-    fs.stat(configPath, function(err,stats)
-    {
-      if (err)
+      fs.stat(configPath, function(err,stats)
       {
-        generator.log(commonMessages.appendJETPrefix() + "No config file...writing the default config...");  
-        var generatorVersion = _getOracleJetGeneratorVersion(generator);
-        fs.writeJSONSync(configPath, {"generatorVersion": generatorVersion});       
-      }
-      else
-      {
-        generator.log(commonMessages.appendJETPrefix() + ORACLE_JET_CONFIG_FILE +" file exists...checking config...");
-      }
-    });
+        if (err)
+        {
+          generator.log(commonMessages.appendJETPrefix() + "No config file...writing the default config...");  
+          var generatorVersion = _getOracleJetGeneratorVersion(generator);
+          fs.writeJSONSync(configPath, {"generatorVersion": generatorVersion});       
+        }
+        else
+        {
+          generator.log(commonMessages.appendJETPrefix() + ORACLE_JET_CONFIG_FILE +" file exists...checking config...");
+        }
+      });
 
-    return context;
+      resolve(context);
+    });
+   
   },
 
   invokeBowerCopyScript: function _invokeBowerCopyScript(context)
   {
-    return common.gruntSpawnCommandPromise(context, "grunt", ["bowercopy"], "Invoking grunt bowercopy.");
+    return common.gruntSpawnCommandPromise(context, "grunt", ["bowercopy"], "Invoking grunt bowercopy.", {stdio:'ignore'});
   },
 
   npmBowerInstall: function _npmBowerInstall(context)

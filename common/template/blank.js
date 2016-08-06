@@ -1,17 +1,32 @@
 /**
- * Copyright (c) 2014, 2016, Oracle and/or its affiliates.
- * The Universal Permissive License (UPL), Version 1.0
- */
+  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  The Universal Permissive License (UPL), Version 1.0
+*/
 "use strict";
 
 var fs = require("fs-extra");
+var path = require('path');
+
 module.exports =
 {
   BLANK_TEMPLATE: "blank",
 
-  handle: function _handle(generator, destination) 
+  handle: function _handle(generator, destination, templateType) 
   {
-    var source = generator.templatePath(this.BLANK_TEMPLATE);
+    var source;
+    var templatePath;
+    
+    if (templateType === 'web')
+    {
+      templatePath = '../../app/templates/';
+    }
+    else
+    {
+      templatePath = '../../hybrid/templates/';
+    }
+    
+    templatePath += this.BLANK_TEMPLATE;
+    source = path.resolve(generator.sourceRoot(), templatePath);
 
     return new Promise(function(resolve, reject)
     {

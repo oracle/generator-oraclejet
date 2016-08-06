@@ -1,7 +1,7 @@
 /**
- * Copyright (c) 2014, 2016, Oracle and/or its affiliates.
- * The Universal Permissive License (UPL), Version 1.0
- */
+  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  The Universal Permissive License (UPL), Version 1.0
+*/
 var env = process.env,
         assert = require('assert'),
         fs = require('fs-extra'),
@@ -70,44 +70,5 @@ describe("Web Test", function ()
 
     });
 
-    it("Run bowercopy task", function(done){
-      this.timeout(60000);
-      exec('grunt bowercopy', {cwd: testDir}, function(err, stdout){
-        done();
-        assert.equal(util.isSuccess(stdout), true, err);      
-      });
-    });
-
-    describe("validate templates", function (){   
-
-      it("navBar is invalid template", function (done) {
-        this.timeout(15000);
-        exec('yo oraclejet testWebTemplate --template=navBar', execOptions, function (error, stdout)
-        {
-          var errLogCorrect = /Invalid template name or URL for web: navBar/.test(error.message);
-          assert.equal(errLogCorrect, true, error);
-          done();
-        });
-      });
-
-      it("navDrawer is invalid template", function (done) {
-        this.timeout(15000);
-        exec('yo oraclejet testWebTemplate --template=navDrawer', execOptions, function (error, stdout)
-        {
-          var errLogCorrect = /Invalid template name or URL for web: navDrawer/.test(error.message);
-          assert.equal(errLogCorrect, true, error);
-          done();
-        });
-      });
-      //TODO
-      it("basic is valid template", function (done) {
-        this.timeout(300000);
-        exec('yo oraclejet testWebBasic --template=basic --norestore=true', execOptions, function (error, stdout)
-        {          
-          done();
-          assert.equal(util.norestoreSuccess(stdout), true, error);          
-        });
-      });
-    });
   });
 });

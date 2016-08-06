@@ -1,0 +1,12 @@
+node_modules
+bower_components
+
+hybrid/platforms
+hybrid/www/*
+
+src/js/libs
+themes
+!hybrid/plugins
+hybrid/plugins/*
+!hybrid/plugins/fetch.json
+

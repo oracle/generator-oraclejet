@@ -1,13 +1,14 @@
 /**
- * Copyright (c) 2014, 2016, Oracle and/or its affiliates.
- * The Universal Permissive License (UPL), Version 1.0
- */
+  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  The Universal Permissive License (UPL), Version 1.0
+*/
 "use strict";
 
 var generators = require("yeoman-generator");
 var common = require("../../common");
 var commonMessages = require("../../common/messages");
 var templateHandler = require("../../common/template");
+var path = require("path");
 
 /*
  * Generator for the create step
@@ -19,11 +20,17 @@ var OracleJetWebCreateGenerator = generators.Base.extend(
   initializing: function()
   {
     var done = this.async();
-    common.validateAppDirNotExistsOrIsEmpty(this)
-      .then(function()
+    common.validateArgs(this)
+      .then(common.validateFlags)
+      .then(common.validateAppDirNotExistsOrIsEmpty)
+      .then(function(validAppDir)
       {
+        this.appDir = path.basename(validAppDir);
+        return Promise.resolve(this);
+      }.bind(this))
+      .then(() => {
         done();
-      })
+      })    
       .catch(function(err)
       {
         this.env.error(commonMessages.prefixError(err));
@@ -31,13 +38,13 @@ var OracleJetWebCreateGenerator = generators.Base.extend(
   },
 
   constructor: function () 
-  {
+  { 
     generators.Base.apply(this, arguments);
 
     this.argument(
       "appDir",
       {
-        type: String, 
+        type: String,
         required: false,
         optional: true,
         defaults: ".",
@@ -51,14 +58,11 @@ var OracleJetWebCreateGenerator = generators.Base.extend(
     var self = this;
 
     _writeTemplate(self)
-      .then(common.writeCommonGruntScripts) 
+      .then(common.writeCommonGruntScripts)
+      .then(common.switchToAppDirectory.bind(this))
+      .then(common.writeGitIgnore) 
       .then(function() 
       {
-        // note the error will be handled in the writeTemplate and stop the 
-        // generator
-
-        // change the directory for oraclejet:restore and the invocation of cordova add
-        self.destinationRoot(self.destinationPath(self.appDir));
         done();
       })
       .catch(function(err)
@@ -88,7 +92,7 @@ function _writeTemplate(generator)
 
   return new Promise(function (resolve, reject) 
   { 
-    var appDirectory = generator.destinationPath(generator.appDir);
+    var appDirectory = generator.destinationPath(path.join(generator.appDir, 'src'));
     
     templateHandler.handleTemplate(generator, appDirectory)
       .then(function() 

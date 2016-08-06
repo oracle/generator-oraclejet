@@ -1,7 +1,7 @@
 /**
- * Copyright (c) 2014, 2016, Oracle and/or its affiliates.
- * The Universal Permissive License (UPL), Version 1.0
- */
+  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  The Universal Permissive License (UPL), Version 1.0
+*/
 "use strict";
 
 var fs = require("fs-extra");
@@ -24,14 +24,15 @@ module.exports =
     return _getScaffoldComplete();
   },
 
-  restoreComplete: function _restoreComplete(invokedByRestore)
+  restoreComplete: function _restoreComplete(invokedByRestore, appDir)
   { 
-    return _getRestoreComplete(invokedByRestore);
+    return _getRestoreComplete(invokedByRestore, appDir);
   }, 
 
-  appendJETPrefix: function _appendJETPrefix()
+  appendJETPrefix: function _appendJETPrefix(message)
   {
-    return _appendSuccessPrefix("");
+    message = message || "";
+    return _appendSuccessPrefix(message);
   }
 };
 
@@ -40,7 +41,7 @@ function _getScaffoldComplete()
   return _appendSuccessPrefix("Your app structure is generated. Continuing with library install...");
 }
 
-function _getRestoreComplete(invokedByRestore)
+function _getRestoreComplete(invokedByRestore, appDir)
 {
   if (invokedByRestore)
   {
@@ -48,7 +49,7 @@ function _getRestoreComplete(invokedByRestore)
   }
   else
   {
-    return _appendSuccessPrefix("Your app is ready! Change to your new app directory and try grunt build and serve...");
+    return _appendSuccessPrefix("Your app is ready! Change to your new app directory " + appDir + " and try grunt build and serve...");
   }
 }  
 

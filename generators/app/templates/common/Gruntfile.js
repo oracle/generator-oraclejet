@@ -1,39 +1,26 @@
 /**
- * Copyright (c) 2014, 2016, Oracle and/or its affiliates.
- * The Universal Permissive License (UPL), Version 1.0
- */
-"use strict";
+  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  The Universal Permissive License (UPL), Version 1.0
+*/
+'use strict';
 
-var path = require("path");
+var path = require('path');
 
-/*
- * Currently the tooling uses load-grunt-config to manage it's tasks.
- * In future grunt plugin will be created for better management
- */
-
-module.exports = function (grunt) 
-{
-  require("jit-grunt")(grunt, {});
+module.exports = function(grunt) {
 
   require("load-grunt-config")(grunt, 
   {
-    configPath: path.join(process.cwd(), "scripts/grunt/config"),
-    
-    jitGrunt: 
-    {
-      customTasksDir: "scripts/grunt/tasks"
-    },
+    configPath: path.join(process.cwd(), "scripts/grunt/config")
+  }); 
 
-    data: 
-    {
-      oraclejet: 
-      {
-        ports: 
-        {
-          server: 8000,
-          livereload: 35729
-        }
-      }
-    }
+  grunt.loadNpmTasks("grunt-oraclejet");
+
+  grunt.registerTask("build", (buildType) => {
+    grunt.task.run([`oraclejet-build:${buildType}`]);
   });
+
+  grunt.registerTask("serve", (buildType) => {
+    grunt.task.run([`oraclejet-serve:${buildType}`]);
+  }); 
 };
+

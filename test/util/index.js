@@ -1,7 +1,7 @@
 /**
- * Copyright (c) 2014, 2016, Oracle and/or its affiliates.
- * The Universal Permissive License (UPL), Version 1.0
- */
+  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  The Universal Permissive License (UPL), Version 1.0
+*/
 'use strict';
 //common helpers for generator tests
 var fs = require('fs-extra');
@@ -14,9 +14,22 @@ module.exports = {
   	return (std.indexOf("without errors") > -1 ? true : false);
   },
 
+  buildSuccess: function _isSuccess(std)
+  { 
+    return ((std.indexOf("BUILD SUCCE") > -1 || std.indexOf("Code Sign error"))? true : false);
+  },
+
   norestoreSuccess: function _yoSuccess(std)
   {
     return (std.indexOf("Oracle JET Error") > -1 ? false : true);
+  },   
+  noError: function _noError(std)
+  {
+    return !(/error/i.test(std));
+  },  
+  bowerCopySuccess: function _bowerCopySuccess(std)
+  {
+    return (std.indexOf("All modules accounted") > -1 ? true : false);
   },   
 
   isWindows:function _isWindows(OS)

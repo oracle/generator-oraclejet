@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <!--
- Copyright (c) 2014, 2016, Oracle and/or its affiliates.
- The Universal Permissive License (UPL), Version 1.0
- -->
+  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  The Universal Permissive License (UPL), Version 1.0
+-->
 
 <!-- ************************ IMPORTANT INFORMATION ************************************
         This blank template contains a basic web application setup with a header and sticky footer.
@@ -21,9 +21,9 @@
   section from what is defined, you should also change the role value for that
   section to represent the appropriate content type.
   ***************************** IMPORTANT INFORMATION ************************************ -->
-<html id="htmldoc" lang="en-us" class="demo-sticky-footer-layout">
+<html lang="en-us">
   <head>
-    <title>Oracle JET Quick Start - Blank Application</title>
+    <title>Oracle JET Starter Template - Hybrid Mobile Blank</title>
     <meta http-equiv="x-ua-compatible" content="IE=edge"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="initial-scale=1.0"/>
@@ -31,27 +31,15 @@
     <link rel="apple-touch-icon-precomposed" href="css/images/touchicon.png">
     <meta name="apple-mobile-web-app-title" content="Oracle JET">
 
-    <link rel="stylesheet" href="css/libs/oj/v2.0.2/alta/oj-alta-min.css" id="css" />
+    <!-- injector:theme -->
+    <link rel="stylesheet" href="css/libs/oj/v2.1.0-b1/alta/oj-alta-min.css" id="css" />
+    <!-- endinjector -->
+
+    <!-- This is where you would add any app specific styling -->
+    <link rel="stylesheet" href="css/override.css" type="text/css"/>
+    
   </head>
   <body>
-    <div id="mainContent" class="oj-web-applayout-page">
-      <!-- Header content -->
-      <header role="banner" class="oj-web-applayout-header">
-        <div class="oj-web-applayout-max-width oj-flex-bar oj-sm-align-items-center">
-          <div data-bind="oj-flex-bar-middle">
-            <span class="oj-web-applayout-header-title" title="Application Name" data-bind="text: titleLabel"></span>
-          </div>
-        </div>
-      </header>
-      <!-- Main page content -->
-      <div class="oj-web-applayout-content oj-web-applayout-max-width">
-      </div>
-      <!-- Footer content -->
-      <footer role="contentinfo" class="oj-web-applayout-footer oj-flex oj-sm-align-items-flex-end">
-        <div class="oj-flex-item oj-text-secondary-color oj-text-sm oj-web-applayout-max-width"
-             data-bind="text: copyright"></div>
-      </footer>
-    </div>
 
     <script type="text/javascript" data-main="js/main" src="js/libs/require/require.js"></script>
 

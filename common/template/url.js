@@ -1,7 +1,7 @@
 /**
- * Copyright (c) 2014, 2016, Oracle and/or its affiliates.
- * The Universal Permissive License (UPL), Version 1.0
- */
+  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  The Universal Permissive License (UPL), Version 1.0
+*/
 "use strict";
 
 var fs = require("fs-extra");
@@ -34,7 +34,6 @@ module.exports = {
 function _processFetchedTemplateZip(values, temp, destination)
 {
   fs.mkdirsSync(temp);
-
   values.extractAllTo(temp);
   fs.copySync(temp, destination);
   fs.removeSync(temp);

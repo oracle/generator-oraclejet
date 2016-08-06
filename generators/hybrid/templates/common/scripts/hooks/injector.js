@@ -1,7 +1,7 @@
 /**
- * Copyright (c) 2014, 2016, Oracle and/or its affiliates.
- * The Universal Permissive License (UPL), Version 1.0
- */
+  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  The Universal Permissive License (UPL), Version 1.0
+*/
 "use strict";
 
 /*
@@ -15,7 +15,7 @@ var LOCAL_IP_ADDRESS = "127.0.0.1";
 var ANDROID_LOCAL_IP_ADDRESS = "10.0.2.2";
 var LOAD_URL_TIMEOUT_VALUE = "loadUrlTimeoutValue";
 
-module.exports =
+var injector =
 {
   updateIndexHtml: function(platform, external)
   {
@@ -33,6 +33,7 @@ module.exports =
       content = _addPlatformStyleClasses(content, platform);
       if (_isLiveReloadEnabled())
       {
+        content = _updateCspForLiveReload(content, platform);
         content = _addLiveReloadElement(content, platform);
       }
       fs.writeFileSync(indexHtmlPath, content);
@@ -70,8 +71,49 @@ module.exports =
     {
       return;
     }
-  }
+  },
+  
+  injectCspRule: function(content, cspRule)
+  {
+    var newContent = content;
+    var newCspTag;
+    var scriptSrc;
+    var newScriptSrc;
+    var cspTag = _getXmlTagWithAttrValue(content, "meta", "http-equiv", "Content-Security-Policy");
+
+    if (!cspTag)
+    {
+      // CSP meta tag not found, do nothing
+      return content;
+    }
+    var contentAttrValue = _getXmlAttrValue(cspTag, "content");
+    if (!contentAttrValue)
+    {
+      // no content attribute, do nothing
+      return content;
+    }
+    var pattern = new RegExp('script-src([^;]*)', 'gi');
+    var result = pattern.exec(contentAttrValue);
+    if (result)
+    {
+      scriptSrc = result[0];
+      newScriptSrc = scriptSrc + " " + cspRule;
+      contentAttrValue = contentAttrValue.replace(scriptSrc, newScriptSrc);
+    }
+    else
+    {
+      newScriptSrc = "; script-src " + cspRule;
+      contentAttrValue += newScriptSrc;
+    }
+    newCspTag = _setXmlAttrValue(cspTag, "content", contentAttrValue);
+    newContent = content.replace(cspTag, newCspTag);
+
+    return newContent;
+  }  
+  
 };
+
+module.exports = injector;
 
 function _getIndexHtmlPath(platform, external)
 {
@@ -146,6 +188,16 @@ function _addLiveReloadElement(content, platform)
   return newContent;
 }
 
+function _updateCspForLiveReload(content, platform)
+{
+  var newContent = content;
+  var liveReloadPort = process.env["LIVERELOAD_PORT"];  
+  var liveReloadSrc = "http://" + _getLocalIpAddress(platform) + ":" + liveReloadPort;
+
+  newContent = injector.injectCspRule(content, liveReloadSrc);
+
+  return newContent;
+}
 
 function _getConfigXmlPath(platform)
 {

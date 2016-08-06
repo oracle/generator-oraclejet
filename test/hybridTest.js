@@ -1,7 +1,7 @@
 /**
- * Copyright (c) 2014, 2016, Oracle and/or its affiliates.
- * The Universal Permissive License (UPL), Version 1.0
- */
+  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  The Universal Permissive License (UPL), Version 1.0
+*/
 var env = process.env,
         assert = require('assert'),
         fs = require('fs-extra'),
@@ -34,8 +34,9 @@ describe("Hybrid Test", function ()
     it("Generate android/ios app", function (done)
     {
       this.timeout(120000);
-      exec('yo oraclejet:hybrid hybridTest --template=navBar --norestore=true --platforms=' + platform, execOptions, function (error, stdout)
+      exec('yo oraclejet:hybrid hybridTest --template=navbar --appid=my.id --appName=testcase --norestore=true --platforms=' + platform, execOptions, function (error, stdout)
       {
+        assert.equal(error, undefined, error);
         filelist = fs.readdirSync(testDir);
         hybridFileList = fs.readdirSync(hybridTestDir);
         assert.equal(util.norestoreSuccess(stdout), true, error);
@@ -54,13 +55,16 @@ describe("Hybrid Test", function ()
       });
     });
 
-    it("Run bowercopy task", function(done){
-      this.timeout(60000);
-      exec('grunt bowercopy', {cwd: testDir}, function(err, stdout){
-        done();
-        assert.equal(util.isSuccess(stdout), true, err);      
+    it("bowercopy", function (done)
+      {
+        this.timeout(300000);
+        exec('grunt bowercopy', {cwd: testDir}, function (error, stdout)
+        {
+          assert.equal(util.bowerCopySuccess(stdout), true, error);
+          done();
+        });
       });
-    });
+
 
     describe("Invalid arugments & Check error messages", function () {
 
@@ -82,7 +86,7 @@ describe("Hybrid Test", function ()
         exec('grunt build --platform=' + 'android1', {cwd: testDir}, function (error, stdout)
         {
 
-          var errLogCorrect = /Invalid platform value 'android1'/.test(stdout);
+          var errLogCorrect = /Invalid platform/i.test(stdout);
           assert.equal(errLogCorrect, true, stdout);
           done();
         });
@@ -90,11 +94,11 @@ describe("Hybrid Test", function ()
 
       it("complain about unsupported server port", function (done)
       {
-        this.timeout(150000);
-        exec('grunt serve --platform=' + platform + ' --serverPort=' + '12we', {cwd: testDir}, function (error, stdout)
+        this.timeout(20000);
+        exec('grunt serve --platform=' + platform + ' --serverPort=' + '12we', {cwd: testDir,}, function (error, stdout)
         {
 
-          var errLogCorrect = /Invalid value '12we' for server/.test(stdout);
+          var errLogCorrect = /deprecated/.test(stdout);
           assert.equal(errLogCorrect, true, stdout);
           done();
         });
@@ -106,21 +110,31 @@ describe("Hybrid Test", function ()
         exec('grunt build:xyz --platform=' + platform, {cwd: testDir}, function (error, stdout)
         {
 
-          var errLogCorrect = /Invalid argument, try build:dev or build:release/.test(stdout);
+          var errLogCorrect = /buildType xyz is invalid/.test(stdout);
           assert.equal(errLogCorrect, true, stdout);
           done();
         });
       });
     });
 
-    describe("Build release", function ()
+    describe("Build", function ()
     {
       it("Grunt build android/ios", function (done)
       {
         this.timeout(2400000);
-        exec('grunt build:release --platform=' + platform, {cwd: testDir, maxBuffer: 1024 * 20000 }, function (error, stdout)
+        exec('grunt build --platform=' + platform, {cwd: testDir, maxBuffer: 1024 * 20000 }, function (error, stdout)
         {
-          assert.equal(util.isSuccess(stdout), true, error);
+          assert.equal(util.buildSuccess(stdout), true, error);
+          done();
+        });
+      });
+
+      it("Grunt build android/ios for device", function (done)
+      {
+        this.timeout(2400000);
+        exec(`grunt build --platform=${platform} --destination=device`, {cwd: testDir, maxBuffer: 1024 * 20000 }, function (error, stdout)
+        {
+          assert.equal(util.buildSuccess(stdout), true, error);
           done();
         });
       });
@@ -128,10 +142,16 @@ describe("Hybrid Test", function ()
 
     describe("Check essential files", function ()
     {
-      it("config.xml exists", function ()
+      it("config.xml exists and is correct", function ()
       {
         var inlist = hybridFileList.indexOf("config.xml") > -1;
         assert.equal(inlist, true, path.resolve(hybridTestDir, 'config.xml') + " missing");
+        if (inlist) {
+            // Check contents of config.xml
+            var configRead = fs.readFileSync(path.resolve(hybridTestDir, 'config.xml'), "utf-8");
+            assert.equal(configRead.indexOf("<name>testcase</name>") > -1, true, "config.xml missing <name>");
+            assert.equal(configRead.indexOf('id="my.id"') > -1, true, "config.xml missing correct id value");
+        }
       });
 
       it("package.json exists", function ()
@@ -162,7 +182,54 @@ describe("Hybrid Test", function ()
 
     });
   });
-  
+
+  describe("serve", () => {
+    it("Grunt serve android/ios without platform", function (done)
+    {
+      this.timeout(2400000);
+      exec(`grunt serve`, {cwd: testDir, maxBuffer: 1024 * 20000, timeout:100000, killSignal:'SIGTERM' }, function (error, stdout)
+      {
+        assert.equal((util.noError(stdout) || /watch:srouceFiles/.test(stdout)), true, error);
+        done();
+      });
+    });
+  });
+
+  describe("add-sass", () => {
+    it("add sass generator", function (done)
+    {
+      this.timeout(2400000);
+      exec(`yo oraclejet:add-sass`, {cwd: testDir, maxBuffer: 1024 * 20000, timeout:100000, killSignal:'SIGTERM' }, function (error, stdout)
+      {
+        assert.equal(/add-sass finished/.test(stdout) || /add-sass finished/.test(error), true, error);
+        done();
+      });
+    });
+  });
+
+  describe("add-theme", () => {
+    it("add add-theme generator", function (done)
+    {
+      this.timeout(2400000);
+      exec(`yo oraclejet:add-theme green`, {cwd: testDir, maxBuffer: 1024 * 20000, timeout:50000, killSignal:'SIGTERM' }, function (error, stdout)
+      {
+        assert.equal(util.noError(stdout), true, error);
+        done();
+      });
+    });
+  });
+
+  describe("compile sass", () => {
+    it("compile sass", function (done)
+    {
+      this.timeout(2400000);
+      exec(`grunt build --theme=green`, {cwd: testDir, maxBuffer: 1024 * 20000, timeout:100000, killSignal:'SIGTERM' }, function (error, stdout)
+      {
+        assert.equal(util.noError(stdout), true, stdout);
+        done();
+      });
+    });
+  });  
 
   describe("Clean hybridTest", function () {
 

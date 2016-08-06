@@ -1,69 +1,56 @@
 /**
- * Copyright (c) 2014, 2016, Oracle and/or its affiliates.
- * The Universal Permissive License (UPL), Version 1.0
- */
+  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  The Universal Permissive License (UPL), Version 1.0
+*/
 "use strict";
 
 var blankTemplate = require("./blank");
 var urlTemplate = require("./url");
 var commonTemplate = require("./common");
+var npmTemplate = require("./npm");
 var commonMessages = require("../messages");
+
 var _HYBRID = "hybrid";
 var _WEB = "web";
-var _BOTH = "both";
 
 var BLANK_TEMPLATE = blankTemplate.BLANK_TEMPLATE;
-var _TEMPLATE_URL_ROOT = "https://github.com/oracle/oraclejet/releases/download/2.0.2/";
 
-var _TEMPLATES =
-{
-  "navBar":
-  {
-    url: _TEMPLATE_URL_ROOT + "OracleJET_QuickStartHybridNavBar.zip",
-    targetType: _HYBRID
-  },
-  "navDrawer":
-  {
-    url: _TEMPLATE_URL_ROOT + "OracleJET_QuickStartHybridNavDrawer.zip",
-    targetType: _HYBRID
-  },
-  "basic":
-  {
-    url: _TEMPLATE_URL_ROOT + "OracleJET_QuickStartBasic.zip",
-    targetType: _WEB
-  }
-};
+var _TEMPLATES_NPM_URL = "http://den00pwq.us.oracle.com:8080/hudson/job/OJET_V2.1.X/lastSuccessfulBuild/artifact/apps/components/public_html/public_samples/oraclejet-templates-2.1.0-b1.tgz";
 
-_TEMPLATES[BLANK_TEMPLATE] =
-{
-  url: null,
-  targetType: _BOTH
-}
+var _TEMPLATES = [BLANK_TEMPLATE, 'basic',  'navbar', 'navdrawer'];
+
 
 module.exports =
 {
   handleTemplate: function _handleTemplate(generator, templateDestDirectory) 
   {
-    // templateDestDirectory will be src or appDirectory for hybrid and web respectively
     var template = generator.options.template || BLANK_TEMPLATE;
-    
+
     generator.log("Processing template...", template);
   
-    var templateUrl = _toTemplateUrl(template, generator.options.namespace);    
+    var templateUrl = _toTemplateUrl(template, generator.options.namespace);
     
-    if(templateUrl) 
+    try 
     {
-      return commonTemplate.handle(urlTemplate.handle(generator, templateUrl, templateDestDirectory));
-    }
+      if (templateUrl)
+      {
+        return commonTemplate.handle(urlTemplate.handle(generator, templateUrl, templateDestDirectory));
+      }
     
-    if(template === BLANK_TEMPLATE) 
-    {
-      return commonTemplate.handle(blankTemplate.handle(generator, templateDestDirectory));
+      var templateSpec = _resolveTemplateSpec(generator, template);
+      if (templateSpec['name'] === BLANK_TEMPLATE)
+      {
+        return commonTemplate.handle(blankTemplate.handle(generator, templateDestDirectory, templateSpec['type']));
+      }
+      else
+      {
+        return  npmTemplate.handle(generator, _TEMPLATES_NPM_URL, templateDestDirectory, templateSpec);
+      }
     }
-
-    var error = _getTemplateError(template, generator.options.namespace); 
-    return Promise.reject(commonMessages.error(error , "processing template"));
-  }
+    catch (err)
+    {
+      return Promise.reject(commonMessages.error(err, "processing template"));   }
+    }
 };
 
 function _isUrl(url) 
@@ -71,20 +58,41 @@ function _isUrl(url)
   return /^https?:\/\/?([\da-z\.-]+)(:\d{2,4})?([\/\w \.-]*)*\/?$/.test(url);
 }
 
-function _toTemplateUrl(template, generatorNameSpace) 
+function _toTemplateUrl(template) 
 {
   if (_isUrl(template))
   {
     return template;
   }
-
-  if (_TEMPLATES.hasOwnProperty(template) && _isValidTargetType(template, _getGeneratorType(generatorNameSpace))) 
-  {     
-    // use the predefined url if the targetType matches
-    return _TEMPLATES[template].url;
-  }
   
   return null;   
+}
+
+function _resolveTemplateSpec(generator, template)
+{
+  var res = template.split(':');
+
+  var templateName = res[0];
+  var templateType = (res.length > 1) ? res[1] : _getGeneratorType(generator.options.namespace);
+  
+  _validateTemplateName(templateName);
+  _validateTemplateType(templateType);
+   
+  return { 'name': templateName, 'type': templateType };
+}
+
+function _validateTemplateName(templateName)
+{
+  if (_TEMPLATES.indexOf(templateName) < 0)
+  {
+    let templateList = '';
+    _TEMPLATES.forEach(function(value)
+    {
+      templateList += '\n  ' + value;
+    });
+    let msg = '\nA URL or one of the following names is expected: ' + templateList;
+    throw new Error('Invalid template name: ' + templateName + '. ' + msg);
+  }
 }
 
 function _getGeneratorType(generatorNameSpace) 
@@ -92,29 +100,11 @@ function _getGeneratorType(generatorNameSpace)
   return /hybrid/.test(generatorNameSpace) ? _HYBRID : _WEB;
 }
 
-function _isValidTargetType(template, generatorType) 
+function _validateTemplateType(templateType) 
 { 
-  var templateType = _TEMPLATES[template].targetType;
-  return (templateType == generatorType) || (templateType == _BOTH);
-}
-
-function _getTemplateError(template, generatorNameSpace) 
-{
-  var generatorType = _getGeneratorType(generatorNameSpace);
-  var validTemplateNames = ". \nTry valid " + generatorType + " templates: " + _getTemplateNames (generatorType);
-  var errorMessage = "Error: Invalid template name or URL for ";
-  return new Error(errorMessage + generatorType + ": " + template + validTemplateNames);
-}
-
-function _getTemplateNames(generatorType)
-{
-  var templateNames = [];
-
-  for (var key in _TEMPLATES)
+  if (templateType !== _WEB && templateType !== _HYBRID)
   {
-    if (_isValidTargetType(key, generatorType))
-      templateNames += '"' + key + '" or '; 
+    throw new Error('Invalid template type: ' + templateType);
   }
-
-  return templateNames.slice(0,-4) + ".";
 }
+
