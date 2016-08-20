@@ -154,6 +154,20 @@ module.exports =
       }
       resolve(generator);    
     });
+  },
+
+  fsExistsSync: function(path)
+  {
+    try
+    {
+      fs.statSync(path);
+      return true;
+    }
+    catch (err)
+    {
+      // file/directory does not exist
+      return false;
+    }
   }
 };
 

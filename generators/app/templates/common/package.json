@@ -3,16 +3,14 @@
   "version": "1.0.0",
   "description": "A sample Oracle JavaScript Extension Toolkit (JET) web app",
   "author": {
-    "name": "Oracle Jet Team",
-    "email": "oraclejet_interest_ww_grp@oracle.com",
-    "homepage": "http://jet.us.oracle.com"
+    "name": "Oracle Jet Team"
   },
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-bowercopy": "1.2.4",
-    "grunt-oraclejet": "1.1.0-b3",
+    "grunt-oraclejet": "~1.1.0",
     "load-grunt-config": "0.19.2",
-    "oraclejet-tooling": "1.1.0-b3"
+    "oraclejet-tooling": "~1.1.0"
   },
   "engines": {
     "node": ">=0.10.0"

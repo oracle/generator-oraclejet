@@ -1,6 +1,6 @@
 {
   "name": "generator-oraclejet",
-  "version": "1.1.0-b3",
+  "version": "1.1.0",
   "license": "UPL-1.0",
   "description": "initial",
   "homepage": "http://oraclejet.org",
@@ -43,5 +43,5 @@
   },
 
   "preferGlobal": true,
-  "jetversion": "2.1.0-b1"
+  "jetversion": "2.1.0"
 }

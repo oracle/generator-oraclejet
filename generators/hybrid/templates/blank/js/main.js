@@ -26,9 +26,9 @@ requirejs.config(
     'promise': 'libs/es6-promise/es6-promise',
     'hammerjs': 'libs/hammer/hammer-2.0.8',
     'ojdnd': 'libs/dnd-polyfill/dnd-polyfill-1.0.0',
-    'ojs': 'libs/oj/v2.1.0-b1/debug',
-    'ojL10n': 'libs/oj/v2.1.0-b1/ojL10n',
-    'ojtranslations': 'libs/oj/v2.1.0-b1/resources',
+    'ojs': 'libs/oj/v2.1.0/debug',
+    'ojL10n': 'libs/oj/v2.1.0/ojL10n',
+    'ojtranslations': 'libs/oj/v2.1.0/resources',
     'text': 'libs/require/text',
     'signals': 'libs/js-signals/signals'
   }

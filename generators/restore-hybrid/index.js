@@ -6,6 +6,7 @@
 
 var generators = require("yeoman-generator");
 var common = require("../../common");
+var commonHybrid = require("../../hybrid");
 var commonMessages = require("../../common/messages");
 var commonRestore = require("../../common/restore");
 var commonBowerCopy = require("../../common/bowerCopy");
@@ -44,6 +45,7 @@ var OracleJetHybridRestoreGenerator = generators.Base.extend(
     var done = this.async();
     
     commonRestore.npmBowerInstall({generator: this})
+      .then(commonHybrid.copyHooks)
       .then(commonRestore.writeOracleJetConfigFile)
       .then(commonRestore.invokeBowerCopyScript)
       .then(function() 

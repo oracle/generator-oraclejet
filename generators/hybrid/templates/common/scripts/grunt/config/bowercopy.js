@@ -103,6 +103,17 @@ module.exports = function(grunt)
         "dnd-polyfill": "oraclejet/dist/js/libs/dnd-polyfill/"
       }
     },
+    
+    oraclejetNlsRootResources:
+    {
+      options:
+      {
+        srcPrefix: "bower_components/oraclejet/dist/js/libs/oj/resources/nls",
+        destPrefix: "src/js/libs/oj/v<%= grunt.config.data.bowercopy.options.versions.jetVersion %>/resources/root"
+      },
+      
+      src: '*.js'
+    },
 
     // place in the same directory as jet's demo app
     thirdParty:

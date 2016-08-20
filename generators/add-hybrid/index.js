@@ -68,12 +68,11 @@ var OracleJetAddHybridGenerator = generators.Base.extend(
     
     _createExtraSrcDirs(this)
       .then(cordovaHelper.create.bind(this))
+      .then(commonHybrid.copyHooks.bind(this))
       .then(commonHybrid.copyResources.bind(this))
       .then(commonHybrid.removeExtraCordovaFiles.bind(this))
-      // TODO: need to figure out what to do with hooks here      
-//      .then(commonHybrid.writeCordovaHookScripts.bind(this))  
-      .then(commonHybrid.updateConfigXml.bind(this)) 
       .then(platformsHelper.addPlatforms.bind(this))                 
+      .then(commonHybrid.updateConfigXml.bind(this)) 
       .then(function()
       {
         done();

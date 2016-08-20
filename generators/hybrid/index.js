@@ -91,9 +91,8 @@ var OracleJetHybridCreateGenerator = generators.Base.extend({
       .then(cordovaHelper.create)
       .then(commonHybrid.copyResources.bind(this))
       .then(commonHybrid.removeExtraCordovaFiles.bind(this))      
-      .then(commonHybrid.writeCordovaHookScripts.bind(this))  
-      .then(commonHybrid.updateConfigXml.bind(this)) 
       .then(platformsHelper.addPlatforms.bind(this))                 
+      .then(commonHybrid.updateConfigXml.bind(this)) 
       .then(function()
       {
         done();

@@ -7,6 +7,7 @@
 var fs = require("fs-extra");
 var path = require("path");
 
+var common = require("../common");
 var constants = require("../util/constants");
 var commonMessages = require("../common/messages");
 var DOMParser = require("xmldom").DOMParser;
@@ -96,26 +97,6 @@ module.exports =
     });
   },
   
-  writeCordovaHookScripts: function _writeCordovaHookScripts(generator)
-  { 
-    var source = generator.templatePath("common/scripts/hooks");
-    var dest = generator.destinationPath(constants.CORDOVA_DIRECTORY) + "/scripts/hooks/";
-    fs.ensureDirSync(dest);
-
-    return new Promise(function(resolve, reject)
-    {      
-      fs.copy(source, dest, function(err)
-      {
-        if(err)
-        {
-          reject(err);
-          return;
-        } 
-        resolve(generator);
-      });    
-    });
-  },
-
   updateConfigXml: function _updateConfigXml(generator)
   {
     var configXml = generator.destinationPath(constants.CORDOVA_DIRECTORY + "/" + constants.CORDOVA_CONFIG_XML);
@@ -141,8 +122,36 @@ module.exports =
         reject(commonMessages.error(err, "updateConfigXml"));
       }
     });
-  }
+  },
 
+  copyHooks: function(context) 
+  {
+    // 'Generator' may be passed as {generator: generator} or {generator}
+    const generator = context.generator || context;
+    
+    const source = generator.destinationPath('node_modules/oraclejet-tooling/hooks/');
+    const dest = generator.destinationPath('hybrid/scripts/hooks/');
+
+    return new Promise(function (resolve, reject) 
+    {
+      if (common.fsExistsSync(source))
+      {
+        fs.copy(source, dest, function (err)
+        {
+          if (err)
+          {
+            reject(err);
+            return;
+          }
+          resolve(context);
+        });
+      }
+      else
+      {
+        reject('Missing folder \'oraclejet-tooling/hooks/\'.')
+      }
+    });
+  }
 };
 
 
