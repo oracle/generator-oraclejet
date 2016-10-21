@@ -5,12 +5,12 @@
   "promise": "libs/es6-promise/es6-promise",
   "hammerjs": "libs/hammer/hammer-2.0.8",
   "ojdnd": "libs/dnd-polyfill/dnd-polyfill-1.0.0",
-  "ojs": "libs/oj/v2.1.0/debug",
-  "ojL10n": "libs/oj/v2.1.0/ojL10n",
-  "ojtranslations": "libs/oj/v2.1.0/resources",
-  "ojtranslations/nls/ojtranslations": "libs/oj/v2.1.0/resources/root/ojtranslations",
-  "ojtranslations/nls/localeElements": "libs/oj/v2.1.0/resources/root/localeElements",
-  "ojtranslations/nls/timezoneData": "libs/oj/v2.1.0/resources/root/timezoneData",
+  "ojs": "libs/oj/v2.2.0/debug",
+  "ojL10n": "libs/oj/v2.2.0/ojL10n",
+  "ojtranslations": "libs/oj/v2.2.0/resources",
+  "ojtranslations/nls/ojtranslations": "libs/oj/v2.2.0/resources/root/ojtranslations",
+  "ojtranslations/nls/localeElements": "libs/oj/v2.2.0/resources/root/localeElements",
+  "ojtranslations/nls/timezoneData": "libs/oj/v2.2.0/resources/root/timezoneData",
   "text": "libs/require/text",
   "signals": "libs/js-signals/signals"
 }

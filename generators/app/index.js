@@ -50,6 +50,10 @@ var OracleJetWebCreateGenerator = generators.Base.extend(
         defaults: ".",
         desc: "Application directory to contain the scaffold content"
       });
+    
+    this.option('template', {
+      desc: 'blank, basic[:web|:hybrid], navbar[:web|:hybrid], navdrawer[:web|:hybrid], or <URL to zip file>'
+    });
   },
 
   writing: function () 

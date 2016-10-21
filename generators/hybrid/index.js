@@ -37,14 +37,23 @@ var OracleJetHybridCreateGenerator = generators.Base.extend({
         desc: "Application directory to contain the scaffold content"
       });
 
-    this.option("platforms", {desc:"Create the application for multiple mobile platforms"});
-    this.option("platform", {desc:"Create the application with single platform"});
-    this.option("template", {desc:"Use one of the starter templates"});
-    this.option("appid", {desc:"Specify the app id for your application"});
+    this.option('platforms', {
+      desc: 'Specify the platforms to be supported by the scaffolded hybrid app [android, ios, windows]',
+    });
+    this.option('platform', {
+      desc: 'Alias for --platforms if the user wishes to specify a single hybrid platform [android, ios, windows]'
+    });
+    this.option('template', {
+      desc: 'Specify the starter template that is used to scaffold the app [blank, basic[:web|:hybrid], navbar[:web|:hybrid], navdrawer[:web|:hybrid], or <URL to zip file>'
+    });
+    this.option('appid', {
+      desc: 'Specify the app ID for scaffolded hybrid app',
+    });
     // Deprecated version
     this.option("appId",{desc:"Deprecated. Use --appid instead."});
-    
-    this.option("appname",{desc:"Specify the app name for your application"});
+    this.option('appname', {
+      desc: 'Specify the app name for scaffolded hybrid app'
+    });
     // Deprecated vrsion
     this.option("appName", {desc:"Deprecated. Use --appname instead."});
   },

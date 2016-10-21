@@ -68,5 +68,11 @@ module.exports = {
   isCordovaSuccess: function _isCordovaSuccess(std)
   {
     return (std.indexOf("BUILD SUCCESSFUL") > -1 ? true : false);
+  },
+
+  isNoRestoreTest: function _isNoRestoreTest()
+  {
+    return process.env["expressTest"]==='true';
   }
+
 };

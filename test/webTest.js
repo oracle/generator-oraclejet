@@ -12,12 +12,12 @@ var env = process.env,
         yoAssert = require('yeoman-assert'),
         execOptions =
         {
-          cwd: path.resolve('built/test/generator/test/')
+          cwd: path.resolve('test_result/test/generator/test/')
         };
 
 var filelist;
-var testDir = path.resolve('built/test/generator/test', 'webTest');
-var utilDir = path.resolve('built/test/generator/util/web');
+var testDir = path.resolve('test_result/test/generator/test', 'webTest');
+var utilDir = path.resolve('test_result/test/generator/util/web');
 
 describe("Web Test", function ()
 {

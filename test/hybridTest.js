@@ -11,14 +11,14 @@ var env = process.env,
         util = require('./util'),
         execOptions =
         {
-          cwd: path.resolve('built/test/generator/test')
+          cwd: path.resolve('test_result/test/generator/test')
         };
 
   var filelist;
   var hybridFileList;
-  var testDir = path.resolve('built/test/generator/test/hybridTest');
-  var hybridTestDir = path.resolve('built/test/generator/test/hybridTest/' + hybridDirectory);
-  var utilDir = path.resolve('built/test/generator/util/hybrid');
+  var testDir = path.resolve('test_result/test/generator/test/hybridTest');
+  var hybridTestDir = path.resolve('test_result/test/generator/test/hybridTest/' + hybridDirectory);
+  var utilDir = path.resolve('test_result/test/generator/util/hybrid');
   var platform = util.getPlatform(env.OS);
 
 describe("Hybrid Test", function ()
@@ -29,12 +29,16 @@ describe("Hybrid Test", function ()
     fs.emptyDirSync(testDir);    
   });  
 
-  describe("Scaffold with norestore flag", function(){
+  describe("Scaffold", function(){
    
     it("Generate android/ios app", function (done)
     {
-      this.timeout(120000);
-      exec('yo oraclejet:hybrid hybridTest --template=navbar --appid=my.id --appName=testcase --norestore=true --platforms=' + platform, execOptions, function (error, stdout)
+      var timeOutLimit = util.isNoRestoreTest() ? 120000 : 320000;
+      this.timeout(timeOutLimit);
+      var command = 'yo oraclejet:hybrid hybridTest --template=navbar --appid=my.id --appName=testcase --platforms=' + platform;
+      command = util.isNoRestoreTest() ? command + ' --norestore' : command;
+
+      exec(command, execOptions, function (error, stdout)
       {
         assert.equal(error, undefined, error);
         filelist = fs.readdirSync(testDir);
@@ -49,10 +53,14 @@ describe("Hybrid Test", function ()
 
     it("Copy npm and bower modules", function(done){
       this.timeout(200000);
-      //copy Npm and bower modules     
-      fs.copy(utilDir, testDir, function(err){
+      //copy Npm and bower modules   
+      if (util.isNoRestoreTest()){  
+        fs.copy(utilDir, testDir, function(err){
+          done();
+        });
+      } else {
         done();
-      });
+      }
     });
 
     it("bowercopy", function (done)
@@ -187,7 +195,8 @@ describe("Hybrid Test", function ()
     it("Grunt serve android/ios without platform", function (done)
     {
       this.timeout(2400000);
-      exec(`grunt serve`, {cwd: testDir, maxBuffer: 1024 * 20000, timeout:100000, killSignal:'SIGTERM' }, function (error, stdout)
+      const cmd = util.isWindows(env.OS) ? 'grunt serve' : 'grunt serve --destination="iPhone-6, 9.2"';
+      exec(cmd, {cwd: testDir, maxBuffer: 1024 * 20000, timeout:100000, killSignal:'SIGTERM' }, function (error, stdout)
       {
         assert.equal((util.noError(stdout) || /watch:srouceFiles/.test(stdout)), true, error);
         done();

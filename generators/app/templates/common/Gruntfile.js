@@ -15,11 +15,11 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks("grunt-oraclejet");
 
-  grunt.registerTask("build", (buildType) => {
+  grunt.registerTask("build", "Public task. Calls oraclejet-build to build the oraclejet application. Can be customized with additional build tasks.", (buildType) => {
     grunt.task.run([`oraclejet-build:${buildType}`]);
   });
 
-  grunt.registerTask("serve", (buildType) => {
+  grunt.registerTask("serve", "Public task. Calls oraclejet-serve to serve the oraclejet application. Can be customized with additional serve tasks.", (buildType) => {
     grunt.task.run([`oraclejet-serve:${buildType}`]);
   }); 
 };

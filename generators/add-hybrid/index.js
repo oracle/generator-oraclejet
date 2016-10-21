@@ -23,13 +23,22 @@ var OracleJetAddHybridGenerator = generators.Base.extend(
   {
     generators.Base.apply(this, arguments);
 
-    this.option("platforms");
-    this.option("platform");
-    this.option("appid");
-    this.option("appId");
-    this.option("appname");
-    this.option("appName");
-
+    this.option('platforms', {
+      desc: 'Specify the platforms to be supported by the scaffolded hybrid app [android, ios, windows]',
+    });
+    this.option('platform', {
+      desc: 'Alias for --platforms if the user wishes to specify a single hybrid platform [android, ios, windows]'
+    });
+    this.option('appid', {
+      desc: 'Specify the app ID for scaffolded hybrid app'
+    });
+    // Deprecated version
+    this.option("appId",{desc:"Deprecated. Use --appid instead."});
+    this.option('appname', {
+      desc: 'Specify the app name for scaffolded hybrid app'
+    });
+    // Deprecated version
+    this.option("appName", {desc:"Deprecated. Use --appname instead."});
   },
 
   initializing: function() 
@@ -70,6 +79,7 @@ var OracleJetAddHybridGenerator = generators.Base.extend(
       .then(cordovaHelper.create.bind(this))
       .then(commonHybrid.copyHooks.bind(this))
       .then(commonHybrid.copyResources.bind(this))
+      .then(_copyCordovaMocks.bind(this))
       .then(commonHybrid.removeExtraCordovaFiles.bind(this))
       .then(platformsHelper.addPlatforms.bind(this))                 
       .then(commonHybrid.updateConfigXml.bind(this)) 
@@ -148,4 +158,30 @@ function _validateHybridDirDoesNotExist(generator)
     // hybrid dir does not exist, OK to proceed
   }
   return Promise.resolve(generator);  
+}
+
+function _copyCordovaMocks(generator)
+{
+  var source = generator.templatePath("../../hybrid/templates/common/src/js/");
+  var dest = generator.destinationPath("./src-hybrid/js/");
+
+  return new Promise(function (resolve, reject)
+  {
+    if (common.fsExistsSync(source))
+    {
+      fs.copy(source, dest, function (err)
+      {
+        if (err)
+        {
+          reject(err);
+          return;
+        }
+        resolve(generator);
+      });
+    }
+    else
+    {
+      reject('Missing file \'/js/cordovaMocks.js\'.')
+    }
+  });
 }

@@ -7,7 +7,7 @@ var env = process.env,
 	path = require('path'),
 	exec = require('child_process').exec,
 	execOptions = {
-		cwd:path.resolve('build/scripts/generator-oraclejet')
+		cwd:path.resolve('./dist/generator-oraclejet')
 	};
 
 describe("Example Test", function()

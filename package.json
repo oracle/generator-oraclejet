@@ -1,47 +1,46 @@
 {
   "name": "generator-oraclejet",
-  "version": "1.1.0",
+  "version": "2.2.0",
   "license": "UPL-1.0",
   "description": "initial",
   "homepage": "http://oraclejet.org",
-  "keywords": 
-  [
+  "keywords": [
     "yeoman-generator"
   ],
-  "main": "common/index.js",  
-  "files": 
-  [
+  "main": "common/index.js",
+  "files": [
+    "RELEASENOTES.md",
     "generators",
     "common",
     "util",
     "hybrid"
   ],
-
-  "dependencies": 
-  {
-    "yeoman-generator": "0.22.5",   
+  "dependencies": {
+    "yeoman-generator": "0.22.5",
     "adm-zip": "0.4.7",
     "fs-extra": "0.26.5",
     "xmldom": "0.1.22",
     "request": "2.69.0"
   },
-
-  "engines": 
-  {
+  "engines": {
     "node": ">=0.10.0"
   },
-
-  "devDependencies": 
-  {
+  "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-copy": "^1.0.0",
+    "grunt-download": "^0.2.0",
+    "grunt-mkdir": "^1.0.0",
+    "grunt-mocha-test": "^0.12.7",
+    "grunt-zip": "^0.17.1",
     "load-grunt-configs": "^0.4.3",
     "load-grunt-tasks": "3.5.0",
+    "node-sass": "^3.4.2",
     "yeoman-assert": "2.1.1",
     "yeoman-test": "1.0.0"
   },
 
   "preferGlobal": true,
-  "jetversion": "2.1.0"
+  "jetversion": "2.2.0"
 }
+

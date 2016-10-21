@@ -15,7 +15,7 @@ var _WEB = "web";
 
 var BLANK_TEMPLATE = blankTemplate.BLANK_TEMPLATE;
 
-var _TEMPLATES_NPM_URL =  "oraclejet-templates@2.1.0";
+var _TEMPLATES_NPM_URL = "oraclejet-templates@~2.2.0";
 
 var _TEMPLATES = [BLANK_TEMPLATE, 'basic',  'navbar', 'navdrawer'];
 
@@ -55,7 +55,7 @@ module.exports =
 
 function _isUrl(url) 
 {
-  return /^https?:\/\/?([\da-z\.-]+)(:\d{2,4})?([\/\w \.-]*)*\/?$/.test(url);
+  return /^https?:\/\/[^\s\/$.?#].[^\s]*$/i.test(url);
 }
 
 function _toTemplateUrl(template) 

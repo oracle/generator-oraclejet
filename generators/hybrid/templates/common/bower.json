@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "dependencies": 
   {
-    "oraclejet": "2.1.0"
+    "oraclejet": "~2.2.0"
   }
 }

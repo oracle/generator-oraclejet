@@ -31,14 +31,17 @@ module.exports =
 
       fs.stat(configPath, function(err,stats)
       {
+        var generatorVersion = _getOracleJetGeneratorVersion(generator);
         if (err)
         {
-          generator.log(commonMessages.appendJETPrefix() + "No config file...writing the default config...");  
-          var generatorVersion = _getOracleJetGeneratorVersion(generator);
+          generator.log(commonMessages.appendJETPrefix() + "No config file...writing the default config...");
           fs.writeJSONSync(configPath, {"generatorVersion": generatorVersion});       
         }
         else
         {
+          var configJson = fs.readJSONSync(configPath);
+          configJson.generatorVersion = generatorVersion;
+          fs.writeJSONSync(configPath, configJson);     
           generator.log(commonMessages.appendJETPrefix() + ORACLE_JET_CONFIG_FILE +" file exists...checking config...");
         }
       });
@@ -83,7 +86,8 @@ module.exports =
  */
 function _getOracleJetGeneratorVersion(generator)
 {
-  var generatorJSON =  generator.sourceRoot("package.json");
-  return fs.readJSONSync(generatorJSON).version;
+  // We intend to read the top level package.json for the generator-oraclejet module.
+  // Note this path to package.json depends on the location of this file within the module (common/restore.js)
+  var generatorJSON = require('../package.json');
+  return generatorJSON.version;
 }
-

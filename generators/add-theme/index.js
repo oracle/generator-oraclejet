@@ -42,7 +42,11 @@ var OracleJetAddThemeGenerator = generators.Base.extend(
       this.env.error(commonMessages.prefixError(err));
     }
     if(this.themeName === constants.DEFAULT_THEME) {
-      this.env.error(commonMessages.prefixError("Theme " + constants.DEFAULT_THEME + " is reserved."));    }    
+      this.env.error(commonMessages.prefixError("Theme " + constants.DEFAULT_THEME + " is reserved.")); }
+
+    if(!_isValidThemeName(this.themeName)) {
+      this.env.error(commonMessages.prefixError(`Special characters invalid in theme name ${this.themeName}.`));
+    }    
   },
   
   writing: function() 
@@ -74,7 +78,6 @@ module.exports = OracleJetAddThemeGenerator;
 
 function _addSassTheme(generator) {
   var themeName = generator.themeName;
-
   const srcPath = generator.destinationPath(constants.APP_SRC_DIRECTORY);
   const themeDestPath =  path.join(srcPath, 'themes', themeName);
   fs.ensureDirSync(themeDestPath);
@@ -130,6 +133,10 @@ function _isScssFile(file) {
   return /scss/.test(path.extname(file));
 }
 
+function _isValidThemeName(string) {
+  return !(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/.test(string));
+}
+
 function _getJetVersion(generator) {
   let bowerJSON = generator.destinationPath('bower_components/oraclejet/bower.json');
   bowerJSON = fs.readJsonSync(bowerJSON);
@@ -155,7 +162,7 @@ function _copySettingsFilesFromJETSrc(themeName, dest, generator) {
     const srcSettingFileName = _getSrcSettingFileName(platform);
     const srcPath = path.join(JET_SCSS_SRC_PATH, platformPath, srcSettingFileName);
 
-    const destSettingFileName = _getDestSettingFileName(themeName, platform);
+    const destSettingFileName = _getDestSettingFileName(DEFAULT_THEME, platform);
     const destPath = path.join(dest, platform, destSettingFileName);
 
     fs.copySync(srcPath, destPath);
@@ -187,27 +194,23 @@ function _copySettingsFilesFromJETSrc(themeName, dest, generator) {
   function _getValuePairsArray() {
     return [
       {
-        str:'@import "../utilities/oj.utilities.urls";',
-        newStr: '@import "../../../../bower_components/oraclejet/dist/scss/utilities/oj.utilities.urls";',
+        str: new RegExp('@import\ \"\.\.\/utilities', 'g'),
+        newStr: '@import "../../../../bower_components/oraclejet/dist/scss/utilities',
       },
       {
-        str: '@import "../utilities/oj.utilities.math";',
-        newStr: '@import "../../../../bower_components/oraclejet/dist/scss/utilities/oj.utilities.math";',
-      },
-      {
-        str: new RegExp('.*\\$themeName.*'),
+        str: new RegExp('.*\\$themeName.*', 'g'),
         newStr: `$themeName:           ${THEMENAME_TOKEN} !default;`,
       },
       {
-        str: new RegExp('.*\\$imageDir.*'),
+        str: new RegExp('.*\\$imageDir.*', 'g'),
         newStr: `$imageDir: "../../../alta/${JET_VERSION_TOKEN}/${PLATFORM_TOKEN}/images/" !default;`,
       },
       {
-        str: new RegExp('.*\\$fontDir.*'),
+        str: new RegExp('.*\\$fontDir.*', 'g'),
         newStr: `$fontDir:  "../../../alta/${JET_VERSION_TOKEN}/${PLATFORM_TOKEN}/fonts/" !default;`,
       },
       {
-        str: new RegExp('.*\\$commonImageDir.*'),
+        str: new RegExp('.*\\$commonImageDir.*', 'g'),
         newStr: `$commonImageDir:  "../../../alta/${JET_VERSION_TOKEN}/common/images/" !default;`,
       },
     ];
