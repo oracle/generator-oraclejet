@@ -1,11 +1,13 @@
 /**
-  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  Copyright (c) 2015, 2017, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
 "use strict";
 
 var path = require("path");
 var constants = require("../util/constants");
+var util = require("../util");
+var paths = require("../util/paths");
 var common = require("../common");
 var commonMessages = require("../common/messages");
 
@@ -80,13 +82,13 @@ var platformsHelper = module.exports =
             return;
           }
 
-          generator.prompt(
+          generator.prompt([
           {
             type: "checkbox",
             name: "platforms",
             choices: _filterPromptingPlatforms(possiblePlatforms),
             message: "Please choose the platforms you want to install"
-          }, function(answers) 
+          }]).then(function(answers) 
           {
             // preserve the values for the corodva add part
             generator._platformsToInstall = answers.platforms;
@@ -109,8 +111,10 @@ var platformsHelper = module.exports =
     
     // always add the browser platform
     platforms.push('browser');
+    const cordovaDir = paths.getConfiguredPaths(generator.destinationPath()).stagingHybrid;
+    const appRoot = generator.destinationPath();
 
-    generator.destinationRoot(generator.destinationPath(constants.CORDOVA_DIRECTORY));
+    generator.destinationRoot(generator.destinationPath(cordovaDir));
 
     return new Promise(function(resolve, reject)
     {
@@ -126,7 +130,7 @@ var platformsHelper = module.exports =
 
       p.then(function()
       {
-        generator.destinationRoot(path.resolve(".."));
+        generator.destinationRoot(appRoot);
         resolve(generator);
       })
       .catch(function(err)

@@ -1,5 +1,5 @@
 /**
-  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  Copyright (c) 2015, 2017, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
 "use strict";
@@ -10,21 +10,17 @@ module.exports = {
   SUPPORTED_PLATFORMS: ["android", "ios", "windows", "web"],
   SUPPORTED_HYBRID_PLATFORMS: ["android", "ios", "windows"],
   CORDOVA_CONFIG_XML: "config.xml",
-  CORDOVA_DIRECTORY: "hybrid",
   DEFAULT_THEME:"alta",
+  APP_CONFIG_JSON: "oraclejetconfig.json",
 
-  APP_SRC_DIRECTORY: "src",
-  APP_SRC_HYBRID_DIRECTORY: "src-hybrid",
-  APP_SRC_WEB_DIRECTORY: "src-web",
-
-  APP_TYPE: 
+  APP_TYPE:
   {
     "HYBRID": "hybrid",
     "WEB": "web"
-  }, 
+  },
 
   SUPPORTED_FLAGS: (namespace) => {
-    
+
     const systemFlags = [
       'env',
       'resolved',
@@ -34,7 +30,8 @@ module.exports = {
       'skip-cache',
       'skip-install',
       'app-name',
-      'app-id'
+      'app-id',
+      'insight'
     ];
 
     const hybridFlags = [

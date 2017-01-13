@@ -1,5 +1,5 @@
 /**
-  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  Copyright (c) 2015, 2017, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
 // grunt bowercopy task
@@ -139,6 +139,8 @@ module.exports = function(grunt)
         "require": "text",
         "proj4js": "proj4",
         "require-css": "require-css",
+        "webcomponents/CustomElements.js": "webcomponentsjs/CustomElements.js",
+        "webcomponents/CustomElements.min.js": "webcomponentsjs/CustomElements.min.js",
         "jquery/jqueryui-amd-<%= grunt.config.data.bowercopy.options.versions.jqueryUIVersion %>.min/core.js":"jquery-ui/ui/minified/core.js",
         "jquery/jqueryui-amd-<%= grunt.config.data.bowercopy.options.versions.jqueryUIVersion %>.min/data.js":"jquery-ui/ui/minified/data.js",
         "jquery/jqueryui-amd-<%= grunt.config.data.bowercopy.options.versions.jqueryUIVersion %>.min/disable-selection.js":"jquery-ui/ui/minified/disable-selection.js",

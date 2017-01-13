@@ -1,5 +1,5 @@
 /**
-  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  Copyright (c) 2015, 2017, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
 "use strict";
@@ -14,10 +14,6 @@ module.exports = {
 
     return new Promise(function(resolve, reject) 
     {
-      var commonTemplate = yoGenerator.templatePath("common");
-      var commonTemplateDest = yoGenerator.destinationPath(yoGenerator.appDir + "/");
-      fs.copySync(commonTemplate, commonTemplateDest);
-
       _installNpmTemplate(yoGenerator, npmUrl)
         .then(function()
         {
@@ -106,7 +102,7 @@ function _installNpmTemplate(yoGenerator, npmUrl)
   return new Promise(function(resolve, reject){
       var cmd = 'npm install ' + npmUrl;
       var appDir = yoGenerator.destinationPath(yoGenerator.appDir);
-      fs.ensureDir(appDir);
+      fs.ensureDirSync(path.join(appDir, 'node_modules'));
       exec(cmd, {cwd: appDir}, function(err){
         if(err) return reject(err);
         return resolve();

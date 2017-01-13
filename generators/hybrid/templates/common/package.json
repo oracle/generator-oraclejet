@@ -9,9 +9,9 @@
     "fs-extra": "0.30.0",
     "grunt": "^1.0.1",
     "grunt-bowercopy": "1.2.4",
-    "grunt-oraclejet": "~2.2.0",
+    "grunt-oraclejet": "~2.3.0",
     "load-grunt-config": "0.19.2",
-    "oraclejet-tooling": "~2.2.0"
+    "oraclejet-tooling": "~2.3.0"
   },
   "engines": {
     "node": ">=0.10.0"

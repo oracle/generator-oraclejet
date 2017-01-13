@@ -1,18 +1,19 @@
 /**
-  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  Copyright (c) 2015, 2017, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
 "use strict";
 
 var fs = require("fs-extra");
 var path = require("path");
-
+var util = require("../util");
 var common = require("../common");
 var constants = require("../util/constants");
 var commonMessages = require("../common/messages");
 var DOMParser = require("xmldom").DOMParser;
 var endOfLine = require("os").EOL;
 var graphics = require("./graphics");
+var paths = require("../util/paths");
 
 var ORACLEJET_APP_ID = "org.oraclejet.";
 
@@ -61,8 +62,7 @@ module.exports =
 
   removeExtraCordovaFiles: function _removeExtraCordovaFiles(generator)
   { 
-    var cordovaDir = generator.destinationPath(constants.CORDOVA_DIRECTORY);
-
+    var cordovaDir = _getHybridPath(generator);
     return new Promise(function(resolve, reject)
     {    
       try
@@ -81,7 +81,7 @@ module.exports =
   copyResources: function _copyResources(generator)
   {
     var source = generator.templatePath("../../hybrid/templates/common/res");
-    var dest = generator.destinationPath(constants.CORDOVA_DIRECTORY) + "/res/";
+    var dest = _getHybridPath(generator, "res/");
 
     return new Promise(function(resolve, reject)
     {      
@@ -99,7 +99,8 @@ module.exports =
   
   updateConfigXml: function _updateConfigXml(generator)
   {
-    var configXml = generator.destinationPath(constants.CORDOVA_DIRECTORY + "/" + constants.CORDOVA_CONFIG_XML);
+    var cordovaDir = _getHybridPath(generator);
+    var configXml = generator.destinationPath(cordovaDir + "/" + constants.CORDOVA_CONFIG_XML);
 
     return new Promise(function(resolve, reject)
     {
@@ -127,10 +128,9 @@ module.exports =
   copyHooks: function(context) 
   {
     // 'Generator' may be passed as {generator: generator} or {generator}
-    const generator = context.generator || context;
-    
+    const generator = context.generator || context;    
     const source = generator.destinationPath('node_modules/oraclejet-tooling/hooks/');
-    const dest = generator.destinationPath('hybrid/scripts/hooks/');
+    const dest = _getHybridPath(generator, 'scripts/hooks/');
 
     return new Promise(function (resolve, reject) 
     {
@@ -328,3 +328,8 @@ function _getFirstElementByTagName(node, tag)
   return node.getElementsByTagName(tag)[0];
 }
 
+function _getHybridPath(generator, subDir) {
+  const appDir = generator.destinationPath();
+  const hybridRoot = paths.getConfiguredPaths(appDir).stagingHybrid;
+  return (subDir) ? path.join(hybridRoot, subDir) : hybridRoot;
+}

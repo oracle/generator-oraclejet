@@ -14,5 +14,6 @@
       "hybrid": "hybrid",
       "themes": "themes"
     }
-  } 
+  },
+  "defaultBrowser": "chrome"
 }

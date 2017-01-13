@@ -1,5 +1,5 @@
 /**
-  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  Copyright (c) 2015, 2017, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
 "use strict";
@@ -7,7 +7,6 @@
 var fs = require("fs-extra");
 var path = require("path");
 
-var constants = require("../util/constants");
 var fetchZip = require ("../util/fetchZip");
 var util = require("../util");
 var common = require("./index");

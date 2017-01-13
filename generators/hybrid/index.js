@@ -1,11 +1,11 @@
 /**
-  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  Copyright (c) 2015, 2017, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
 "use strict";
 
 var generators = require("yeoman-generator");
-var constants = require("../../util/constants");
+var paths = require("../../util/paths");
 var path = require("path");
 var templateHandler = require("../../common/template/");
 var common = require("../../common");
@@ -133,8 +133,9 @@ function _writeTemplate(generator)
   return new Promise(function(resolve, reject) 
   {
     var appDir = generator.appDir;
+    var appSrc = paths.getDefaultPaths().source;
 
-    templateHandler.handleTemplate(generator, generator.destinationPath(appDir + "/" + constants.APP_SRC_DIRECTORY + "/"))
+    templateHandler.handleTemplate(generator, generator.destinationPath(appDir + "/" + appSrc + "/"))
       .then(function() 
       {
         resolve(generator);

@@ -1,10 +1,10 @@
 /**
-  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  Copyright (c) 2015, 2017, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
 "use strict";
-
-var constants = require("../util/constants");
+var paths = require("../util/paths");
+var fs = require("fs-extra");
 
 module.exports =
 {
@@ -12,7 +12,8 @@ module.exports =
   {
     return new Promise(function(resolve, reject) 
     {
-      var cordovaDir = constants.CORDOVA_DIRECTORY;
+      var cordovaDir = paths.getConfiguredPaths(generator.destinationPath()).stagingHybrid;
+      fs.ensureDirSync(cordovaDir);
       var args = ["create", cordovaDir];
       
       var appid = generator.options.appid;

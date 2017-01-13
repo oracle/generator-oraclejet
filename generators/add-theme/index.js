@@ -1,5 +1,5 @@
 /**
-  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  Copyright (c) 2015, 2017, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
 "use strict";
@@ -9,6 +9,8 @@ var fs = require("fs-extra");
 var path = require("path");
 var constants = require("../../util/constants");
 var common = require("../../common");
+var util = require("../../util");
+var paths = require("../../util/paths");
 var commonMessages = require("../../common/messages");
 const DEFAULT_THEME = 'mytheme';
 const JET_SCSS_SRC_PATH = 'bower_components/oraclejet/dist/scss';
@@ -75,11 +77,12 @@ var OracleJetAddThemeGenerator = generators.Base.extend(
 
 module.exports = OracleJetAddThemeGenerator;
 
-
 function _addSassTheme(generator) {
-  var themeName = generator.themeName;
-  const srcPath = generator.destinationPath(constants.APP_SRC_DIRECTORY);
-  const themeDestPath =  path.join(srcPath, 'themes', themeName);
+  const themeName = generator.themeName;
+  const _configPaths = paths.getConfiguredPaths(generator.destinationPath());
+  const srcPath = _configPaths.source;
+  const srcThemes = _configPaths.sourceThemes;
+  const themeDestPath = path.resolve(srcPath, srcThemes, themeName);
   fs.ensureDirSync(themeDestPath);
 
   var source = generator.templatePath(DEFAULT_THEME);
@@ -198,19 +201,19 @@ function _copySettingsFilesFromJETSrc(themeName, dest, generator) {
         newStr: '@import "../../../../bower_components/oraclejet/dist/scss/utilities',
       },
       {
-        str: new RegExp('.*\\$themeName.*', 'g'),
+        str: new RegExp('.*\\$themeName.*'),
         newStr: `$themeName:           ${THEMENAME_TOKEN} !default;`,
       },
       {
-        str: new RegExp('.*\\$imageDir.*', 'g'),
+        str: new RegExp('.*\\$imageDir.*'),
         newStr: `$imageDir: "../../../alta/${JET_VERSION_TOKEN}/${PLATFORM_TOKEN}/images/" !default;`,
       },
       {
-        str: new RegExp('.*\\$fontDir.*', 'g'),
+        str: new RegExp('.*\\$fontDir.*'),
         newStr: `$fontDir:  "../../../alta/${JET_VERSION_TOKEN}/${PLATFORM_TOKEN}/fonts/" !default;`,
       },
       {
-        str: new RegExp('.*\\$commonImageDir.*', 'g'),
+        str: new RegExp('.*\\$commonImageDir.*'),
         newStr: `$commonImageDir:  "../../../alta/${JET_VERSION_TOKEN}/common/images/" !default;`,
       },
     ];

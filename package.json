@@ -1,8 +1,8 @@
 {
   "name": "generator-oraclejet",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "license": "UPL-1.0",
-  "description": "initial",
+  "description": "Yeoman generator for Oracle JET web and mobile applications",
   "homepage": "http://oraclejet.org",
   "keywords": [
     "yeoman-generator"
@@ -16,11 +16,11 @@
     "hybrid"
   ],
   "dependencies": {
-    "yeoman-generator": "0.22.5",
-    "adm-zip": "0.4.7",
-    "fs-extra": "0.26.5",
-    "xmldom": "0.1.22",
-    "request": "2.69.0"
+    "yeoman-generator": "^0.24.1",
+    "adm-zip": "^0.4.7",
+    "fs-extra": "^1.0.0",
+    "xmldom": "^0.1.27",
+    "request": "^2.79.0"
   },
   "engines": {
     "node": ">=0.10.0"
@@ -31,16 +31,17 @@
     "grunt-contrib-copy": "^1.0.0",
     "grunt-download": "^0.2.0",
     "grunt-mkdir": "^1.0.0",
-    "grunt-mocha-test": "^0.12.7",
+    "grunt-mocha-test": "^0.13.2",
     "grunt-zip": "^0.17.1",
-    "load-grunt-configs": "^0.4.3",
-    "load-grunt-tasks": "3.5.0",
+    "load-grunt-configs": "^1.0.0",
+    "load-grunt-tasks": "^3.5.2",
     "node-sass": "^3.4.2",
-    "yeoman-assert": "2.1.1",
-    "yeoman-test": "1.0.0"
+    "yeoman-assert": "^2.1.1",
+    "yeoman-test": "^1.5.1"
   },
 
   "preferGlobal": true,
-  "jetversion": "2.2.0"
+  "jetversion": "2.3.0",
+  "jetdocversion": "230"
 }
 

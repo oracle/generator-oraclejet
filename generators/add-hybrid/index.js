@@ -1,5 +1,5 @@
 /**
-  Copyright (c) 2015, 2016, Oracle and/or its affiliates.
+  Copyright (c) 2015, 2017, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
 "use strict";
@@ -8,12 +8,14 @@ var generators = require("yeoman-generator");
 var fs = require("fs-extra");
 var path = require("path");
 var common = require("../../common");
+var util = require("../../util/index");
+var paths = require("../../util/paths");
 var constants = require("../../util/constants");
 var commonMessages = require("../../common/messages");
 var commonHybrid = require("../../hybrid");
 var cordovaHelper = require("../../hybrid/cordova");
 var platformsHelper = require("../../hybrid/platforms");
-
+const _configPaths = {};
 /*
  * Generator for the add-hybrid step
  */
@@ -44,7 +46,8 @@ var OracleJetAddHybridGenerator = generators.Base.extend(
   initializing: function() 
   { 
     var done = this.async();
-     common.validateArgs(this)
+    _setConfigPaths(paths.getConfiguredPaths(this.destinationPath()));
+    common.validateArgs(this)
       .then(common.validateFlags)
       .then(_validateAppDirForAddHybrid)
       .then(function()
@@ -94,12 +97,24 @@ var OracleJetAddHybridGenerator = generators.Base.extend(
           this.env.error(commonMessages.prefixError(err));
         }
       }.bind(this));
+  },
+
+  end: function() 
+  {
+    this.log(commonMessages.appendJETPrefix('Add-hybrid finished.'));
   }
 
 });
 
-module.exports = OracleJetAddHybridGenerator;
+function _setConfigPaths(configPathObj) {
+  Object.keys(configPathObj).forEach((key) => {
+    _configPaths[key] = configPathObj[key];
+  });
+}
 
+function _getPathFromConfig(generator, name) {
+  return util.getPathFromConfigJson(generator.destinationPath(), name);
+}
 
 function _validateAppDirForAddHybrid(generator)
 {
@@ -110,9 +125,10 @@ function _validateAppDirForAddHybrid(generator)
 
 function _createExtraSrcDirs(generator)
 {
-  var srcHybridPath = generator.destinationPath(constants.APP_SRC_HYBRID_DIRECTORY);
-  var srcWebPath = generator.destinationPath(constants.APP_SRC_WEB_DIRECTORY);
-  
+  var srcHybridPath = _configPaths.sourceHybrid;
+  var srcWebPath = _configPaths.sourceWeb;
+  srcWebPath = generator.destinationPath(srcWebPath);
+  srcHybridPath = generator.destinationPath(srcHybridPath);
   fs.ensureDirSync(srcHybridPath);
   fs.ensureDirSync(srcWebPath);
   
@@ -123,15 +139,15 @@ function _validateSrcDirExists(generator)
 {
   var stats;
   var errorMsg;
-  
+  var appSrcPath = _configPaths.source;
   try
   {
-    stats = fs.statSync(generator.destinationPath(constants.APP_SRC_DIRECTORY));
+    stats = fs.statSync(generator.destinationPath(appSrcPath));
     return Promise.resolve(generator);
   }
   catch (err)
   {
-    errorMsg = "Missing '" + constants.APP_SRC_DIRECTORY + "' directory. "
+    errorMsg = "Missing '" + appSrcPath + "' directory. "
              + "Invalid JET project structure.";
     return Promise.reject(commonMessages.error(errorMsg, "validateSrcDirExists"));
   }
@@ -145,10 +161,11 @@ function _validateHybridDirDoesNotExist(generator)
   
   try
   {
-    stats = fs.statSync(generator.destinationPath(constants.CORDOVA_DIRECTORY));
+    const hybridPath = _configPaths.stagingHybrid;
+    stats = fs.statSync(generator.destinationPath(hybridPath));
     if (stats.isDirectory)
     {
-      errorMsg = "The project already contains the '" + constants.CORDOVA_DIRECTORY
+      errorMsg = "The project already contains the '" + hybridPath
                + "' directory.";
       return Promise.reject(commonMessages.error(errorMsg, "validateHybridDirDoesNotExist"));
     }
@@ -162,8 +179,11 @@ function _validateHybridDirDoesNotExist(generator)
 
 function _copyCordovaMocks(generator)
 {
-  var source = generator.templatePath("../../hybrid/templates/common/src/js/");
-  var dest = generator.destinationPath("./src-hybrid/js/");
+
+  const source = generator.templatePath("../../hybrid/templates/common/src/js/");
+  const srcHybridPath = _configPaths.sourceHybrid;
+  const srcJsPath = _configPaths.sourceJavascript;
+  const dest = generator.destinationPath(`./${srcHybridPath}/${srcJsPath}/`);
 
   return new Promise(function (resolve, reject)
   {
@@ -181,7 +201,9 @@ function _copyCordovaMocks(generator)
     }
     else
     {
-      reject('Missing file \'/js/cordovaMocks.js\'.')
+      reject('Missing file \'cordovaMocks.js\'.')
     }
   });
 }
+
+module.exports = OracleJetAddHybridGenerator;
