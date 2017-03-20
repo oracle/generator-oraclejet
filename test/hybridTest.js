@@ -2,6 +2,10 @@
   Copyright (c) 2015, 2017, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
+/**
+  Copyright (c) 2015, 2017, Oracle and/or its affiliates.
+  The Universal Permissive License (UPL), Version 1.0
+*/
 var env = process.env,
         assert = require('assert'),
         fs = require('fs-extra'),
@@ -25,6 +29,7 @@ describe("Hybrid Test", function ()
 {
 
   before(function(){
+    console.log(testDir);
     fs.ensureDirSync(testDir);
     fs.emptyDirSync(testDir);    
   });  
@@ -33,14 +38,14 @@ describe("Hybrid Test", function ()
    
     it("Generate android/ios app", function (done)
     {
-      var timeOutLimit = util.isNoRestoreTest() ? 120000 : 320000;
+      var timeOutLimit = util.isNoRestoreTest() ? 120000 : 520000;
       this.timeout(timeOutLimit);
       var command = 'yo oraclejet:hybrid hybridTest --template=navbar --appid=my.id --appName=testcase --platforms=' + platform;
       command = util.isNoRestoreTest() ? command + ' --norestore' : command;
 
       exec(command, execOptions, function (error, stdout)
       {
-        assert.equal(error, undefined, error);
+        if(error) {assert.equal(error, undefined, error);}
         filelist = fs.readdirSync(testDir);
         hybridFileList = fs.readdirSync(hybridTestDir);
         assert.equal(util.norestoreSuccess(stdout), true, error);
@@ -51,7 +56,7 @@ describe("Hybrid Test", function ()
   
   describe("Run Tests", function(){
 
-    it("Copy npm and bower modules", function(done){
+    it("Copy npm modules", function(done){
       this.timeout(200000);
       //copy Npm and bower modules   
       if (util.isNoRestoreTest()){  
@@ -63,17 +68,6 @@ describe("Hybrid Test", function ()
       }
     });
 
-    it("bowercopy", function (done)
-      {
-        this.timeout(300000);
-        exec('grunt bowercopy', {cwd: testDir}, function (error, stdout)
-        {
-          assert.equal(util.bowerCopySuccess(stdout), true, error);
-          done();
-        });
-      });
-
-
     describe("Invalid arugments & Check error messages", function () {
 
       it("complain generating app to non-empty appDir", function (done)
@@ -81,7 +75,6 @@ describe("Hybrid Test", function ()
         this.timeout(300000);
         exec('yo oraclejet:hybrid hybridTest --platforms=' + platform, execOptions, function (error, stdout)
         {
-
           var errLogCorrect = /path already exists and is not empty/.test(error.message);
           assert.equal(errLogCorrect, true, error);
           done();
@@ -103,10 +96,10 @@ describe("Hybrid Test", function ()
       it("complain about unsupported server port", function (done)
       {
         this.timeout(20000);
-        exec('grunt serve --platform=' + platform + ' --serverPort=' + '12we', {cwd: testDir,}, function (error, stdout)
+        exec('grunt serve --platform=' + platform + ' --server-port=' + '12we', {cwd: testDir,}, function (error, stdout)
         {
 
-          var errLogCorrect = /deprecated/.test(stdout);
+          var errLogCorrect = /not valid/.test(stdout);
           assert.equal(errLogCorrect, true, stdout);
           done();
         });
@@ -149,9 +142,11 @@ describe("Hybrid Test", function ()
     });
 
     describe("Check essential files", function ()
-    {
+    { 
       it("config.xml exists and is correct", function ()
       {
+        filelist = fs.readdirSync(testDir);
+        hybridFileList = fs.readdirSync(hybridTestDir);
         var inlist = hybridFileList.indexOf("config.xml") > -1;
         assert.equal(inlist, true, path.resolve(hybridTestDir, 'config.xml') + " missing");
         if (inlist) {
@@ -195,10 +190,10 @@ describe("Hybrid Test", function ()
     it("Grunt serve android/ios without platform", function (done)
     {
       this.timeout(2400000);
-      const cmd = util.isWindows(env.OS) ? 'grunt serve' : 'grunt serve --destination="iPhone-6, 9.2"';
+      const cmd = 'grunt serve';
       exec(cmd, {cwd: testDir, maxBuffer: 1024 * 20000, timeout:100000, killSignal:'SIGTERM' }, function (error, stdout)
       {
-        assert.equal((util.noError(stdout) || /watch:srouceFiles/.test(stdout)), true, error);
+        assert.equal((util.noError(stdout) || /watch:sourceFiles/.test(stdout)), true, error);
         done();
       });
     });

@@ -2,30 +2,26 @@
   Copyright (c) 2015, 2017, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
-"use strict";
+'use strict';
 
-var path = require("path");
-var fs = require("fs-extra");
+const path = require('path');
+const fs = require('fs-extra');
 
 module.exports =
 {
-  getDirectories: function(source)
-  {
+  getDirectories(source) {
     // util function to get directories listing
-    return fs.readdirSync(source).filter(function(file)
-      {
-        return fs.statSync(path.join(source, file)).isDirectory();
-      });
+    return fs.readdirSync(source).filter(file =>
+      fs.statSync(path.join(source, file)).isDirectory());
   },
-  fsExistsSync: function (path) {
+  fsExistsSync(filePath) {
     try {
-      fs.statSync(path);
+      fs.statSync(filePath);
       return true;
     } catch (err) {
       // file/directory does not exist
       return false;
-    } 
+    }
   }
 };
-
 

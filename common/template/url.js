@@ -2,37 +2,28 @@
   Copyright (c) 2015, 2017, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
-"use strict";
+'use strict';
 
-var fs = require("fs-extra");
-var fetchZip = require("../../util/fetchZip");
+const fs = require('fs-extra');
+const fetchZip = require('../../util/fetchZip');
 
 module.exports = {
 
-  handle: function _handle(generator, template, destination) 
-  {
-    var temp = generator.destinationPath(generator.appDir + "/temp");
+  handle: function _handle(generator, template, destination) {
+    const temp = generator.destinationPath(`${generator.appDir}/temp`);
 
-    return new Promise(function(resolve, reject) 
-    {
-
+    return new Promise((resolve, reject) => {
       fetchZip(template)
-        .then(function(values) 
-        {
+        .then((values) => {
           _processFetchedTemplateZip(values, temp, destination);
           return resolve(generator);
         })
-        .catch(function(err) 
-        {
-          return reject(err);
-        });
-
+        .catch(err => reject(err));
     });
   }
 };
 
-function _processFetchedTemplateZip(values, temp, destination)
-{
+function _processFetchedTemplateZip(values, temp, destination) {
   fs.mkdirsSync(temp);
   values.extractAllTo(temp);
   fs.copySync(temp, destination);

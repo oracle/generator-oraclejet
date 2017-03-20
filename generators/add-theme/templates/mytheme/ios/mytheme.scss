@@ -14,7 +14,7 @@
 @import "<%= themename %>.ios.settings";
 
 // import alta-ios aggregating file
-@import "../../../../bower_components/oraclejet/dist/scss/alta-ios/oj-alta";
+@import "../../../../node_modules/oraclejet/dist/scss/alta-ios/oj-alta";
 
 // import custom css overrides
 @import "<%= themename %>.ios.overrides";

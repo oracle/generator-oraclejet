@@ -13,7 +13,7 @@
 @import "<%= themename %>.web.settings";
 
 // import alta aggregating file
-@import "../../../../bower_components/oraclejet/dist/scss/alta/oj-alta";
+@import "../../../../node_modules/oraclejet/dist/scss/alta/oj-alta";
 
 // import custom css overrides
 @import "<%= themename %>.web.overrides";

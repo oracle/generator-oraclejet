@@ -14,7 +14,7 @@
 @import "<%= themename %>.windows.settings";
 
 // import alta-windows aggregating file
-@import "../../../../bower_components/oraclejet/dist/scss/alta-windows/oj-alta";
+@import "../../../../node_modules/oraclejet/dist/scss/alta-windows/oj-alta";
 
 // import custom css overrides
 @import "<%= themename %>.windows.overrides";

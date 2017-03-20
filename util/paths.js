@@ -2,30 +2,30 @@
   Copyright (c) 2015, 2017, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
-"use strict";
+'use strict';
 
-const path = require("path");
-const fs = require("fs-extra");
-const constants = require("./constants");
-const util = require("./index");
+const path = require('path');
+const fs = require('fs-extra');
+const constants = require('./constants');
+const util = require('./index');
 
 const _cachedPathsMap = {};
 const _defaultPaths = _getDefaultPaths();
 
 module.exports =
 {
-  getConfiguredPaths: function (appDir) {
+  getConfiguredPaths(appDir) {
     let resultPaths = _cachedPathsMap[appDir];
-    if(!resultPaths) {
+    if (!resultPaths) {
       _cachedPathsMap[appDir] = resultPaths = _deriveConfiguredPaths(appDir);
     }
     return resultPaths;
-  }, 
+  },
 
-  getDefaultPaths: function () {
+  getDefaultPaths() {
     return _defaultPaths;
   }
-}
+};
 
 function _deriveConfiguredPaths(appDir) {
   const configurePaths = {};

@@ -14,7 +14,7 @@
 @import "<%= themename %>.android.settings";
 
 // import alta-android aggregating file
-@import "../../../../bower_components/oraclejet/dist/scss/alta-android/oj-alta";
+@import "../../../../node_modules/oraclejet/dist/scss/alta-android/oj-alta";
 
 // import custom css overrides
 @import "<%= themename %>.android.overrides";

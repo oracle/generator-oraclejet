@@ -2,6 +2,10 @@
   Copyright (c) 2015, 2017, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
+/**
+  Copyright (c) 2015, 2017, Oracle and/or its affiliates.
+  The Universal Permissive License (UPL), Version 1.0
+*/
 var env = process.env,
         assert = require('assert'),
         fs = require('fs-extra'),
@@ -23,14 +27,14 @@ describe("Web Test", function ()
 {
   before(function(){
     fs.ensureDirSync(testDir);
-    fs.emptyDirSync(testDir);    
-  });  
+    fs.emptyDirSync(testDir);
+  });
 
   describe("Scaffold with norestore flag", function(){
-    
+
     it("Generate web app", function (done)
     {
-      this.timeout(120000);
+      this.timeout(520000);
       exec('yo oraclejet webTest --norestore=true', execOptions, function (error, stdout)
       {
         done();
@@ -44,7 +48,7 @@ describe("Web Test", function ()
 
     it("Copy npm and bower modules", function(done){
       this.timeout(200000);
-      //copy Npm and bower modules     
+      //copy Npm and bower modules
       fs.copy(utilDir, testDir, function(err){
         done();
       });
@@ -70,5 +74,16 @@ describe("Web Test", function ()
 
     });
 
+    describe('Extend to hybrid', function () {
+      it('Add hybrid', function (done) {
+        this.timeout(2400000);
+        exec(`yo oraclejet:add-hybrid --platform=${util.getPlatform(env.OS)}`, { cwd: testDir }, (error, stdout) => {
+          filelist = fs.readdirSync(testDir);
+          const inlist = filelist.indexOf('hybrid') > -1;
+          assert.equal(inlist, true, `${testDir}/hybrid missing`);
+          done();
+        });
+      });
+    });
   });
 });

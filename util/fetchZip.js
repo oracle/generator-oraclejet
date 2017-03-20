@@ -4,47 +4,37 @@
 */
 'use strict';
 
-var admzip = require('adm-zip');
-var request = require('request');
+const Admzip = require('adm-zip');
+const request = require('request');
 
-module.exports = function(url) 
-{
+module.exports = function (url) {
   // fetches the zip file
-  return new Promise(function(resolve, reject) 
-  {
-    var data = [];
-    var dataLen = 0;
-      
-    request.get({url: url, encoding: null}).on('error', function(err)
-    {
+  return new Promise((resolve, reject) => {
+    const data = [];
+    let dataLen = 0;
+
+    request.get({ url, encoding: null }).on('error', (err) => {
+      reject(err);
+    }).on('data', (block) => {
+      data.push(block);
+      dataLen += block.length;
+    }).on('end', (err) => {
+      if (err) {
         reject(err);
-    }).on('data', function(block)
-    {
-        data.push(block);
-        dataLen += block.length;
-    }).on('end', function(err, resp, body)
-    {
-        if (err) {
-            reject(err);
-        }          
-        var buf = new Buffer(dataLen);
+      }
+      const buf = new Buffer(dataLen);
 
-        for (var i=0, len = data.length, pos = 0; i < len; i++) 
-        { 
-            data[i].copy(buf, pos); 
-            pos += data[i].length; 
-        } 
+      for (let i = 0, len = data.length, pos = 0; i < len; i += 1) {
+        data[i].copy(buf, pos);
+        pos += data[i].length;
+      }
 
-        try 
-        {
-          var zip = new admzip(buf);
-          resolve(zip);
-        }
-        catch (e)
-        {
-          reject(e);
-          return;
-        }
+      try {
+        const zip = new Admzip(buf);
+        resolve(zip);
+      } catch (e) {
+        reject(e);
+      }
     });
   });
 };

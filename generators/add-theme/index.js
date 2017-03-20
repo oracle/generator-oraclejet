@@ -2,78 +2,72 @@
   Copyright (c) 2015, 2017, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
-"use strict";
+'use strict';
 
-var generators = require("yeoman-generator");
-var fs = require("fs-extra");
-var path = require("path");
-var constants = require("../../util/constants");
-var common = require("../../common");
-var util = require("../../util");
-var paths = require("../../util/paths");
-var commonMessages = require("../../common/messages");
+const generators = require('yeoman-generator');
+const fs = require('fs-extra');
+const path = require('path');
+const constants = require('../../util/constants');
+const common = require('../../common');
+const paths = require('../../util/paths');
+const commonMessages = require('../../common/messages');
+
 const DEFAULT_THEME = 'mytheme';
-const JET_SCSS_SRC_PATH = 'bower_components/oraclejet/dist/scss';
+const JET_SCSS_SRC_PATH = 'node_modules/oraclejet/dist/scss';
 const PLATFORM_TOKEN = '<%= platform %>';
 const JET_VERSION_TOKEN = '<%= jetversion %>';
 const THEMENAME_TOKEN = '<%= themename %>';
 /*
  * Generator for the add-theme step
  */
-var OracleJetAddThemeGenerator = generators.Base.extend(
-{
-  initializing: function()
+const OracleJetAddThemeGenerator = generators.Base.extend(
   {
-    var done = this.async();
-    common.validateArgs(this)
+    initializing: function () { //eslint-disable-line
+      const done = this.async();
+      common.validateArgs(this)
       .then(common.validateFlags)
       .then(() => {
         done();
-      })    
-      .catch(function(err)
-      {
+      })
+      .catch((err) => {
         this.env.error(commonMessages.prefixError(err));
-      }.bind(this));
-  },
-  constructor: function () 
-  {
-    generators.Base.apply(this, arguments);
-    try {
-      this.argument('themeName', {type: String, required: true});
-    } catch (err) {
-      this.env.error(commonMessages.prefixError(err));
-    }
-    if(this.themeName === constants.DEFAULT_THEME) {
-      this.env.error(commonMessages.prefixError("Theme " + constants.DEFAULT_THEME + " is reserved.")); }
+      });
+    },
+    constructor: function () { //eslint-disable-line
+      generators.Base.apply(this, arguments);//eslint-disable-line
+      try {
+        this.argument('themeName', { type: String, required: true });
+      } catch (err) {
+        this.env.error(commonMessages.prefixError(err));
+      }
+      if (this.themeName === constants.DEFAULT_THEME) {
+        this.env.error(commonMessages.prefixError(`Theme ${constants.DEFAULT_THEME} is reserved.`));
+      }
 
-    if(!_isValidThemeName(this.themeName)) {
-      this.env.error(commonMessages.prefixError(`Special characters invalid in theme name ${this.themeName}.`));
-    }    
-  },
-  
-  writing: function() 
-  {
-    var done = this.async();
-    _addSassTheme(this) 
-      .then(function(){
+      if (!_isValidThemeName(this.themeName)) {
+        this.env.error(commonMessages.prefixError(`Special characters invalid in theme name ${this.themeName}.`));
+      }
+    },
+
+    writing: function () { //eslint-disable-line
+      const done = this.async();
+      _addSassTheme(this)
+      .then(() => {
         done();
-      })              
-      .catch(function(err)
-      {
-        if (err)
-        {
+      })
+      .catch((err) => {
+        if (err) {
           this.env.error(commonMessages.prefixError(err));
         }
-      }.bind(this));
-  },
+      });
+    },
 
-  end: function() 
-  {
-    this.log(commonMessages.appendJETPrefix(this.themeName + ' theme added.'));
-    process.exit(1);
-  }
+    end: function () {  //eslint-disable-line
+      this.log(commonMessages.appendJETPrefix(`${this.themeName} theme added.`));
+      process.exit(1);
+    }
 
-});
+  });
 
 module.exports = OracleJetAddThemeGenerator;
 
@@ -85,23 +79,23 @@ function _addSassTheme(generator) {
   const themeDestPath = path.resolve(srcPath, srcThemes, themeName);
   fs.ensureDirSync(themeDestPath);
 
-  var source = generator.templatePath(DEFAULT_THEME);
+  const source = generator.templatePath(DEFAULT_THEME);
 
   return new Promise((resolve, reject) => {
     try {
       // first copy over templates
-      fs.copySync(source, themeDestPath); 
-      _copySettingsFilesFromJETSrc(themeName, themeDestPath, generator);  
-      _renameFilesAllPlatforms(themeName, themeDestPath, generator);   
+      fs.copySync(source, themeDestPath);
+      _copySettingsFilesFromJETSrc(themeName, themeDestPath, generator);
+      _renameFilesAllPlatforms(themeName, themeDestPath, generator);
       return resolve(generator);
     } catch (err) {
-      return reject(commonMessages.error(err, "add-theme"));
-    }  
-  }); 
+      return reject(commonMessages.error(err, 'add-theme'));
+    }
+  });
 }
 
 function _renameFilesAllPlatforms(themeName, dest, generator) {
-  let platforms = _getAllSupportedPlatforms();
+  const platforms = _getAllSupportedPlatforms();
 
   platforms.forEach((platform) => {
     _renameFileOnePlatform(themeName, dest, platform, generator);
@@ -113,19 +107,19 @@ function _getAllSupportedPlatforms() {
 }
 
 function _renameFileOnePlatform(themeName, dest, platform, generator) {
-  let fileDir = path.join(dest, platform);
-  let fileList = fs.readdirSync(fileDir);
-  let scssFiles = fileList.filter(_isScssFile);
+  const fileDir = path.join(dest, platform);
+  const fileList = fs.readdirSync(fileDir);
+  const scssFiles = fileList.filter(_isScssFile);
 
-  scssFiles.forEach((file) => {     
-    let newPath = _renameFile(themeName, fileDir, file);
-    _replaceTokens(newPath, generator, themeName, platform); 
+  scssFiles.forEach((file) => {
+    const newPath = _renameFile(themeName, fileDir, file);
+    _replaceTokens(newPath, generator, themeName, platform);
   });
 }
 
-//replace mytheme.css to the actual themeName.css
+// replace mytheme.css to the actual themeName.css
 function _renameFile(themeName, fileDir, file) {
-  let oldPath = path.join(fileDir, file);  
+  const oldPath = path.join(fileDir, file);
   let newPath = file.replace(DEFAULT_THEME, themeName);
   newPath = path.join(fileDir, newPath);
   fs.renameSync(oldPath, newPath);
@@ -137,27 +131,27 @@ function _isScssFile(file) {
 }
 
 function _isValidThemeName(string) {
-  return !(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/.test(string));
+  return !(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/.test(string)); //eslint-disable-line
 }
 
 function _getJetVersion(generator) {
-  let bowerJSON = generator.destinationPath('bower_components/oraclejet/bower.json');
-  bowerJSON = fs.readJsonSync(bowerJSON);
-  return bowerJSON.version;
+  let packageJSON = generator.destinationPath('node_modules/oraclejet/package.json');
+  packageJSON = fs.readJsonSync(packageJSON);
+  return packageJSON.version;
 }
 
-// default marker <%= jetversion %> <%= themename %> <%= platform %>are used to inject jet version and themename
+// default marker <%= jetversion %> <%= themename %> <%= platform %>
+// are used to inject jet version and themename
 function _replaceTokens(filePath, generator, themeName, platform) {
   let fileContent = fs.readFileSync(filePath, 'utf-8');
-  const jetVersion = _getJetVersion(generator); 
+  const jetVersion = _getJetVersion(generator);
   fileContent = fileContent.replace(new RegExp(JET_VERSION_TOKEN, 'g'), jetVersion);
   fileContent = fileContent.replace(new RegExp(THEMENAME_TOKEN, 'g'), themeName);
   fileContent = fileContent.replace(new RegExp(PLATFORM_TOKEN, 'g'), platform);
   fs.outputFileSync(filePath, fileContent);
 }
 
-function _copySettingsFilesFromJETSrc(themeName, dest, generator) {
-  
+function _copySettingsFilesFromJETSrc(themeName, dest) {
   const settingsFileName = `_oj.alta.${PLATFORM_TOKEN}settings.scss`;
 
   constants.SUPPORTED_PLATFORMS.forEach((platform) => {
@@ -177,7 +171,7 @@ function _copySettingsFilesFromJETSrc(themeName, dest, generator) {
   }
 
   function _getSrcSettingFileName(platform) {
-    const platformName = (platform === 'web') ? '' : platform + '.';
+    const platformName = (platform === 'web') ? '' : `${platform}.`;
     return settingsFileName.replace(PLATFORM_TOKEN, platformName);
   }
 
@@ -186,7 +180,7 @@ function _copySettingsFilesFromJETSrc(themeName, dest, generator) {
   }
 
   function _injectDefaultValues(filePath) {
-    let fileContent = fs.readFileSync(filePath,'utf-8');
+    let fileContent = fs.readFileSync(filePath, 'utf-8');
     const valuePairs = _getValuePairsArray();
     valuePairs.forEach((valuePair) => {
       fileContent = fileContent.replace(valuePair.str, valuePair.newStr);
@@ -197,8 +191,8 @@ function _copySettingsFilesFromJETSrc(themeName, dest, generator) {
   function _getValuePairsArray() {
     return [
       {
-        str: new RegExp('@import\ \"\.\.\/utilities', 'g'),
-        newStr: '@import "../../../../bower_components/oraclejet/dist/scss/utilities',
+        str: new RegExp('@import\ \"\.\.\/utilities', 'g'), //eslint-disable-line
+        newStr: '@import "../../../../node_modules/oraclejet/dist/scss/utilities',
       },
       {
         str: new RegExp('.*\\$themeName.*'),

@@ -2,74 +2,62 @@
   Copyright (c) 2015, 2017, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
-"use strict";
+'use strict';
 
-var generators = require("yeoman-generator");
-var fs = require("fs-extra");
-var path = require("path");
-var constants = require("../../util/constants");
-var common = require("../../common");
-var commonMessages = require("../../common/messages");
+const generators = require('yeoman-generator');
+const common = require('../../common');
+const commonMessages = require('../../common/messages');
 
 /*
  * Generator for the add-sass step
  */
-var OracleJetAddSassGenerator = generators.Base.extend(
-{
-  initializing: function()
+const OracleJetAddSassGenerator = generators.Base.extend(
   {
-    var done = this.async();
-    common.validateArgs(this)
+    initializing: function () { //eslint-disable-line
+      const done = this.async();
+      common.validateArgs(this)
       .then(common.validateFlags)
       .then(() => {
         done();
-      })    
-      .catch(function(err)
-      {
+      })
+      .catch((err) => {
         this.env.error(commonMessages.prefixError(err));
-      }.bind(this));
-  },
+      });
+    },
 
-  constructor: function () 
-  {
-    generators.Base.apply(this, arguments);
-  },
-  
-  writing: function() 
-  {
-    var done = this.async();
-    
-    _npmInstallNodeSass(this)               
-      .then(function()
-      { 
+    constructor: function() { //eslint-disable-line
+      generators.Base.apply(this, arguments); //eslint-disable-line
+    },
+
+    writing: function() { //eslint-disable-line
+      const done = this.async();
+
+      _npmInstallNodeSass(this)
+      .then(() => {
         done();
       })
-      .catch(function(err)
-      {
-        if (err)
-        {
+      .catch((err) => {
+        if (err) {
           this.env.error(commonMessages.prefixError(err));
         }
-      }.bind(this));
-  },
+      });
+    },
 
-  end: function() 
-  {
-    this.log(commonMessages.appendJETPrefix('add-sass finished.'));
-    process.exit(1);
-  }
+    end: function() { //eslint-disable-line
+      console.log(commonMessages.appendJETPrefix('add-sass finished.'));
+      process.exit(1);
+    }
 
-});
+  });
 
 module.exports = OracleJetAddSassGenerator;
 
 
 function _npmInstallNodeSass(generator) {
   try {
-    generator.npmInstall(['node-sass@3.4.2'], {'saveDev':true});
+    generator.npmInstall(['node-sass@4.2.0'], { saveDev: true });
     return Promise.resolve(generator);
   } catch (err) {
-    return Promise.reject(commonMessages.error(err, "install node-sass"));
+    return Promise.reject(commonMessages.error(err, 'install node-sass'));
   }
-  
 }

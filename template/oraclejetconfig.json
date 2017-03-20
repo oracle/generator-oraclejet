@@ -13,7 +13,8 @@
       "web": "web",
       "hybrid": "hybrid",
       "themes": "themes"
-    }
-  },
-  "defaultBrowser": "chrome"
+    },
+
+    "defaultBrowser": "chrome"
+  } 
 }
