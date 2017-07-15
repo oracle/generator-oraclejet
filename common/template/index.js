@@ -18,7 +18,7 @@ const _WEB = 'web';
 
 const BLANK_TEMPLATE = blankTemplate.BLANK_TEMPLATE;
 
-const _TEMPLATES_NPM_URL = 'oraclejet-templates@~3.1.0';
+const _TEMPLATES_NPM_URL = 'oraclejet-templates@~3.2.0';
 
 const _TEMPLATES = [BLANK_TEMPLATE, 'basic', 'navbar', 'navdrawer'];
 
@@ -101,7 +101,9 @@ function _validateTemplateType(templateType) {
 }
 
 function _getLocalFileAbsolutePath(generator, templatePath) {
-  const absolutePath = path.isAbsolute(templatePath) ? templatePath
-                      : path.resolve(process.cwd(), templatePath);
+  const tempPath = (templatePath[0] !== '~') ? templatePath
+                      : path.join(process.env.HOME, templatePath.slice(1));
+  const absolutePath = path.isAbsolute(tempPath) ? tempPath
+                      : path.resolve(process.cwd(), tempPath);
   return util.fsExistsSync(absolutePath) ? absolutePath : null;
 }

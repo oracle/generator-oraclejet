@@ -67,17 +67,19 @@ module.exports =
     });
   },
 
-  copyResources: function _copyResources(generator) {
+  copyResources: function _copyResources(context) {
+    const generator = context.generator || context;
     const source = generator.templatePath('../../hybrid/templates/common/res');
     const dest = _getHybridPath(generator, 'res/');
 
     return new Promise((resolve, reject) => {
-      fs.copy(source, dest, (err) => {
+      // do not overwrite existing icons
+      fs.copy(source, dest, { overwrite: false }, (err) => {
         if (err) {
           reject(err);
           return;
         }
-        resolve(generator);
+        resolve(context);
       });
     });
   },

@@ -4,12 +4,15 @@
 */
 'use strict';
 
+const exec = require('child_process').exec;
 const generators = require('yeoman-generator');
 const common = require('../../common');
 const commonHybrid = require('../../hybrid');
 const commonMessages = require('../../common/messages');
 const commonRestore = require('../../common/restore');
 const path = require('path');
+const paths = require('../../util/paths');
+const fs = require('fs-extra');
 
 /*
  * Generator for the restore step
@@ -40,7 +43,9 @@ const OracleJetHybridRestoreGenerator = generators.Base.extend(
 
       commonRestore.npmInstall({ generator: this })
       .then(commonHybrid.copyHooks)
+      .then(commonHybrid.copyResources)
       .then(commonRestore.writeOracleJetConfigFile)
+      .then(_invokeCordovaPrepare)
       .then(() => {
         done();
       })
@@ -58,5 +63,24 @@ const OracleJetHybridRestoreGenerator = generators.Base.extend(
     }
 
   });
+
+function _invokeCordovaPrepare(context) {
+  const generator = context.generator || context;
+  if (!generator.options.invokedByRestore) return Promise.resolve(context);
+  const cwd = paths.getConfiguredPaths(generator.destinationPath()).stagingHybrid;
+  fs.ensureDirSync(path.join(cwd, 'www'));
+  console.log('Restoring hybrid plugins and platforms....');
+  return new Promise((resolve, reject) => {
+    const cmd = 'cordova prepare';
+    const cmdOpts = { cwd, stdio: [0, 'pipe', 'pipe'], maxBuffer: 1024 * 20000 };
+    exec(cmd, cmdOpts, (error) => {
+      // When www/index.html files are missing, cordova reports error
+      if (error && !/index\.html/.test(error)) {
+        reject(error);
+      }
+      resolve(context);
+    });
+  });
+}
 
 module.exports = OracleJetHybridRestoreGenerator;

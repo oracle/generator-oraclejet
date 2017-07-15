@@ -4,6 +4,7 @@
 */
 'use strict';
 
+const childProcess = require('child_process');
 const generators = require('yeoman-generator');
 const fs = require('fs-extra');
 const path = require('path');
@@ -46,6 +47,7 @@ const OracleJetAddHybridGenerator = generators.Base.extend(
       const done = this.async();
       _setConfigPaths(paths.getConfiguredPaths(this.destinationPath()));
       common.validateArgs(this)
+      .then(_checkIfCordovaIsInstalled)
       .then(common.validateFlags)
       .then(_validateAppDirForAddHybrid)
       .then(() => {
@@ -93,6 +95,18 @@ const OracleJetAddHybridGenerator = generators.Base.extend(
     }
 
   });
+
+function _checkIfCordovaIsInstalled(generator) {
+  return new Promise((resolve, reject) => {
+    childProcess.exec('cordova', (error) => {
+      if (error) {
+        reject('Cordova not installed. Please install by: "npm install -g cordova"');
+      } else {
+        resolve(generator);
+      }
+    });
+  });
+}
 
 function _setConfigPaths(configPathObj) {
   Object.keys(configPathObj).forEach((key) => {

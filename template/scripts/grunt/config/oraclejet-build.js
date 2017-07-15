@@ -34,8 +34,14 @@ module.exports = function (grunt) {
  * Example: {cwd: 'app', src: ['**', '!test.js'], dest: 'staging',  rename: function (dest, file) {return renamed path}}
  */
     // copyCustomLibsToStaging: {
-    //   fileList: []
-    // },
+    //  fileList: [
+    //   {
+    //     cwd:'node_modules/oraclejet/',
+    //     src: ['*'],
+    //     dest: 'web/js/libs/oraclejet'
+    //   }
+    //  ]
+    // }
 
 /**
  * # copySrcToStaging
@@ -111,7 +117,15 @@ module.exports = function (grunt) {
  * The web specific configurations will override the general configuration. 
  */
     web: {
-
+    // copyCustomLibsToStaging: {
+    //  fileList: [
+    //   {
+    //     cwd:'node_modules/oraclejet/',
+    //     src: ['*'],
+    //     dest: 'web/js/libs/oraclejet'
+    //   }
+    //  ]
+    // }
     }, 
 
 /**
@@ -119,7 +133,15 @@ module.exports = function (grunt) {
  * The hybrid specific configurations will override the general configuration. 
  */
     hybrid: {
-
+    // copyCustomLibsToStaging: {
+    //  fileList: [
+    //   {
+    //     cwd:'node_modules/oraclejet/',
+    //     src: ['*'],
+    //     dest: 'hybrid/www/js/libs/oraclejet'
+    //   }
+    //  ]
+    // }
     }
   };
 };
