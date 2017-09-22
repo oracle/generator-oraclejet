@@ -16,7 +16,7 @@ module.exports = {
 
   buildSuccess: function _isSuccess(std)
   { 
-    return ((std.indexOf("BUILD SUCCE") > -1 || std.indexOf("Code Sign error"))? true : false);
+    return (std.indexOf("BUILD SUCCE") > -1 || std.indexOf('Code signing') > -1 || std.indexOf("Code Sign") > -1);
   },
 
   norestoreSuccess: function _yoSuccess(std)

@@ -50,7 +50,7 @@ module.exports =
   },
 
   writeCommonTemplates: function _writeCommonTemplates(generator) {
-    const templateSrc = path.join(generator.templatePath(), '../../../template');
+    const templateSrc = path.join(generator.templatePath(), '../../../template/common');
     const templateDest = generator.destinationPath();
 
     return new Promise((resolve, reject) => {
@@ -88,6 +88,9 @@ module.exports =
               items.forEach((filename) => {
                 if (_fileNotHidden(filename)) {
                   const error = `path already exists and is not empty: ${path.resolve(appDir)}`;
+                  reject(commonMessages.error(error, 'validateAppDir'));
+                } else if (filename === '.gitignore') {
+                  const error = 'path already exists and contains a .gitignore file';
                   reject(commonMessages.error(error, 'validateAppDir'));
                 }
               });
@@ -173,6 +176,11 @@ function _handleAbsoluteOrMissingPath(generator) {
 
 function _updateJSONAppName(generator, jsonPath) {
   const json = fs.readJSONSync(generator.destinationPath(jsonPath));
-  json.name = generator.options.appname;
+  // space in app name will result in npm install failure
+  json.name = _removeSpaceInAppName(generator.options.appname);
   fs.writeJSONSync(jsonPath, json);
+}
+
+function _removeSpaceInAppName(appName) {
+  return appName.replace(' ', '-');
 }

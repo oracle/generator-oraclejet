@@ -55,7 +55,7 @@ module.exports = OracleJetAddSassGenerator;
 
 function _npmInstallNodeSass(generator) {
   try {
-    generator.npmInstall(['node-sass@4.2.0'], { saveDev: true });
+    generator.npmInstall(['node-sass@4.5.3'], { saveDev: true });
     return Promise.resolve(generator);
   } catch (err) {
     return Promise.reject(commonMessages.error(err, 'install node-sass'));

@@ -12,7 +12,8 @@ module.exports = {
   CORDOVA_CONFIG_XML: 'config.xml',
   DEFAULT_THEME: 'alta',
   APP_CONFIG_JSON: 'oraclejetconfig.json',
-
+  JET_COMPOSITES: 'jet-composites',
+  COMPONENT_FILES: ['component.json', 'loader.js', 'styles.css'],
   APP_TYPE:
   {
     HYBRID: 'hybrid',
@@ -30,7 +31,11 @@ module.exports = {
       'skip-install',
       'app-name',
       'app-id',
-      'insight'
+      'insight',
+      'component',
+      'hybrid',
+      'platfrom',
+      'platfroms'
     ];
 
     const hybridFlags = [
@@ -39,12 +44,12 @@ module.exports = {
       'appname',
       'appName',
       'platform',
-      'platforms',
+      'platforms'
     ];
 
     const appFlags = [
       'template',
-      'norestore',
+      'norestore'
     ];
 
     const restoreFlags = [

@@ -35,7 +35,7 @@ function _getRestoreComplete(invokedByRestore, appDir) {
   if (invokedByRestore) {
     return _appendSuccessPrefix('Your app restore finished successfully...');
   }
-  return _appendSuccessPrefix(`Your app is ready! Change to your new app directory ${appDir} and try grunt build and serve...`);
+  return _appendSuccessPrefix(`Your app is ready! Change to your new app directory ${appDir} and try ojet build and serve...`);
 }
 
 function _getPrefixError(error) {

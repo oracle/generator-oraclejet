@@ -69,6 +69,7 @@ function _invokeCordovaPrepare(context) {
   if (!generator.options.invokedByRestore) return Promise.resolve(context);
   const cwd = paths.getConfiguredPaths(generator.destinationPath()).stagingHybrid;
   fs.ensureDirSync(path.join(cwd, 'www'));
+
   console.log('Restoring hybrid plugins and platforms....');
   return new Promise((resolve, reject) => {
     const cmd = 'cordova prepare';

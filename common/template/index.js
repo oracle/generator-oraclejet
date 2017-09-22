@@ -9,7 +9,6 @@ const urlTemplate = require('./url');
 const commonTemplate = require('./common');
 const npmTemplate = require('./npm');
 const localTemplate = require('./local');
-const commonMessages = require('../messages');
 const path = require('path');
 const util = require('../../util');
 
@@ -18,7 +17,7 @@ const _WEB = 'web';
 
 const BLANK_TEMPLATE = blankTemplate.BLANK_TEMPLATE;
 
-const _TEMPLATES_NPM_URL = 'oraclejet-templates@~3.2.0';
+const _TEMPLATES_NPM_URL = '@oracle/oraclejet-templates@~4.0.0';
 
 const _TEMPLATES = [BLANK_TEMPLATE, 'basic', 'navbar', 'navdrawer'];
 
@@ -29,11 +28,7 @@ module.exports =
     const template = generator.options.template || BLANK_TEMPLATE;
     generator.log('Processing template...', template);
     const templateHandler = _getHandler(generator, template, templateDestDirectory);
-    try {
-      return commonTemplate.handle(templateHandler);
-    } catch (err) {
-      return Promise.reject(commonMessages.error(err, 'processing template'));
-    }
+    return commonTemplate.handle(templateHandler);
   }
 };
 

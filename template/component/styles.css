@@ -1,0 +1,7 @@
+@component@:not(.oj-complete){
+  visibility: hidden;
+}
+
+@component@{
+
+}

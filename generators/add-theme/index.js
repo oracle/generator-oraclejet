@@ -13,7 +13,7 @@ const paths = require('../../util/paths');
 const commonMessages = require('../../common/messages');
 
 const DEFAULT_THEME = 'mytheme';
-const JET_SCSS_SRC_PATH = 'node_modules/oraclejet/dist/scss';
+const JET_SCSS_SRC_PATH = 'node_modules/@oracle/oraclejet/dist/scss';
 const PLATFORM_TOKEN = '<%= platform %>';
 const JET_VERSION_TOKEN = '<%= jetversion %>';
 const THEMENAME_TOKEN = '<%= themename %>';
@@ -135,7 +135,7 @@ function _isValidThemeName(string) {
 }
 
 function _getJetVersion(generator) {
-  let packageJSON = generator.destinationPath('node_modules/oraclejet/package.json');
+  let packageJSON = generator.destinationPath('node_modules/@oracle/oraclejet/package.json');
   packageJSON = fs.readJsonSync(packageJSON);
   return packageJSON.version;
 }
@@ -192,7 +192,7 @@ function _copySettingsFilesFromJETSrc(themeName, dest) {
     return [
       {
         str: new RegExp('@import\ \"\.\.\/utilities', 'g'), //eslint-disable-line
-        newStr: '@import "../../../../node_modules/oraclejet/dist/scss/utilities',
+        newStr: '@import "../../../../node_modules/@oracle/oraclejet/dist/scss/utilities',
       },
       {
         str: new RegExp('.*\\$themeName.*'),

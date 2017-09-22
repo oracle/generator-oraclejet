@@ -10,7 +10,9 @@ const path = require('path');
 const templateHandler = require('../../common/template/');
 const common = require('../../common');
 const commonHybrid = require('../../hybrid');
+const commonComponent = require('../../common/component');
 const commonMessages = require('../../common/messages');
+const commonTest = require('../../common/test');
 const cordovaHelper = require('../../hybrid/cordova');
 const platformsHelper = require('../../hybrid/platforms');
 
@@ -59,6 +61,9 @@ const OracleJetHybridCreateGenerator = generators.Base.extend(
 
     initializing: function () { //eslint-disable-line
       const done = this.async();
+      if (this.options.component) {
+        this.appDir = this.options.component;
+      }
       common.validateArgs(this)
       .then(common.validateFlags)
       .then(common.validateAppDirNotExistsOrIsEmpty)
@@ -85,7 +90,6 @@ const OracleJetHybridCreateGenerator = generators.Base.extend(
 
     writing: function () {  //eslint-disable-line
       const done = this.async();
-
       _writeTemplate(this)
       .then(common.switchToAppDirectory.bind(this))
       .then(common.writeCommonTemplates)
@@ -101,15 +105,21 @@ const OracleJetHybridCreateGenerator = generators.Base.extend(
       })
       .catch((err) => {
         if (err) {
-          this.env.error(commonMessages.prefixError(err));
+          this.log.error(err);
+          process.exit(1);
         }
       });
     },
 
     end() {
-      this.log(commonMessages.scaffoldComplete());
+      if (this.options.component) {
+        this.log(`Oracle JET: Your component ${this.options.component} project is scaffolded. Performing npm install may take a bit...`);
+      } else {
+        this.log(commonMessages.scaffoldComplete());
+      }
+
       if (!this.options.norestore) {
-        this.composeWith('oraclejet:restore-hybrid', { options: this.options });
+        this.composeWith('@oracle/oraclejet:restore-hybrid', { options: this.options });
       }
     }
   });
@@ -122,11 +132,13 @@ function _writeTemplate(generator) {
     const appSrc = paths.getDefaultPaths().source;
 
     templateHandler.handleTemplate(generator, generator.destinationPath(`${appDir}/${appSrc}/`))
+      .then(commonComponent.writeComponentTemplate)
+      .then(commonTest.writeTestTemplate)
       .then(() => {
         resolve(generator);
       })
       .catch((err) => {
-        reject(commonMessages.error(err, 'writeTemplate'));
+        reject(err);
       });
   });
 }

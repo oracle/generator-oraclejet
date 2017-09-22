@@ -31,7 +31,7 @@ const OracleJetRestoreGenerator = generators.Base.extend(
       this.options.invokedByRestore = true;
 
       this.composeWith(
-      `oraclejet:restore-${restoreType}`,
+      `@oracle/oraclejet:restore-${restoreType}`,
       { options: this.options, arguments: this.arguments });
     }
   });

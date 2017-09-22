@@ -6,15 +6,16 @@
       "hybrid": "src-hybrid",
       "javascript": "js",
       "styles": "css",
-      "themes": "themes"
+      "themes": "themes",
+      "tests": "tests"
     },
 
     "staging": {
       "web": "web",
       "hybrid": "hybrid",
       "themes": "themes"
-    },
-
-    "defaultBrowser": "chrome"
-  } 
+    }
+  },
+  
+  "defaultBrowser": "chrome" 
 }

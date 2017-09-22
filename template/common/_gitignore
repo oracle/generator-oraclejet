@@ -1,8 +1,9 @@
-node_modules/*
-bower_components/*
+/node_modules
+/bower_components
 /web
 /themes
 
+/hybrid/node_modules
 /hybrid/platforms
 /hybrid/www/*
 

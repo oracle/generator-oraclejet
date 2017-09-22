@@ -71,9 +71,8 @@ module.exports =
     const generator = context.generator || context;
     const source = generator.templatePath('../../hybrid/templates/common/res');
     const dest = _getHybridPath(generator, 'res/');
-
+    fs.emptyDirSync(dest);
     return new Promise((resolve, reject) => {
-      // do not overwrite existing icons
       fs.copy(source, dest, { overwrite: false }, (err) => {
         if (err) {
           reject(err);
@@ -92,7 +91,7 @@ module.exports =
       try {
         const configRead = fs.readFileSync(configXml, 'utf-8');
         const document = new DOMParser().parseFromString(configRead, 'text/xml');
-        _addCordovaConfigDescriptionAndAuthor(document);
+        _addCordovaConfigDescription(document);
         _addCordovaConfigHooks(document);
         _addIosOrientationPreference(document);
         _addIosOverscrollPreference(document);
@@ -111,7 +110,7 @@ module.exports =
   copyHooks(context) {
     // 'Generator' may be passed as {generator: generator} or {generator}
     const generator = context.generator || context;
-    const source = generator.destinationPath('node_modules/oraclejet-tooling/hooks/');
+    const source = generator.destinationPath('node_modules/@oracle/oraclejet-tooling/hooks/');
     const dest = _getHybridPath(generator, 'scripts/hooks/');
 
     return new Promise((resolve, reject) => {
@@ -124,7 +123,7 @@ module.exports =
           resolve(context);
         });
       } else {
-        reject('Missing folder \'oraclejet-tooling/hooks/\'.');
+        reject('Missing folder \'@oracle/oraclejet-tooling/hooks/\'.');
       }
     });
   }
@@ -151,19 +150,10 @@ function _getAppBaseName(appDir) {
 }
 
 
-function _addCordovaConfigDescriptionAndAuthor(document) {
+function _addCordovaConfigDescription(document) {
   const widget = _getFirstElementByTagName(document, 'widget');
   const packageJSON = fs.readJSONSync(path.resolve('package.json'));
-  _updateCordovaConfigAuthor(widget, packageJSON);
   _updateCordovaConfigDescription(widget, packageJSON);
-}
-
-function _updateCordovaConfigAuthor(widget, packageJSON) {
-  const author = packageJSON.author;
-  const authorElement = _getFirstElementByTagName(widget, 'author');
-  authorElement.childNodes[0].data = `\n        ${author.name}\n    `;
-  authorElement.setAttribute('email', author.email);
-  authorElement.setAttribute('href', author.homepage);
 }
 
 function _updateCordovaConfigDescription(widget, packageJSON) {

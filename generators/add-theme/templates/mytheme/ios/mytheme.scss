@@ -5,17 +5,9 @@
 //    the custom variable file must be imported before the platform theme 
 //    aggregating file (where the platform variable file will be imported).
 // 2. platform theme aggregating file
-// 3. custom override file(s): In case of specificity equality 
-//    the last declaration found in the CSS file wins, so you want
-//    your overrides imported last so they have higher specificity.
-
 
 //import custom variable overrides
 @import "<%= themename %>.ios.settings";
 
 // import alta-ios aggregating file
-@import "../../../../node_modules/oraclejet/dist/scss/alta-ios/oj-alta";
-
-// import custom css overrides
-@import "<%= themename %>.ios.overrides";
-
+@import "../../../../node_modules/@oracle/oraclejet/dist/scss/alta-ios/oj-alta";

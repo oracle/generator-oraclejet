@@ -35,7 +35,7 @@ describe("Web Test", function ()
     it("Generate web app", function (done)
     {
       this.timeout(520000);
-      exec('yo oraclejet webTest --norestore=true', execOptions, function (error, stdout)
+      exec('yo @oracle/oraclejet webTest --norestore=true', execOptions, function (error, stdout)
       {
         done();
         assert.equal(util.norestoreSuccess(stdout), true, error);
@@ -77,7 +77,7 @@ describe("Web Test", function ()
     describe('Extend to hybrid', function () {
       it('Add hybrid', function (done) {
         this.timeout(2400000);
-        exec(`yo oraclejet:add-hybrid --platform=${util.getPlatform(env.OS)}`, { cwd: testDir }, (error, stdout) => {
+        exec(`yo @oracle/oraclejet:add-hybrid --platform=${util.getPlatform(env.OS)}`, { cwd: testDir }, (error, stdout) => {
           filelist = fs.readdirSync(testDir);
           const inlist = filelist.indexOf('hybrid') > -1;
           assert.equal(inlist, true, `${testDir}/hybrid missing`);

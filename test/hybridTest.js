@@ -38,17 +38,16 @@ describe("Hybrid Test", function ()
    
     it("Generate android/ios app", function (done)
     {
-      var timeOutLimit = util.isNoRestoreTest() ? 120000 : 520000;
+      var timeOutLimit = util.isNoRestoreTest() ? 320000 : 520000;
       this.timeout(timeOutLimit);
-      var command = 'yo oraclejet:hybrid hybridTest --template=navbar --appid=my.id --appName=testcase --platforms=' + platform;
+      var command = 'yo @oracle/oraclejet:hybrid hybridTest --template=navbar --appid=my.id --appName=testcase --platforms=' + platform;
       command = util.isNoRestoreTest() ? command + ' --norestore' : command;
 
       exec(command, execOptions, function (error, stdout)
       {
-        if(error) {assert.equal(error, undefined, error);}
         filelist = fs.readdirSync(testDir);
         hybridFileList = fs.readdirSync(hybridTestDir);
-        assert.equal(util.norestoreSuccess(stdout), true, error);
+        assert.equal(util.norestoreSuccess(stdout) || /Your app is/.test(stdout), true, error);
         done();
       });
     });
@@ -73,7 +72,7 @@ describe("Hybrid Test", function ()
       it("complain generating app to non-empty appDir", function (done)
       {
         this.timeout(300000);
-        exec('yo oraclejet:hybrid hybridTest --platforms=' + platform, execOptions, function (error, stdout)
+        exec('yo @oracle/oraclejet:hybrid hybridTest --platforms=' + platform, execOptions, function (error, stdout)
         {
           var errLogCorrect = /path already exists and is not empty/.test(error.message);
           assert.equal(errLogCorrect, true, error);
@@ -84,7 +83,7 @@ describe("Hybrid Test", function ()
       it("complain about unsupported platform android1", function (done)
       {
         this.timeout(150000);
-        exec('grunt build --platform=' + 'android1', {cwd: testDir}, function (error, stdout)
+        exec('grunt build --force=true --platform=' + 'android1', {cwd: testDir}, function (error, stdout)
         {
 
           var errLogCorrect = /Invalid platform/i.test(stdout);
@@ -96,7 +95,7 @@ describe("Hybrid Test", function ()
       it("complain about unsupported server port", function (done)
       {
         this.timeout(20000);
-        exec('grunt serve --platform=' + platform + ' --server-port=' + '12we', {cwd: testDir,}, function (error, stdout)
+        exec('grunt serve --force=true --platform=' + platform + ' --server-port=' + '12we', {cwd: testDir,}, function (error, stdout)
         {
 
           var errLogCorrect = /not valid/.test(stdout);
@@ -108,7 +107,7 @@ describe("Hybrid Test", function ()
       it("complain about unsupported build argument", function (done)
       {
         this.timeout(150000);
-        exec('grunt build:xyz --platform=' + platform, {cwd: testDir}, function (error, stdout)
+        exec('grunt build:xyz --force=true --platform=' + platform, {cwd: testDir}, function (error, stdout)
         {
 
           var errLogCorrect = /buildType xyz is invalid/.test(stdout);
@@ -120,7 +119,7 @@ describe("Hybrid Test", function ()
 
     describe("Build", function ()
     {
-      it("Grunt build android/ios", function (done)
+      it("Grunt build android/ios --force=true", function (done)
       {
         this.timeout(2400000);
         exec('grunt build --platform=' + platform, {cwd: testDir, maxBuffer: 1024 * 20000 }, function (error, stdout)
@@ -133,7 +132,7 @@ describe("Hybrid Test", function ()
       it("Grunt build android/ios for device", function (done)
       {
         this.timeout(2400000);
-        exec(`grunt build --platform=${platform} --destination=device`, {cwd: testDir, maxBuffer: 1024 * 20000 }, function (error, stdout)
+        exec(`grunt build --platform=${platform} --destination=device --force=true`, {cwd: testDir, maxBuffer: 1024 * 20000 }, function (error, stdout)
         {
           assert.equal(util.buildSuccess(stdout), true, error);
           done();
@@ -190,10 +189,10 @@ describe("Hybrid Test", function ()
     it("Grunt serve android/ios without platform", function (done)
     {
       this.timeout(2400000);
-      const cmd = 'grunt serve';
+      const cmd = 'grunt serve --force=true';
       exec(cmd, {cwd: testDir, maxBuffer: 1024 * 20000, timeout:100000, killSignal:'SIGTERM' }, function (error, stdout)
       {
-        assert.equal((util.noError(stdout) || /watch:sourceFiles/.test(stdout)), true, error);
+        assert.equal((util.noError(stdout) || /Build SUCCEEDED/.test(stdout) || /Deploying to /.test(stdout)), true, stdout);
         done();
       });
     });
@@ -203,9 +202,9 @@ describe("Hybrid Test", function ()
     it("add sass generator", function (done)
     {
       this.timeout(2400000);
-      exec(`yo oraclejet:add-sass`, {cwd: testDir, maxBuffer: 1024 * 20000, timeout:100000, killSignal:'SIGTERM' }, function (error, stdout)
+      exec(`yo @oracle/oraclejet:add-sass`, {cwd: testDir, maxBuffer: 1024 * 20000, timeout:200000, killSignal:'SIGTERM' }, function (error, stdout)
       {
-        assert.equal(/add-sass finished/.test(stdout) || /add-sass finished/.test(error), true, error);
+        assert.equal(/add-sass finished/.test(stdout) || /add-sass finished/.test(error), true, stdout);
         done();
       });
     });
@@ -215,7 +214,7 @@ describe("Hybrid Test", function ()
     it("add add-theme generator", function (done)
     {
       this.timeout(2400000);
-      exec(`yo oraclejet:add-theme green`, {cwd: testDir, maxBuffer: 1024 * 20000, timeout:50000, killSignal:'SIGTERM' }, function (error, stdout)
+      exec(`yo @oracle/oraclejet:add-theme green`, {cwd: testDir, maxBuffer: 1024 * 20000, timeout:50000, killSignal:'SIGTERM' }, function (error, stdout)
       {
         assert.equal(util.noError(stdout), true, error);
         done();
@@ -229,7 +228,7 @@ describe("Hybrid Test", function ()
       this.timeout(2400000);
       exec(`grunt build --theme=green`, {cwd: testDir, maxBuffer: 1024 * 20000, timeout:100000, killSignal:'SIGTERM' }, function (error, stdout)
       {
-        assert.equal(util.noError(stdout), true, stdout);
+        assert.equal(util.noError(stdout) || /Cordova compile finished/.test(stdout), true, stdout);
         done();
       });
     });

@@ -6,7 +6,9 @@
 
 const generators = require('yeoman-generator');
 const common = require('../../common');
+const commonComponent = require('../../common/component');
 const commonMessages = require('../../common/messages');
+const commonTest = require('../../common/test');
 const templateHandler = require('../../common/template');
 const path = require('path');
 
@@ -19,6 +21,9 @@ const OracleJetWebCreateGenerator = generators.Base.extend(
   {
     initializing: function () {   //eslint-disable-line
       const done = this.async();
+      if (this.options.component) {
+        this.appDir = this.options.component;
+      }
       common.validateArgs(this)
       .then(common.validateFlags)
       .then(common.validateAppDirNotExistsOrIsEmpty)
@@ -67,16 +72,21 @@ const OracleJetWebCreateGenerator = generators.Base.extend(
       })
       .catch((err) => {
         if (err) {
-          self.env.error(commonMessages.prefixError(err));
+          self.log.error(err);
+          process.exit(1);
         }
       });
     },
 
     end: function () {  //eslint-disable-line
-      this.log(commonMessages.scaffoldComplete());
+      if (this.options.component) {
+        this.log(`Oracle JET: Your component ${this.options.component} project is scaffolded. Performing npm install may take a bit...`);
+      } else {
+        this.log(commonMessages.scaffoldComplete());
+      }
 
       if (!this.options.norestore) {
-        this.composeWith('oraclejet:restore-web', { options: this.options });
+        this.composeWith('@oracle/oraclejet:restore-web', { options: this.options });
       }
     }
   });
@@ -88,11 +98,13 @@ function _writeTemplate(generator) {
     const appDirectory = generator.destinationPath(path.join(generator.appDir, 'src'));
 
     templateHandler.handleTemplate(generator, appDirectory)
+      .then(commonComponent.writeComponentTemplate)
+      .then(commonTest.writeTestTemplate)
       .then(() => {
         resolve(generator);
       })
       .catch((err) => {
-        reject(commonMessages.error(err, 'writeTemplate'));
+        reject(err);
       });
   });
 }
