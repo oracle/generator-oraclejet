@@ -1,5 +1,8 @@
 ## Release Notes for generator-oraclejet ##
 
+### 4.1.0
+* No changes
+
 ### 4.0.0
 * Moved module into @oracle scope, changing the name to @oracle/generator-oraclejet
 * This module should no longer be installed directly.  Use @oracle/ojet-cli instead for scaffolding JET apps.

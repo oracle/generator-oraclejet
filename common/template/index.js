@@ -17,7 +17,7 @@ const _WEB = 'web';
 
 const BLANK_TEMPLATE = blankTemplate.BLANK_TEMPLATE;
 
-const _TEMPLATES_NPM_URL = '@oracle/oraclejet-templates@~4.0.0';
+const _TEMPLATES_NPM_URL = '@oracle/oraclejet-templates@~4.1.0';
 
 const _TEMPLATES = [BLANK_TEMPLATE, 'basic', 'navbar', 'navdrawer'];
 
