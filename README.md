@@ -1,4 +1,4 @@
-# @oracle/generator-oraclejet 4.1.0
+# @oracle/generator-oraclejet 4.2.0
 
 ## About the generator
 This Yeoman generator for Oracle JET lets you quickly set up a project for use as a web application or hybrid mobile application for Android, iOS or Windows 10. 
@@ -14,5 +14,5 @@ Oracle JET is an open source project.  Pull Requests are currently not being acc
 for details.
 
 ## [License](https://github.com/oracle/generator-oraclejet/tree/master/LICENSE.md)
-Copyright (c) 2014, 2017 Oracle and/or its affiliates
+Copyright (c) 2014, 2018 Oracle and/or its affiliates
 The Universal Permissive License (UPL), Version 1.0

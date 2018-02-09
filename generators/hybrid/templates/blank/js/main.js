@@ -1,5 +1,5 @@
 /**
-  Copyright (c) 2015, 2017, Oracle and/or its affiliates.
+  Copyright (c) 2015, 2018, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
 'use strict';
@@ -23,9 +23,9 @@ requirejs.config(
       'promise': 'libs/es6-promise/es6-promise',
       'hammerjs': 'libs/hammer/hammer-2.0.8',
       'ojdnd': 'libs/dnd-polyfill/dnd-polyfill-1.0.0',
-      'ojs': 'libs/oj/v4.1.0/debug',
-      'ojL10n': 'libs/oj/v4.1.0/ojL10n',
-      'ojtranslations': 'libs/oj/v4.1.0/resources',
+      'ojs': 'libs/oj/v4.2.0/debug',
+      'ojL10n': 'libs/oj/v4.2.0/ojL10n',
+      'ojtranslations': 'libs/oj/v4.2.0/resources',
       'text': 'libs/require/text',
       'signals': 'libs/js-signals/signals',
       'customElements': 'libs/webcomponents/custom-elements.min',
