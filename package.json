@@ -1,6 +1,6 @@
 {
   "name": "@oracle/generator-oraclejet",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "license": "UPL-1.0",
   "description": "Yeoman generator for Oracle JET web and mobile applications",
   "homepage": "http://oraclejet.org",

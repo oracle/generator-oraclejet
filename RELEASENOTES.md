@@ -1,6 +1,6 @@
 ## Release Notes for generator-oraclejet ##
 
-### 5.0.0
+### 5.0.1
 * No changes
 
 ### 4.2.0
