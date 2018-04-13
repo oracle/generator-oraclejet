@@ -17,7 +17,7 @@ const _WEB = 'web';
 
 const BLANK_TEMPLATE = blankTemplate.BLANK_TEMPLATE;
 
-const _TEMPLATES_NPM_URL = '@oracle/oraclejet-templates@~4.2.0';
+const _TEMPLATES_NPM_URL = '@oracle/oraclejet-templates@~5.0.0';
 
 const _TEMPLATES = [BLANK_TEMPLATE, 'basic', 'navbar', 'navdrawer'];
 
@@ -26,7 +26,7 @@ module.exports =
 {
   handleTemplate: function _handleTemplate(generator, templateDestDirectory) {
     const template = generator.options.template || BLANK_TEMPLATE;
-    generator.log('Processing template...', template);
+    generator.log('Processing template:', template);
     const templateHandler = _getHandler(generator, template, templateDestDirectory);
     return commonTemplate.handle(templateHandler);
   }

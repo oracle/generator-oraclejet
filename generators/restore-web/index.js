@@ -35,7 +35,7 @@ const OracleJetWebRestoreGenerator = generators.Base.extend(
 
     install: function() { //eslint-disable-line
     // since both will be performing npm install initially just log here
-      this.log('Performing npm install may take a bit...');
+      this.log('Performing npm install may take a bit.');
       const done = this.async();
       commonRestore.npmInstall({ generator: this })
       .then(commonRestore.writeOracleJetConfigFile)
@@ -44,7 +44,8 @@ const OracleJetWebRestoreGenerator = generators.Base.extend(
       })
       .catch((err) => {
         if (err) {
-          this.env.error(commonMessages.prefixError(err));
+          console.error(`\x1b[31mError: ${commonMessages.prefixError(err)}\x1b[0m`);
+          process.exit(1);
         }
       });
     },
@@ -52,7 +53,7 @@ const OracleJetWebRestoreGenerator = generators.Base.extend(
     end: function() { //eslint-disable-line
       this.log(commonMessages.restoreComplete(
         this.options.invokedByRestore, path.basename(this.env.cwd)));
-      process.exit(1);
+      process.exit(0);
     }
   });
 

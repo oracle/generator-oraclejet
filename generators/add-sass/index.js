@@ -45,7 +45,7 @@ const OracleJetAddSassGenerator = generators.Base.extend(
 
     end: function() { //eslint-disable-line
       console.log(commonMessages.appendJETPrefix('add-sass finished.'));
-      process.exit(1);
+      process.exit(0);
     }
 
   });
@@ -55,7 +55,7 @@ module.exports = OracleJetAddSassGenerator;
 
 function _npmInstallNodeSass(generator) {
   try {
-    generator.npmInstall(['node-sass@4.5.3'], { saveDev: true });
+    generator.npmInstall(['node-sass@4.7.2'], { saveDev: true });
     return Promise.resolve(generator);
   } catch (err) {
     return Promise.reject(commonMessages.error(err, 'install node-sass'));

@@ -2,23 +2,31 @@
   Copyright (c) 2015, 2018, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
+'use strict';
 define(
-    ['ojs/ojcore', 'knockout', 'jquery'], function (oj, ko, $) {
-    'use strict';
+    ['ojs/ojcore', 'knockout', 'jquery', 'ojL10n!./resources/nls/@component@-strings'], function (oj, ko, $) {
+
     
     function ExampleComponentModel(context) {
         var self = this;
+        
+        //At the start of your viewModel constructor
+        var busyContext = oj.Context.getContext(context.element).getBusyContext();
+        var options = {"description": "CCA Startup - Waiting for data"};
+        self.busyResolve = busyContext.addBusyState(options);
+
         self.composite = context.element;
+
         //Example observable
         self.messageText = ko.observable('Hello from Example Component');
 
-        context.props.then(function (propertyMap) {
-            //Store a reference to the properties for any later use
-            self.properties = propertyMap;
+        // Example for parsing context properties
+        // if (context.properties.name) {
+        //     parse the context properties here
+        // }
 
-            //Parse your component properties here 
-
-        });
+        //Once all startup and async activities have finished, relocate if there are any async activities
+        self.busyResolve();
     };
     
     //Lifecycle methods - uncomment and implement if necessary 
@@ -32,6 +40,9 @@ define(
     //};
 
     //ExampleComponentModel.prototype.detached = function(context){
+    //};
+
+    //ExampleComponentModel.prototype.propertyChanged = function(context){
     //};
 
     return ExampleComponentModel;

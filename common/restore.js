@@ -21,20 +21,20 @@ module.exports =
     const configPath = path.resolve(destinationRoot, ORACLE_JET_CONFIG_FILE);
 
     return new Promise((resolve) => {
-      generator.log('Writing ', ORACLE_JET_CONFIG_FILE);
+      generator.log('Writing:', ORACLE_JET_CONFIG_FILE);
 
     // need to place the oracletjetconfig.json at origDestRoot
 
       fs.stat(configPath, (err) => {
         const generatorVersion = _getOracleJetGeneratorVersion(generator);
         if (err) {
-          generator.log(`${commonMessages.appendJETPrefix()}No config file...writing the default config...`);
+          generator.log(`${commonMessages.appendJETPrefix()}No config file. Writing the default config.`);
           fs.writeJSONSync(configPath, { generatorVersion });
         } else {
           const configJson = fs.readJSONSync(configPath);
           configJson.generatorVersion = generatorVersion;
           fs.writeJSONSync(configPath, configJson);
-          generator.log(`${commonMessages.appendJETPrefix() + ORACLE_JET_CONFIG_FILE} file exists...checking config...`);
+          generator.log(`${commonMessages.appendJETPrefix() + ORACLE_JET_CONFIG_FILE} file exists. Checking config.`);
         }
         resolve(context);
       });
@@ -44,7 +44,7 @@ module.exports =
   npmInstall: function _npmInstall(context) {
     return new Promise((resolve, reject) => {
       Promise.all([
-        common.gruntSpawnCommandPromise(context, 'npm', ['install'], 'Invoking npm install')
+        common.gruntSpawnCommandPromise(context, 'npm', ['install'], 'Invoking npm install.')
       ])
         .then(() => {
           // rejection will be handled by each promise which will

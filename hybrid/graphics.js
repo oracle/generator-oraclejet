@@ -59,7 +59,9 @@ module.exports = {
        { src: 'Default-Landscape@2x~ipad.png', width: '2048', height: '1536' },
        { src: 'Default-Landscape-736h.png', width: '2208', height: '1242' },
        { src: 'Default-Portrait@2x~ipad.png', width: '1536', height: '2048' },
-       { src: 'Default-Portrait~ipad.png', width: '768', height: '1024' }
+       { src: 'Default-Portrait~ipad.png', width: '768', height: '1024' },
+       { src: 'Default-Portrait-iphone-x-2436h.png', width: '1125', height: '2436' },
+       { src: 'Default-Portrait-iphone-x-1125h.png', width: '2436', height: '1125' }
     ],
     android:
     [{ src: 'splash-land-ldpi.9.png', density: 'land-ldpi' },

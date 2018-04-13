@@ -106,7 +106,7 @@ module.exports =
       let p = Promise.resolve();
       platforms.forEach((value) => {
         p = p.then(() => common.gruntSpawnCommandPromise(context, 'cordova',
-              ['platform', 'add', value, '--save'], `Adding platform : ${value}`));
+              ['platform', 'add', value, '--save'], `Adding platform: ${value}`));
       });
 
       p.then(() => {

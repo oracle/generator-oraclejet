@@ -30,11 +30,13 @@ module.exports =
           path.join(appDir, _configPaths.source, _configPaths.sourceTests));
 
         // avoid overwrite test
-        if (fs.existsSync(destDirectory)) resolve(generator);
-
-        fs.ensureDirSync(destDirectory);
-        fs.copySync(templateSrc, destDirectory);
-        _replaceTestHTMLToken(generator);
+        if (fs.existsSync(destDirectory)) {
+          resolve(generator);
+        } else {
+          fs.ensureDirSync(destDirectory);
+          fs.copySync(templateSrc, destDirectory);
+          _replaceTestHTMLToken(generator);
+        }
       }
       return resolve(generator);
     });

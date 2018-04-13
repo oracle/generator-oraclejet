@@ -28,14 +28,14 @@ module.exports =
 };
 
 function _getScaffoldComplete() {
-  return _appendSuccessPrefix('Your app structure is generated. Continuing with library install...');
+  return _appendSuccessPrefix('Your app structure is generated. Continuing with library install.');
 }
 
 function _getRestoreComplete(invokedByRestore, appDir) {
   if (invokedByRestore) {
-    return _appendSuccessPrefix('Your app restore finished successfully...');
+    return _appendSuccessPrefix('\x1b[32mYour app restore finished successfully.\x1b[0m');
   }
-  return _appendSuccessPrefix(`Your app is ready! Change to your new app directory ${appDir} and try ojet build and serve...`);
+  return _appendSuccessPrefix(`\x1b[32mYour app is ready! Change to your new app directory '${appDir}' and try 'ojet build' and 'ojet serve'.\x1b[0m`);
 }
 
 function _getPrefixError(error) {
@@ -60,9 +60,9 @@ function _getError(error, task) {
 }
 
 function _appendSuccessPrefix(message) {
-  return `Oracle JET: ${message}`;
+  return `${message}`;
 }
 
 function _appendErrorPrefix(message) {
-  return `Oracle JET Error: ${message}`;
+  return `${message}`;
 }

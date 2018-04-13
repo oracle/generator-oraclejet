@@ -64,7 +64,7 @@ const OracleJetAddThemeGenerator = generators.Base.extend(
 
     end: function () {  //eslint-disable-line
       this.log(commonMessages.appendJETPrefix(`${this.themeName} theme added.`));
-      process.exit(1);
+      process.exit(0);
     }
 
   });

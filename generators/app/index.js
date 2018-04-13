@@ -36,7 +36,8 @@ const OracleJetWebCreateGenerator = generators.Base.extend(
         done();
       })
       .catch((err) => {
-        this.env.error(commonMessages.prefixError(err));
+        console.error(`\x1b[31mError: ${commonMessages.prefixError(err)}\x1b[0m`);
+        process.exit(1);
       });
     },
 
@@ -80,7 +81,7 @@ const OracleJetWebCreateGenerator = generators.Base.extend(
 
     end: function () {  //eslint-disable-line
       if (this.options.component) {
-        this.log(`Oracle JET: Your component ${this.options.component} project is scaffolded. Performing npm install may take a bit...`);
+        this.log(`Your component ${this.options.component} project is scaffolded. Performing npm install may take a bit.`);
       } else {
         this.log(commonMessages.scaffoldComplete());
       }

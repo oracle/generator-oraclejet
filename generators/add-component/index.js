@@ -64,9 +64,9 @@ const OracleJetAddComponentGenerator = generators.Base.extend(
       if (!isApp) {
         this.composeWith('@oracle/oraclejet:app', { options: this.options });
       } else {
-        console.log(commonMessages.appendJETPrefix(`add component ${this.componentName} finished.`));
+        console.log(commonMessages.appendJETPrefix(`Add component ${this.componentName} finished.`));
       }
-      if (isApp) process.exit(1);
+      if (isApp) process.exit(0);
     }
 
   });
@@ -77,6 +77,6 @@ function _validateComponentName(generator) {
   const name = generator.componentName;
   if (name !== name.toLowerCase() || name.indexOf('-') < 0 || !/^[a-z]/.test(name)) {
     const message = 'Invalid component name. Must be all lowercase letters and contain at least one hyphen.';
-    throw `\x1b[31m${new Error(message)}\x1b[0m`; //eslint-disable-line
+    generator.env.error(`\x1b[31m${new Error(message)}\x1b[0m`); //eslint-disable-line
   }
 }

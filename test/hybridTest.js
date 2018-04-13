@@ -74,7 +74,7 @@ describe("Hybrid Test", function ()
         this.timeout(300000);
         exec('yo @oracle/oraclejet:hybrid hybridTest --platforms=' + platform, execOptions, function (error, stdout)
         {
-          var errLogCorrect = /path already exists and is not empty/.test(error.message);
+          var errLogCorrect = /path already exists/.test(error.message);
           assert.equal(errLogCorrect, true, error);
           done();
         });

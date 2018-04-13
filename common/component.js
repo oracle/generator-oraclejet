@@ -37,6 +37,8 @@ module.exports =
         }
         fs.ensureDirSync(destDirectory);
         fs.copySync(templateSrc, destDirectory);
+
+        _renamePrefix(generator);
         _replaceComponentTemplateToken(generator);
       }
 
@@ -46,7 +48,20 @@ module.exports =
 };
 
 function _replaceComponentTemplateToken(generator) {
-  const componentName = generator.componentName || generator.options.component;
+  const componentName = _getComponentName(generator);
+
+  const base = _getBasePath(generator);
+
+  fs.readdirSync(base).forEach((file) => {
+    if (path.extname(file).length !== 0) {
+      const fileContent = fs.readFileSync(path.join(base, file), 'utf-8');
+      fs.outputFileSync(path.join(base, file), fileContent.replace(new RegExp('@component@', 'g'), componentName));
+    }
+  });
+}
+
+function _getBasePath(generator) {
+  const componentName = _getComponentName(generator);
 
   const appDir = generator.appDir === undefined
     ? process.cwd() : generator.destinationPath(generator.appDir);
@@ -57,8 +72,32 @@ function _replaceComponentTemplateToken(generator) {
   const base = path.join(appDir, _configPaths.source,
     _configPaths.sourceJavascript, CONSTANTS.JET_COMPOSITES, componentName);
 
-  CONSTANTS.COMPONENT_FILES.forEach((file) => {
-    const fileContent = fs.readFileSync(path.join(base, file), 'utf-8');
-    fs.outputFileSync(path.join(base, file), fileContent.replace(new RegExp('@component@', 'g'), componentName));
+  return base;
+}
+
+function _getComponentName(generator) {
+  return generator.componentName || generator.options.component;
+}
+
+function _renamePrefix(generator) {
+  let base = _getBasePath(generator);
+  const componentName = _getComponentName(generator);
+  fs.readdirSync(base).forEach((file) => {
+    if (/@component@/.test(file)) _renamePrefixFile(generator, base, file, componentName);
   });
+
+  base = path.join(base, 'resources/nls');
+  if (fs.existsSync(base)) {
+    fs.readdirSync(base).forEach((file) => {
+      if (/@component@/.test(file)) _renamePrefixFile(generator, base, file, componentName);
+    });
+  }
+}
+
+// replace prefix to include the component name
+function _renamePrefixFile(generator, fileDir, file, componentName) {
+  const oldPath = path.join(fileDir, file);
+  let newPath = file.replace('@component@', componentName);
+  newPath = path.join(fileDir, newPath);
+  fs.renameSync(oldPath, newPath);
 }
