@@ -1,6 +1,6 @@
 {
   "name": "@oracle/generator-oraclejet",
-  "version": "5.0.2",
+  "version": "5.1.0",
   "license": "UPL-1.0",
   "description": "Yeoman generator for Oracle JET web and mobile applications",
   "homepage": "http://oraclejet.org",
@@ -18,7 +18,7 @@
   ],
   "dependencies": {
     "yeoman-generator": "^0.24.1",
-    "adm-zip": "^0.4.7",
+    "adm-zip": "0.4.7",
     "fs-extra": "^1.0.0",
     "xmldom": "^0.1.27",
     "request": "^2.79.0"
@@ -44,6 +44,6 @@
     "yeoman-test": "^1.5.1"
   },
   "preferGlobal": true,
-  "jetversion": "5.0.0",
-  "jetdocversion": "500"
+  "jetversion": "5.1.0",
+  "jetdocversion": "510"
 }

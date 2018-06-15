@@ -127,6 +127,9 @@ module.exports =
       const SUPPORTED_FLAGS = CONSTANTS.SUPPORTED_FLAGS(flags.namespace);
       Object.keys(flags).forEach((key) => {
         if (SUPPORTED_FLAGS.indexOf(key) === -1) {
+          if (['platforms', 'platform', 'appid', 'appname'].indexOf(key) !== -1) {
+            reject(commonMessages.error(`Invalid flag: ${key} without flag --hybrid`, 'validateFlags'));
+          }
           reject(commonMessages.error(`Invalid flag: ${key}`, 'validateFlags'));
         }
       });

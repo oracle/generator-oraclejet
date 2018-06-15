@@ -4,7 +4,7 @@
 */
 'use strict';
 define(
-    ['ojs/ojcore', 'knockout', 'jquery', 'ojL10n!./resources/nls/@component@-strings'], function (oj, ko, $) {
+    ['ojs/ojcore', 'knockout', 'jquery', 'ojL10n!./resources/nls/@component@-strings'], function (oj, ko, $, componentStrings) {
 
     
     function ExampleComponentModel(context) {
@@ -19,7 +19,8 @@ define(
 
         //Example observable
         self.messageText = ko.observable('Hello from Example Component');
-
+        self.properties = context.properties;
+        self.res = componentStrings['@component@'];
         // Example for parsing context properties
         // if (context.properties.name) {
         //     parse the context properties here
@@ -33,13 +34,13 @@ define(
     //ExampleComponentModel.prototype.activated = function(context){
     //};
 
-    //ExampleComponentModel.prototype.attached = function(context){
+    //ExampleComponentModel.prototype.connected = function(context){
     //};
 
     //ExampleComponentModel.prototype.bindingsApplied = function(context){
     //};
 
-    //ExampleComponentModel.prototype.detached = function(context){
+    //ExampleComponentModel.prototype.disconnect = function(context){
     //};
 
     //ExampleComponentModel.prototype.propertyChanged = function(context){

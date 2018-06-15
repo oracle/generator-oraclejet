@@ -49,9 +49,12 @@ module.exports =
 
 function _replaceComponentTemplateToken(generator) {
   const componentName = _getComponentName(generator);
-
   const base = _getBasePath(generator);
+  _replaceComponentTokenInFileList(base, componentName);
+  _replaceComponentTokenInFileList(path.join(base, 'resources/nls'), componentName);
+}
 
+function _replaceComponentTokenInFileList(base, componentName) {
   fs.readdirSync(base).forEach((file) => {
     if (path.extname(file).length !== 0) {
       const fileContent = fs.readFileSync(path.join(base, file), 'utf-8');

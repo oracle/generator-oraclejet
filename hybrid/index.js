@@ -240,6 +240,14 @@ function _addWindowsPreferences(document) {
   preference.setAttribute('name', 'windows-target-version');
   preference.setAttribute('value', '10.0');
   windowsPlatformElem.appendChild(preference);
+  const preference2 = document.createElement('preference');
+  preference2.setAttribute('name', 'SplashScreenDelay');
+  preference2.setAttribute('value', '0');
+  windowsPlatformElem.appendChild(preference2);
+  const preference3 = document.createElement('preference');
+  preference3.setAttribute('name', 'SplashScreenBackgroundColor');
+  preference3.setAttribute('value', '');
+  windowsPlatformElem.appendChild(preference3);
 }
 
 function _getWindowsPreferencesSection(document) {

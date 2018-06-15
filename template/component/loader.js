@@ -5,9 +5,9 @@
 define(['ojs/ojcore', 'text!./@component@-view.html', './@component@-viewModel', 'text!./component.json', 'css!./@component@-styles', 'ojs/ojcomposite'],
   function(oj, view, viewModel, metadata) {
     oj.Composite.register('@component@', {
-      view: {inline: view}, 
-      viewModel: {inline: viewModel}, 
-      metadata: {inline: JSON.parse(metadata)}
+      view: view, 
+      viewModel: viewModel, 
+      metadata: JSON.parse(metadata)
     });
   }
 );
