@@ -4,10 +4,10 @@
 
   "cdns": {
     "jet": {
-      "prefix": "https://static.oracle.com/cdn/jet/v5.1.0/default/js",
+      "prefix": "https://static.oracle.com/cdn/jet/v5.2.0/default/js",
       "config": "bundles-config.js"
     },
-    "3rdparty": "https://static.oracle.com/cdn/jet/v5.1.0/3rdparty"
+    "3rdparty": "https://static.oracle.com/cdn/jet/v5.2.0/3rdparty"
   },
 
   "libs": {
@@ -200,12 +200,12 @@
       "debug": {
         "src":  ["css.js", "css-builder.js", "normalize.js"],
         "path": "libs/require-css/css.js",
-        "cdnPath": "css"
+        "cdnPath": "require-css/css"
       },
       "release": {
         "src": ["css.min.js", "css-builder.js", "normalize.js"],
         "path": "libs/require-css/css.min.js",
-        "cdnPath": "css.min"
+        "cdnPath": "require-css/css.min"
       }
     }
   }

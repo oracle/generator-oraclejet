@@ -34,8 +34,9 @@ module.exports = {
       'insight',
       'component',
       'hybrid',
-      'platfrom',
-      'platfroms'
+      'platform',
+      'platforms',
+      'pack'
     ];
 
     const hybridFlags = [

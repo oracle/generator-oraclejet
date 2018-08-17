@@ -3,7 +3,7 @@
   "displayName": "@component@",
   "description": "Describe your component here",
   "version": "1.0.0",
-  "jetVersion": "5.1.0",
+  "jetVersion": "5.2.0",
   "properties": {
   },
   "methods": {

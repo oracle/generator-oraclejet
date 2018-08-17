@@ -20,24 +20,16 @@ module.exports =
 
         if (!isApp) return resolve(generator);
 
-        const appDir = generator.appDir === undefined
-          ? process.cwd() : generator.destinationPath(generator.appDir);
-
-        const _configPaths = generator.appDir === undefined
-          ? paths.getConfiguredPaths(appDir) : paths.getDefaultPaths();
-
-        const destDirectory = generator.destinationPath(
-          path.join(appDir, _configPaths.source,
-            _configPaths.sourceJavascript, CONSTANTS.JET_COMPOSITES, generator.options.component));
-
+        const destDirectory = _getComponentDestPath(generator);
         // avoid overwrite component
         if (fs.existsSync(destDirectory)) {
           console.log('Component already exists. ');
           return resolve(generator);
         }
+
         fs.ensureDirSync(destDirectory);
         fs.copySync(templateSrc, destDirectory);
-
+        if (generator.options.pack) _updatePackInfo(generator);
         _renamePrefix(generator);
         _replaceComponentTemplateToken(generator);
       }
@@ -47,9 +39,20 @@ module.exports =
   }
 };
 
+function _getComponentDestPath(generator) {
+  let destBase = _getCompositesBasePath(generator);
+
+  if (generator.options.pack) {
+    const packPath = path.join(destBase, generator.options.pack);
+    fs.ensureDirSync(packPath);
+    destBase = path.join(destBase, generator.options.pack);
+  }
+  return path.join(destBase, generator.options.component);
+}
+
 function _replaceComponentTemplateToken(generator) {
   const componentName = _getComponentName(generator);
-  const base = _getBasePath(generator);
+  const base = _getComponentDestPath(generator);
   _replaceComponentTokenInFileList(base, componentName);
   _replaceComponentTokenInFileList(path.join(base, 'resources/nls'), componentName);
 }
@@ -63,19 +66,15 @@ function _replaceComponentTokenInFileList(base, componentName) {
   });
 }
 
-function _getBasePath(generator) {
-  const componentName = _getComponentName(generator);
-
+function _getCompositesBasePath(generator) {
   const appDir = generator.appDir === undefined
     ? process.cwd() : generator.destinationPath(generator.appDir);
 
   const _configPaths = generator.appDir === undefined
     ? paths.getConfiguredPaths(appDir) : paths.getDefaultPaths();
 
-  const base = path.join(appDir, _configPaths.source,
-    _configPaths.sourceJavascript, CONSTANTS.JET_COMPOSITES, componentName);
-
-  return base;
+  return path.join(appDir, _configPaths.source,
+    _configPaths.sourceJavascript, CONSTANTS.JET_COMPOSITES);
 }
 
 function _getComponentName(generator) {
@@ -83,7 +82,7 @@ function _getComponentName(generator) {
 }
 
 function _renamePrefix(generator) {
-  let base = _getBasePath(generator);
+  let base = _getComponentDestPath(generator);
   const componentName = _getComponentName(generator);
   fs.readdirSync(base).forEach((file) => {
     if (/@component@/.test(file)) _renamePrefixFile(generator, base, file, componentName);
@@ -104,3 +103,11 @@ function _renamePrefixFile(generator, fileDir, file, componentName) {
   newPath = path.join(fileDir, newPath);
   fs.renameSync(oldPath, newPath);
 }
+
+function _updatePackInfo(generator) {
+  const jsonPath = path.join(_getComponentDestPath(generator), 'component.json');
+  const componentJson = fs.readJsonSync(jsonPath);
+  componentJson.pack = generator.options.pack;
+  fs.outputJsonSync(jsonPath, componentJson);
+}
+
