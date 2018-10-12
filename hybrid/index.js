@@ -15,6 +15,8 @@ const graphics = require('./graphics');
 const paths = require('../util/paths');
 
 const ORACLEJET_APP_ID = 'org.oraclejet.';
+const iOSPlugins = ['cordova-plugin-wkwebview-file-xhr',
+  'cordova-plugin-wkwebview-engine'];
 
 const CORDOVA_HOOKS =
   [
@@ -93,6 +95,10 @@ module.exports =
         const document = new DOMParser().parseFromString(configRead, 'text/xml');
         _addCordovaConfigDescription(document);
         _addCordovaConfigHooks(document);
+        if (generator.options.platform === 'ios'
+          || (generator.options.platforms && generator.options.platforms.indexOf('ios') !== -1)) {
+          _addIosPlugins(document);
+        }
         _addIosOrientationPreference(document);
         _addIosOverscrollPreference(document);
         _addAndroidOverscrollPreference(document);
@@ -178,6 +184,21 @@ function _addIosOrientationPreference(document) {
 function _addIosOverscrollPreference(document) {
   _addPlatformElement(document, 'ios', 'preference', 'DisallowOverscroll', 'true');
 }
+
+function _addIosPlugins(document) {
+  iOSPlugins.forEach((plugin) => {
+    _addPluginElement(document, plugin);
+  });
+}
+
+function _addPluginElement(document, pluginName) {
+  const widget = _getFirstElementByTagName(document, 'widget');
+  const elementNode = document.createElement('plugin');
+  elementNode.setAttribute('name', pluginName);
+  widget.appendChild(elementNode);
+  widget.appendChild(_createNewLineElement(document));
+}
+
 
 function _addAndroidOverscrollPreference(document) {
   _addPlatformElement(document, 'android', 'preference', 'DisallowOverscroll', 'true');

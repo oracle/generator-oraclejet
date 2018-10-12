@@ -24,14 +24,16 @@ requirejs.config(
       'promise': 'libs/es6-promise/es6-promise',
       'hammerjs': 'libs/hammer/hammer-2.0.8',
       'ojdnd': 'libs/dnd-polyfill/dnd-polyfill-1.0.0',
-      'ojs': 'libs/oj/v5.2.0/debug',
-      'ojL10n': 'libs/oj/v5.2.0/ojL10n',
-      'ojtranslations': 'libs/oj/v5.2.0/resources',
+      'ojs': 'libs/oj/v6.0.0/debug',
+      'ojL10n': 'libs/oj/v6.0.0/ojL10n',
+      'ojtranslations': 'libs/oj/v6.0.0/resources',
       'text': 'libs/require/text',
       'signals': 'libs/js-signals/signals',
       'customElements': 'libs/webcomponents/custom-elements.min',
       'proj4': 'libs/proj4js/dist/proj4-src',
-      'css': 'libs/require-css/css'
+      'css': 'libs/require-css/css',
+      'touchr': 'libs/touchr/touchr',
+      'persist': 'libs/persist/min'
     }
     //endinjector
     ,

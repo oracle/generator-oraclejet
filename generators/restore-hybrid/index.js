@@ -67,7 +67,10 @@ const OracleJetHybridRestoreGenerator = generators.Base.extend(
 
 function _invokeCordovaPrepare(context) {
   const generator = context.generator || context;
-  if (!generator.options.invokedByRestore) return Promise.resolve(context);
+  const isIOS = generator.options.platform === 'ios' ||
+    (generator.options.platforms && generator.options.platforms.indexOf('ios') !== -1);
+  if (!isIOS && !generator.options.invokedByRestore) return Promise.resolve(context);
+
   const cwd = paths.getConfiguredPaths(generator.destinationPath()).stagingHybrid;
   fs.ensureDirSync(path.join(cwd, 'www'));
 

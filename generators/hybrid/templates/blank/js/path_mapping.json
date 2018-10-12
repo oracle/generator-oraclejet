@@ -3,11 +3,8 @@
   "use": "local",
 
   "cdns": {
-    "jet": {
-      "prefix": "https://static.oracle.com/cdn/jet/v5.2.0/default/js",
-      "config": "bundles-config.js"
-    },
-    "3rdparty": "https://static.oracle.com/cdn/jet/v5.2.0/3rdparty"
+    "jet": "https://static.oracle.com/cdn/jet/v6.0.0/default/js",
+    "3rdparty": "https://static.oracle.com/cdn/jet/v6.0.0/3rdparty"
   },
 
   "libs": {
@@ -102,6 +99,23 @@
       }
     },
 
+    "persist": {
+      "cdn": "3rdparty",
+      "cwd": "node_modules/@oracle/oraclejet/dist/js/libs/persist",
+      "debug": {
+        "cwd": "debug",
+        "src": ["**"],
+        "path": "libs/persist/debug",
+        "cdnPath": "persist/debug"
+      },
+      "release": {
+        "cwd": "min",
+        "src": ["**"],
+        "path": "libs/persist/min",
+        "cdnPath": "persist/min"
+      }
+    },
+
     "ojs": {
       "cdn": "jet",
       "cwd": "node_modules/@oracle/oraclejet/dist/js/libs/oj",
@@ -176,6 +190,21 @@
         "src": "signals.min.js",
         "path": "libs/js-signals/signals.min.js",
         "cdnPath": "js-signals/signals.min"
+      }
+    },
+
+    "touchr": {
+      "cdn": "3rdparty",
+      "cwd": "node_modules/touchr/js",
+      "debug": {
+        "src":  "touchr.js",
+        "path": "libs/touchr/touchr.js",
+        "cdnPath": "touchr/touchr"
+      },
+      "release": {
+        "src": "touchr.js",
+        "path": "libs/touchr/touchr.js",
+        "cdnPath": "touchr/touchr"
       }
     },
 

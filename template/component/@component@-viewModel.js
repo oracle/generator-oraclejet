@@ -4,8 +4,7 @@
 */
 'use strict';
 define(
-    ['ojs/ojcore', 'knockout', 'jquery', 'ojL10n!./resources/nls/@component@-strings'], function (oj, ko, $, componentStrings) {
-
+    ['knockout', 'jquery', 'ojL10n!./resources/nls/@component@-strings'], function (ko, $, componentStrings) {
     
     function ExampleComponentModel(context) {
         var self = this;
