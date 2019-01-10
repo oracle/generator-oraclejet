@@ -1,5 +1,5 @@
 /**
-  Copyright (c) 2015, 2018, Oracle and/or its affiliates.
+  Copyright (c) 2015, 2019, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
 'use strict';
@@ -7,6 +7,7 @@
 const exec = require('child_process').exec;
 const generators = require('yeoman-generator');
 const common = require('../../common');
+const commonHookRunner = require('../../common/hookRunner');
 const commonHybrid = require('../../hybrid');
 const commonMessages = require('../../common/messages');
 const commonRestore = require('../../common/restore');
@@ -46,6 +47,7 @@ const OracleJetHybridRestoreGenerator = generators.Base.extend(
       .then(commonHybrid.copyResources)
       .then(commonRestore.writeOracleJetConfigFile)
       .then(_invokeCordovaPrepare)
+      .then(commonHookRunner.runAfterAppCreateHook)
       .then(() => {
         done();
       })

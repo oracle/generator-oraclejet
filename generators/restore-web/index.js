@@ -1,11 +1,12 @@
 /**
-  Copyright (c) 2015, 2018, Oracle and/or its affiliates.
+  Copyright (c) 2015, 2019, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
 'use strict';
 
 const generators = require('yeoman-generator');
 const common = require('../../common');
+const commonHookRunner = require('../../common/hookRunner');
 const commonMessages = require('../../common/messages');
 const commonRestore = require('../../common/restore');
 const path = require('path');
@@ -39,6 +40,7 @@ const OracleJetWebRestoreGenerator = generators.Base.extend(
       const done = this.async();
       commonRestore.npmInstall({ generator: this })
       .then(commonRestore.writeOracleJetConfigFile)
+      .then(commonHookRunner.runAfterAppCreateHook)
       .then(() => {
         done();
       })

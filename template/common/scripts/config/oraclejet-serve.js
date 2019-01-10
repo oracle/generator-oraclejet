@@ -1,5 +1,5 @@
 /**
-  Copyright (c) 2015, 2018, Oracle and/or its affiliates.
+  Copyright (c) 2015, 2019, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
 'use strict';
@@ -62,7 +62,7 @@ module.exports = function () {
  *   port, port number, default 8000
  *   hostname, a string of the domain name, default localhost
  *   livereload, a boolean for livereload, default true in dev mode, false in release mode (overwritten when )
- *   open, a blooean for wheather to launch browser, default to true
+ *   open, a boolean for wheather to launch browser, default to true
  *   base, a string of the target directory to be served, default to the staging area
  */
     // connect: {

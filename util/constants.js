@@ -1,5 +1,5 @@
 /**
-  Copyright (c) 2015, 2018, Oracle and/or its affiliates.
+  Copyright (c) 2015, 2019, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
 'use strict';
@@ -14,6 +14,7 @@ module.exports = {
   APP_CONFIG_JSON: 'oraclejetconfig.json',
   JET_COMPOSITES: 'jet-composites',
   COMPONENT_FILES: ['component.json', 'loader.js', 'styles.css'],
+  PATH_TO_HOOKS_CONFIG: 'scripts/hooks/hooks.json',
   APP_TYPE:
   {
     HYBRID: 'hybrid',
