@@ -29,6 +29,27 @@ module.exports = {
   }
 };
 
+module.exports = {
+  runAfterComponentCreateHook() {
+    return new Promise((resolve, reject) => {
+      // Get hooks config
+      const hooksConfig = _getHooksConfigObj();
+      // Get after_app_prepare hook's path
+      const hookPath = hooksConfig.after_component_create;
+      if (hookPath && fs.existsSync(path.resolve(hookPath))) {
+        const hook = require(path.resolve(hookPath)); // eslint-disable-line
+        // Execute hook
+        hook()
+          .then(() => resolve())
+          .catch(err => reject(err));
+      } else {
+        console.warn('Hook \'after_component_create\' not defined.');
+        resolve();
+      }
+    });
+  }
+};
+
 /**
  * ## _getHooksConfigObj
  * Reads the hooks.json file

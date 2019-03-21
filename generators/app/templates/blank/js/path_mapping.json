@@ -3,8 +3,8 @@
   "use": "local",
 
   "cdns": {
-    "jet": "https://static.oracle.com/cdn/jet/v6.1.0/default/js",
-    "3rdparty": "https://static.oracle.com/cdn/jet/v6.1.0/3rdparty"
+    "jet": "https://static.oracle.com/cdn/jet/v6.2.0/default/js",
+    "3rdparty": "https://static.oracle.com/cdn/jet/v6.2.0/3rdparty"
   },
 
   "libs": {

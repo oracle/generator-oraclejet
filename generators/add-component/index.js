@@ -2,16 +2,12 @@
   Copyright (c) 2015, 2019, Oracle and/or its affiliates.
   The Universal Permissive License (UPL), Version 1.0
 */
-/**
-  Copyright (c) 2015, 2017, Oracle and/or its affiliates.
-  The Universal Permissive License (UPL), Version 1.0
-*/
-
 'use strict';
 
 const generators = require('yeoman-generator');
 const common = require('../../common');
 const commonComponent = require('../../common/component');
+const commonHookRunner = require('../../common/hookRunner');
 const commonMessages = require('../../common/messages');
 const commonTest = require('../../common/test');
 const fs2 = require('fs');
@@ -48,6 +44,7 @@ const OracleJetAddComponentGenerator = generators.Base.extend(
       this.options.component = this.componentName;
       commonComponent.writeComponentTemplate(this)
       .then(commonTest.writeTestTemplate)
+      .then(commonHookRunner.runAfterComponentCreateHook)
       .then(() => {
         done();
       })
